@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Quality Management System</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:"Plus Jakarta Sans",system-ui,sans-serif;color:#0e1a2b;background:#f3f5f9}
+button,input,select,textarea{font-family:inherit;font-size:14px}
+input,select,textarea{border:1px solid #b9c4d0;border-radius:8px;padding:9px 10px;box-sizing:border-box;width:100%;background:#fff;color:#0e1a2b}
+label.f{display:block;font-size:12px;font-weight:700;color:#4a5a6e;margin-bottom:10px}
+label.f>*{margin-top:4px;font-weight:400}
+th{font-size:11.5px;letter-spacing:.04em;text-align:left;color:#4a5a6e;padding:8px 10px;border-bottom:2px solid #e1e7ee}
+td{padding:9px 10px;border-bottom:1px solid #edf1f5;font-size:13.5px;vertical-align:top}
+</style>
+</helmet>
+<div style="display:flex;flex-wrap:wrap;min-height:100vh">
+<div style="flex:0 0 260px"><dc-import name="Nav" active="qms" hint-size="260px,1000px"></dc-import></div>
+<main style="flex:999 1 560px;min-width:0;padding:24px 28px 40px;box-sizing:border-box">
+
+<div style="font-size:11px;letter-spacing:.14em;font-weight:700;color:#0a5cc2">QUALITY MANAGEMENT SYSTEM</div>
+<h1 style="margin:4px 0 6px;font-size:28px;font-weight:800">Employer's Requirements and Performance</h1>
+<p style="margin:0 0 18px;font-size:14px;color:#4a5a6e;max-width:800px;line-height:1.55">Enter each Employer's Requirement once. Record the evidence that proves it is met. The scorecard measures performance against targets that you enter from the Employer's Requirements or the contract. Nothing is pre-filled.</p>
+
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px">
+<sc-for list="{{tabs}}" as="t" hint-placeholder-count="3">
+<button onClick="{{t.pick}}" aria-pressed="{{t.pressed}}" style="min-height:44px;padding:0 18px;border-radius:10px;border:1px solid {{t.border}};background:{{t.bg}};color:{{t.fg}};font-weight:700;cursor:pointer">{{t.label}}</button>
+</sc-for>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:24px">
+<sc-for list="{{stats}}" as="s" hint-placeholder-count="5">
+<div style="background:#fff;border-radius:14px;padding:14px 16px;border:1px solid #e1e7ee;border-top:4px solid {{s.color}}"><div style="font-size:12px;font-weight:600;color:#4a5a6e;min-height:30px;line-height:1.35">{{s.label}}</div><div style="font-size:24px;font-weight:800;margin-top:2px">{{s.value}}</div></div>
+</sc-for>
+</div>
+
+<sc-if value="{{isReq}}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start">
+<section style="flex:1 1 340px;max-width:460px;background:#fff;border:1px solid #e1e7ee;border-radius:16px;padding:18px 20px">
+<h2 style="margin:0 0 12px;font-size:18px;font-weight:800">Add a requirement</h2>
+<label class="f">Employer's Requirements clause<input value="{{d.section}}" onInput="{{setSection}}" placeholder="Clause or section number as written"></label>
+<label class="f">Short title<input value="{{d.title}}" onInput="{{setTitle}}"></label>
+<label class="f">Requirement text, word for word<textarea rows="4" value="{{d.text}}" onInput="{{setText}}"></textarea></label>
+<label class="f">Acceptance criteria<textarea rows="2" value="{{d.criteria}}" onInput="{{setCriteria}}"></textarea></label>
+<label class="f">Discipline<select value="{{d.disc}}" onChange="{{setDisc}}"><sc-for list="{{discOpts}}" as="o"><option value="{{o.v}}">{{o.v}}</option></sc-for></select></label>
+<label class="f">Priority<select value="{{d.prio}}" onChange="{{setPrio}}"><option value="critical">critical</option><option value="major">major</option><option value="minor">minor</option></select></label>
+<div style="font-size:12px;font-weight:700;color:#4a5a6e;margin-bottom:6px">How it will be verified (choose at least one)</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+<sc-for list="{{methods}}" as="m" hint-placeholder-count="5">
+<button onClick="{{m.flip}}" aria-pressed="{{m.on}}" style="min-height:40px;padding:0 12px;border-radius:999px;border:1px solid {{m.border}};background:{{m.bg}};color:{{m.fg}};font-weight:600;cursor:pointer">{{m.label}}</button>
+</sc-for>
+</div>
+<button onClick="{{addReq}}" style="min-height:46px;padding:0 20px;border-radius:10px;border:0;background:#0a5cc2;color:#fff;font-weight:700;cursor:pointer">Add requirement</button>
+<div style="margin-top:10px;font-size:13px;font-weight:700;color:{{formMsgColor}}">{{formMsg}}</div>
+</section>
+
+<section style="flex:2 1 460px;min-width:0">
+<h2 style="margin:0 0 8px;font-size:18px;font-weight:800">Requirements register</h2>
+<sc-if value="{{noReqs}}" hint-placeholder-val="">
+<div style="background:#fff;border:1px dashed #9aa9ba;border-radius:14px;padding:22px;font-size:14px;color:#4a5a6e">No requirements entered yet. Add the first one on the left. In the live system you can also import them from a spreadsheet.</div>
+</sc-if>
+<sc-if value="{{hasReqs}}" hint-placeholder-val="{{ true }}">
+<div style="overflow-x:auto;background:#fff;border:1px solid #e1e7ee;border-radius:14px">
+<table style="border-collapse:collapse;width:100%;min-width:560px"><thead><tr><th>REF</th><th>REQUIREMENT</th><th>PRIORITY</th><th>VERIFIED BY</th><th>STATUS</th><th></th></tr></thead><tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="3">
+<tr><td style="font-weight:700;white-space:nowrap">{{r.ref}}</td><td><div style="font-weight:700">{{r.title}}</div><div style="color:#4a5a6e;font-size:12.5px">{{r.sub}}</div></td><td>{{r.prio}}</td><td>{{r.methods}}</td>
+<td><span style="font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;{{r.pill}}">{{r.status}}</span></td>
+<td><button onClick="{{r.activate}}" style="display:{{r.showAct}};min-height:36px;padding:0 10px;border-radius:8px;border:1px solid #145c36;background:#fff;color:#145c36;font-weight:700;cursor:pointer">Activate</button></td></tr>
+</sc-for>
+</tbody></table></div>
+<p style="font-size:12.5px;color:#4a5a6e;margin:8px 0 0">An active requirement cannot be edited. A change creates a new version, with a reason, and the old version stays on record.</p>
+</sc-if>
+</section>
+</div>
+</sc-if>
+
+<sc-if value="{{isComp}}" hint-placeholder-val="">
+<h2 style="margin:0 0 4px;font-size:18px;font-weight:800">Compliance matrix</h2>
+<p style="margin:0 0 12px;font-size:13.5px;color:#4a5a6e">"Compliant" needs evidence: a document, an inspection or a test record. A waiver needs an approval reference.</p>
+<sc-if value="{{noActive}}" hint-placeholder-val="{{ true }}">
+<div style="background:#fff;border:1px dashed #9aa9ba;border-radius:14px;padding:22px;font-size:14px;color:#4a5a6e">No active requirements. Activate a requirement in the register first.</div>
+</sc-if>
+<sc-for list="{{compRows}}" as="c" hint-placeholder-count="2">
+<div style="background:#fff;border:1px solid #e1e7ee;border-radius:14px;padding:14px 18px;margin-bottom:10px">
+<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between"><div style="font-weight:700">{{c.ref}} · {{c.title}}</div><span style="font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;{{c.pill}}">{{c.status}}</span></div>
+<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;align-items:flex-end">
+<label class="f" style="flex:1 1 160px;margin:0">Result<select value="{{c.res}}" onChange="{{c.setRes}}"><option value="compliant">compliant</option><option value="partially_compliant">partially compliant</option><option value="non_compliant">non-compliant</option><option value="waived">waived</option></select></label>
+<label class="f" style="flex:2 1 220px;margin:0">Evidence reference (document, inspection or test)<input value="{{c.ev}}" onInput="{{c.setEv}}"></label>
+<button onClick="{{c.save}}" style="min-height:42px;padding:0 16px;border-radius:10px;border:0;background:#145c36;color:#fff;font-weight:700;cursor:pointer">Record</button>
+</div>
+<div style="margin-top:8px;font-size:13px;font-weight:700;color:#9a3412">{{c.err}}</div>
+</div>
+</sc-for>
+</sc-if>
+
+<sc-if value="{{isKpi}}" hint-placeholder-val="">
+<h2 style="margin:0 0 4px;font-size:18px;font-weight:800">Performance scorecard</h2>
+<p style="margin:0 0 12px;font-size:13.5px;color:#4a5a6e">Enter each target and the clause it comes from. Colour appears only when both a target and a measured value exist. Q01, Q02, Q03 and Q04 are calculated from the register. Others are entered or, in the live system, calculated from inspection, NCR and test records.</p>
+<div style="overflow-x:auto;background:#fff;border:1px solid #e1e7ee;border-radius:14px">
+<table style="border-collapse:collapse;width:100%;min-width:760px"><thead><tr><th>CODE</th><th>METRIC</th><th>BETTER</th><th>TARGET</th><th>ER CLAUSE</th><th>ACTUAL</th><th>STATUS</th></tr></thead><tbody>
+<sc-for list="{{kpiRows}}" as="k" hint-placeholder-count="4">
+<tr><td style="font-weight:700">{{k.code}}</td><td><div style="font-weight:700">{{k.name}}</div><div style="font-size:12px;color:#4a5a6e">{{k.desc}}</div></td><td style="white-space:nowrap">{{k.dir}}</td>
+<td style="width:110px"><input value="{{k.target}}" onInput="{{k.setTarget}}" inputmode="decimal" aria-label="Target"></td>
+<td style="width:110px"><input value="{{k.clause}}" onInput="{{k.setClause}}" aria-label="Clause"></td>
+<td style="width:110px">{{k.actualCell}}<input style="display:{{k.showInput}}" value="{{k.actual}}" onInput="{{k.setActual}}" inputmode="decimal" aria-label="Actual"></td>
+<td><span style="font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap;{{k.pill}}">{{k.status}}</span></td></tr>
+</sc-for>
+</tbody></table></div>
+<p style="font-size:12.5px;color:#4a5a6e;margin:8px 0 0">Amber means within the tolerance you set. Entered values are stored on this device only (prototype).</p>
+</sc-if>
+
+<button onClick="{{resetAll}}" style="margin-top:26px;min-height:44px;padding:0 16px;border:1px solid #6b4600;background:#fff7dd;color:#4a3200;border-radius:10px;font-size:13.5px;font-weight:600;cursor:pointer">Clear everything entered on this page</button>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":1300}}'>
+class Component extends DCLogic {
+  load() {
+    if (this._d) return this._d;
+    let d = null;
+    try { d = JSON.parse(localStorage.getItem('beni_qms_v1') || 'null'); } catch (e) {}
+    this._d = d || { ers: [], comp: {}, kpi: {}, tab: 'req', draft: { section: '', title: '', text: '', criteria: '', disc: 'general', prio: 'major', m: [] }, ev: {}, res: {}, err: {}, msg: '', bad: false };
+    return this._d;
+  }
+  save() { try { localStorage.setItem('beni_qms_v1', JSON.stringify(this._d)); } catch (e) {} this.setState({ t: Date.now() }); }
+  renderVals() {
+    const D = this.load();
+    const upd = (fn) => () => { fn(); this.save(); };
+    const set = (k) => (e) => { D.draft[k] = e.target.value; this.save(); };
+    const PILL = {
+      grey: 'background:#eceff2;color:#3f4854;border:1px solid #c3cad2', green: 'background:#e3f3ea;color:#145c36;border:1px solid #9bcdb0',
+      red: 'background:#ffedd5;color:#9a3412;border:1px solid #fdba74', amber: 'background:#fff1cc;color:#6b4600;border:1px solid #e0b84f'
+    };
+    const tabsDef = [['req', "Employer's Requirements"], ['comp', 'Compliance matrix'], ['kpi', 'Performance metrics']];
+    const tabs = tabsDef.map(t => ({ label: t[1], pick: upd(() => { D.tab = t[0]; }), pressed: D.tab === t[0] ? 'true' : 'false',
+      bg: D.tab === t[0] ? '#0a5cc2' : '#fff', fg: D.tab === t[0] ? '#fff' : '#0e1a2b', border: D.tab === t[0] ? '#0a5cc2' : '#cfd8e2' }));
+
+    const active = D.ers.filter(r => r.status === 'active');
+    const statusOf = (r) => (D.comp[r.ref] ? D.comp[r.ref].result : 'not_verified');
+    const nCompliant = active.filter(r => statusOf(r) === 'compliant').length;
+    const nWaived = active.filter(r => statusOf(r) === 'waived').length;
+    const nBad = active.filter(r => ['non_compliant', 'partially_compliant'].includes(statusOf(r))).length;
+    const nVer = active.filter(r => statusOf(r) !== 'not_verified').length;
+    const pct = (a, b) => (b > 0 ? Math.round(1000 * a / b) / 10 : null);
+    const crit = active.filter(r => r.prio === 'critical');
+    const calc = {
+      Q01: pct(nCompliant, active.length - nWaived),
+      Q02: pct(nVer, active.length),
+      Q03: pct(crit.filter(r => statusOf(r) === 'compliant').length, crit.filter(r => statusOf(r) !== 'waived').length),
+      Q04: active.length ? nBad : null
+    };
+    const stats = [
+      { label: 'Requirements entered', value: String(D.ers.length), color: '#0a5cc2' },
+      { label: 'Active', value: String(active.length), color: '#145c36' },
+      { label: 'Compliant', value: String(nCompliant), color: '#145c36' },
+      { label: 'Non-compliant or partial', value: String(nBad), color: '#0a5cc2' },
+      { label: 'Not yet verified', value: String(active.length - nVer), color: '#f2c300' }
+    ];
+
+    const METHODS = ['inspection', 'test', 'design_review', 'demonstration', 'certificate', 'analysis', 'document_review'];
+    const methods = METHODS.map(m => { const on = D.draft.m.includes(m); return { label: m.replace('_', ' '), on: on ? 'true' : 'false',
+      bg: on ? '#0e1a2b' : '#fff', fg: on ? '#fff' : '#0e1a2b', border: on ? '#0e1a2b' : '#b9c4d0',
+      flip: upd(() => { D.draft.m = on ? D.draft.m.filter(x => x !== m) : D.draft.m.concat(m); }) }; });
+    const addReq = () => {
+      const dr = D.draft;
+      if (!dr.title.trim() || dr.text.trim().length < 5) { D.msg = 'Enter a title and the requirement text.'; D.bad = true; return this.save(); }
+      const n = D.ers.length + 1;
+      D.ers.push({ ref: 'ER-' + String(n).padStart(3, '0'), version: 1, section: dr.section.trim(), title: dr.title.trim(), text: dr.text.trim(),
+        criteria: dr.criteria.trim(), disc: dr.disc, prio: dr.prio, methods: dr.m.slice(), status: 'draft', at: new Date().toISOString() });
+      D.draft = { section: '', title: '', text: '', criteria: '', disc: 'general', prio: 'major', m: [] };
+      D.msg = 'Saved as a draft. Activate it when it is ready.'; D.bad = false; this.save();
+    };
+    const rows = D.ers.map((r, i) => ({
+      ref: r.ref + ' v' + r.version, title: r.title, sub: (r.section ? 'Clause ' + r.section + ' · ' : '') + r.disc,
+      prio: r.prio, methods: r.methods.length ? r.methods.join(', ').replace(/_/g, ' ') : 'none chosen',
+      status: r.status, pill: r.status === 'active' ? PILL.green : PILL.grey, showAct: r.status === 'draft' ? 'inline-block' : 'none',
+      activate: () => {
+        if (!r.methods.length) { D.msg = r.ref + ' needs at least one verification method before it can be activated.'; D.bad = true; return this.save(); }
+        r.status = 'active'; D.msg = r.ref + ' is active and locked.'; D.bad = false; this.save();
+      }
+    }));
+
+    const compRows = active.map(r => {
+      const cur = D.comp[r.ref];
+      const st = statusOf(r);
+      const res = D.res[r.ref] || 'compliant';
+      return { ref: r.ref, title: r.title, res, ev: D.ev[r.ref] || '',
+        status: st.replace(/_/g, ' '), pill: st === 'compliant' ? PILL.green : st === 'not_verified' ? PILL.grey : st === 'waived' ? PILL.amber : PILL.red,
+        setRes: (e) => { D.res[r.ref] = e.target.value; this.save(); }, setEv: (e) => { D.ev[r.ref] = e.target.value; this.save(); },
+        err: D.err[r.ref] || '',
+        save: () => {
+          const ev = (D.ev[r.ref] || '').trim();
+          if (res === 'compliant' && !ev) { D.err[r.ref] = 'Blocked: "compliant" needs an evidence reference.'; return this.save(); }
+          if (res === 'waived' && !ev) { D.err[r.ref] = 'Blocked: a waiver needs its approval reference.'; return this.save(); }
+          D.comp[r.ref] = { result: res, evidence: ev, at: new Date().toISOString() }; D.err[r.ref] = ''; this.save();
+        } };
+    });
+
+    const KP = [
+      ['Q01', "Employer's Requirements compliance", 'Compliant share of active requirements (waived excluded)', 'higher', '%'],
+      ['Q02', 'Requirements verified', 'Share with any compliance result', 'higher', '%'],
+      ['Q03', 'Critical requirements compliance', 'Compliance of requirements marked critical', 'higher', '%'],
+      ['Q04', 'Non-compliant requirements', 'Non-compliant or partly compliant now', 'lower', 'count'],
+      ['Q05', 'Inspection first-time pass rate', 'First inspections accepted', 'higher', '%'],
+      ['Q06', 'Inspection rejection rate', 'Inspections rejected in the period', 'lower', '%'],
+      ['Q07', 'Inspection turnaround (days)', 'Request to inspection', 'lower', 'days'],
+      ['Q08', 'Open NCRs', 'Not yet closed', 'lower', 'count'],
+      ['Q09', 'Overdue NCRs', 'Open and past due date', 'lower', 'count'],
+      ['Q10', 'Critical NCRs open', 'Critical severity, not closed', 'lower', 'count'],
+      ['Q11', 'NCR closure time (days)', 'Identification to closure', 'lower', 'days'],
+      ['Q12', 'Repeat non-conformances', 'Reports repeating an earlier one', 'lower', '%'],
+      ['Q13', 'Test pass rate', 'Passed share of recorded results', 'higher', '%'],
+      ['Q14', 'Material first-time approval', 'Approved without resubmission', 'higher', '%'],
+      ['Q15', 'Overdue corrective actions', 'Not verified and past due', 'lower', 'count'],
+      ['Q16', 'Audit completion', 'Planned audits performed', 'higher', '%']
+    ];
+    const num = (s) => { const v = parseFloat(String(s).replace(',', '.')); return isNaN(v) ? null : v; };
+    const kpiRows = KP.map(k => {
+      const e = D.kpi[k[0]] || { target: '', clause: '', actual: '' };
+      const auto = Object.prototype.hasOwnProperty.call(calc, k[0]);
+      const val = auto ? calc[k[0]] : num(e.actual);
+      const tg = num(e.target);
+      let st = 'no data', pill = PILL.grey;
+      if (val !== null && tg === null) st = 'no target';
+      else if (val !== null) {
+        const good = k[3] === 'higher' ? val >= tg : val <= tg;
+        const tol = Math.abs(tg) * 0.05;
+        const near = k[3] === 'higher' ? val >= tg - tol : val <= tg + tol;
+        st = good ? 'on target' : near ? 'within 5%' : 'off target';
+        pill = good ? PILL.green : near ? PILL.amber : PILL.red;
+      }
+      const edit = (f) => (ev) => { D.kpi[k[0]] = Object.assign({ target: '', clause: '', actual: '' }, D.kpi[k[0]], { [f]: ev.target.value }); this.save(); };
+      return { code: k[0], name: k[1], desc: k[2], dir: k[3] === 'higher' ? 'Higher' : 'Lower', target: e.target, clause: e.clause, actual: e.actual,
+        actualCell: auto ? (val === null ? 'No data' : String(val) + (k[4] === '%' ? '%' : '')) : '', showInput: auto ? 'none' : 'block',
+        setTarget: edit('target'), setClause: edit('clause'), setActual: edit('actual'), status: st, pill };
+    });
+
+    return {
+      tabs, stats, isReq: D.tab === 'req' ? 'yes' : '', isComp: D.tab === 'comp' ? 'yes' : '', isKpi: D.tab === 'kpi' ? 'yes' : '',
+      d: D.draft, setSection: set('section'), setTitle: set('title'), setText: set('text'), setCriteria: set('criteria'),
+      setDisc: set('disc'), setPrio: set('prio'),
+      discOpts: ['architectural','structural','civil','mechanical','electrical','fire_life_safety','lifts_vertical_transport','atc_control_tower','communications_it','aviation_icao','environmental','hse','general'].map(v => ({ v })),
+      methods, addReq, rows, noReqs: D.ers.length ? '' : 'yes', hasReqs: D.ers.length ? 'yes' : '',
+      formMsg: D.msg, formMsgColor: D.bad ? '#9a3412' : '#145c36',
+      compRows, noActive: active.length ? '' : 'yes', kpiRows,
+      resetAll: () => { this._d = null; try { localStorage.removeItem('beni_qms_v1'); } catch (e) {} this.setState({ t: Date.now() }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

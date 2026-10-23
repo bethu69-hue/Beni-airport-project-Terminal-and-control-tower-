@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Project Control Centre</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Fraunces:opsz,wght@9..144,600;9..144,700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:"Plus Jakarta Sans",system-ui,sans-serif;color:#0e1a2b;background:#f3f5f9}
+a{color:#0f4c99}
+button,input{font-family:inherit}
+</style>
+</helmet>
+<div style="display:flex;flex-wrap:wrap;min-height:100vh">
+<div style="flex:0 0 260px"><dc-import name="Nav" active="overview" hint-size="260px,1000px"></dc-import></div>
+
+<main style="flex:999 1 560px;min-width:0;padding:24px 28px 40px;box-sizing:border-box">
+
+<div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:18px">
+<div style="flex:1 1 320px;min-width:0;position:relative">
+<label for="gs" style="position:absolute;left:-9999px">Global search</label>
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6b7a8c" stroke-width="2" stroke-linecap="round" style="position:absolute;left:14px;top:13px" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+<input id="gs" type="search" placeholder="Search reference, claim, notice, RFI, drawing, location, person" style="width:100%;box-sizing:border-box;padding:12px 14px 12px 42px;border:1px solid #d3dbe5;border-radius:12px;font-size:14px;background:#fff;color:#0e1a2b">
+</div>
+<div style="display:flex;gap:10px;align-items:center">
+<div style="text-align:right;line-height:1.3"><div style="font-size:13px;font-weight:700">Andrew Mwaura</div><div style="font-size:12px;color:#4a5a6e">Project Manager</div></div>
+<div style="width:40px;height:40px;border-radius:50%;background:#F7D618;color:#1b2a00;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px" aria-hidden="true">AM</div>
+</div>
+</div>
+
+<header style="position:relative;overflow:hidden;border-radius:20px;background:#0a5cc2;border-bottom:8px solid #F7D618;color:#fff;padding:78px 30px 28px;margin-bottom:22px">
+<img src="/_blob/46171ba6995dc37df5b45594d674ab24" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 45%">
+<div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,30,74,.25) 0%,rgba(6,30,74,.6) 45%,rgba(6,30,74,.94) 100%)"></div>
+<div style="position:relative;display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between;align-items:flex-end">
+<div style="flex:1 1 380px;min-width:0">
+<div style="font-size:11px;letter-spacing:.16em;color:#F7D618;font-weight:700;margin-bottom:8px">CONTRACTOR: AIA ADVENTIS INHOUSE AFRICA</div>
+<h1 style="margin:0;font-family:Fraunces,Georgia,serif;font-size:36px;line-height:1.12;font-weight:700;text-shadow:0 2px 20px rgba(0,0,0,.45)">BENI AIRPORT DRC — PROJECT CONTROL CENTRE</h1>
+<p style="margin:8px 0 16px;font-size:14px;color:#cfe0ee">Terminal and Control Tower Project · Beni, Democratic Republic of Congo</p>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<a href="Notices.dc.html" style="min-height:44px;padding:0 18px;border-radius:999px;background:#F7D618;color:#2a2000;font-weight:700;font-size:14px;display:inline-flex;align-items:center;text-decoration:none">Issue notice</a>
+<button style="min-height:44px;padding:0 16px;border-radius:999px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.3);font-size:14px;font-weight:600;cursor:pointer">Record observation</button>
+<button style="min-height:44px;padding:0 16px;border-radius:999px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.3);font-size:14px;font-weight:600;cursor:pointer">Upload photo</button>
+<button style="min-height:44px;padding:0 16px;border-radius:999px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.3);font-size:14px;font-weight:600;cursor:pointer">Create RFI</button>
+<a href="Claims.dc.html" style="min-height:44px;padding:0 16px;border-radius:999px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.3);font-size:14px;font-weight:600;display:inline-flex;align-items:center;text-decoration:none">Register claim</a>
+<a href="Quality.dc.html" style="min-height:44px;padding:0 16px;border-radius:999px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.3);font-size:14px;font-weight:600;display:inline-flex;align-items:center;text-decoration:none">Start inspection</a>
+</div>
+</div>
+<div style="flex:0 1 300px;min-width:240px;background:rgba(6,30,74,.45);border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:14px 16px">
+<div style="font-size:12px;color:#b9d2e6;font-weight:600">Time for Completion</div>
+<div style="height:10px;border-radius:999px;margin:10px 0 8px;border:1px dashed rgba(255,255,255,.5)"></div>
+<div style="font-size:13px;color:#e8f1f8">Not configured. Enter the Commencement Date and Time for Completion in project setup.</div>
+</div>
+</div>
+</header>
+
+<div style="background:#fff7dd;border:1px solid #e8c766;border-radius:12px;padding:12px 16px;margin-bottom:22px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between">
+<div style="flex:1 1 320px;font-size:13.5px;line-height:1.5;color:#4a3200"><strong>Project not configured.</strong> Dates, values and progress are blank, and counts show live records only. Sample items below are marked DEMO DATA and kept apart from live data.</div>
+<button onClick="{{toggleDemo}}" style="min-height:44px;padding:0 16px;border:1px solid #6b4600;background:#fff;color:#4a3200;border-radius:10px;font-size:13.5px;font-weight:600;cursor:pointer">{{demoBtn}}</button>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-bottom:14px">
+<sc-for list="{{rings}}" as="g" hint-placeholder-count="4">
+<div style="background:#fff;border-radius:16px;padding:16px 18px;display:flex;gap:16px;align-items:center;box-shadow:0 1px 2px rgba(14,26,43,.06),0 6px 18px rgba(14,26,43,.05)">
+<svg width="76" height="76" viewBox="0 0 76 76" role="img" aria-label="{{g.label}} not configured" style="flex:0 0 76px">
+<circle cx="38" cy="38" r="31" fill="none" stroke="#dbe2ea" stroke-width="8" stroke-dasharray="3 6" stroke-linecap="round"></circle>
+<text x="38" y="43" text-anchor="middle" font-size="16" font-weight="700" fill="#4a5a6e">—</text>
+</svg>
+<div style="min-width:0"><div style="font-size:13px;font-weight:700">{{g.label}}</div><div style="font-size:12px;color:#4a5a6e;margin-top:3px">Not configured</div></div>
+</div>
+</sc-for>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-bottom:26px">
+<sc-for list="{{dates}}" as="d" hint-placeholder-count="4">
+<div style="background:#fff;border-radius:16px;padding:14px 18px;border:1px solid #e1e7ee">
+<div style="font-size:12px;color:#4a5a6e;font-weight:600">{{d.label}}</div>
+<div style="font-size:17px;font-weight:800;margin-top:6px;color:#4a5a6e">Not set</div>
+<div style="font-size:11.5px;color:#4a5a6e;margin-top:3px">{{d.note}}</div>
+</div>
+</sc-for>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start;margin-bottom:26px">
+
+<section aria-labelledby="alh" style="flex:999 1 520px;min-width:0">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+<h2 id="alh" style="margin:0;font-size:18px;font-weight:800">Contractual Alerts</h2>
+<span style="font-size:12.5px;color:#4a5a6e">Top five by urgency · appear only from Approved for Use rules</span>
+</div>
+<sc-if value="{{noAlerts}}" hint-placeholder-val="{{ false }}">
+<div style="background:#fff;border:1px dashed #9aa9ba;border-radius:16px;padding:26px;font-size:14px;color:#4a5a6e;line-height:1.6">No contractual alerts. No deadline rule is yet Approved for Use. <a href="Notices.dc.html">Open the rule library</a></div>
+</sc-if>
+<div style="display:flex;flex-direction:column;gap:12px">
+<sc-for list="{{alerts}}" as="a" hint-placeholder-count="3">
+<div style="background:#fff;border-radius:16px;display:flex;flex-wrap:wrap;overflow:hidden;box-shadow:0 1px 2px rgba(14,26,43,.06),0 6px 18px rgba(14,26,43,.05)">
+<div style="flex:0 0 96px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 8px;{{a.box}}">
+<div style="font-size:30px;font-weight:800;line-height:1">{{a.num}}</div>
+<div style="font-size:11px;font-weight:700;margin-top:4px;text-align:center">{{a.unit}}</div>
+</div>
+<div style="flex:1 1 300px;min-width:0;padding:14px 18px">
+<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:6px">
+<span style="font-size:10.5px;font-weight:800;color:#0b4fb3;border:1px solid #0b4fb3;border-radius:5px;padding:1px 6px;letter-spacing:.05em">DEMO DATA</span>
+<span style="font-size:12px;color:#4a5a6e;font-weight:600">{{a.ref}}</span>
+<span style="font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:999px;{{a.badge}}">{{a.status}}</span>
+</div>
+<div style="font-size:15px;font-weight:700">{{a.desc}}</div>
+<div style="font-size:12.5px;color:#4a5a6e;margin-top:6px;line-height:1.6">Responsible: {{a.who}} · Trigger: {{a.trigger}}<br>Clause: {{a.clause}} · Deadline: {{a.deadline}} · <a href="Notices.dc.html">Open record</a></div>
+</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<aside style="flex:1 1 300px;min-width:0;display:flex;flex-direction:column;gap:18px">
+<section style="background:#fff;border-radius:16px;padding:18px;box-shadow:0 1px 2px rgba(14,26,43,.06),0 6px 18px rgba(14,26,43,.05)" aria-labelledby="hzh">
+<h2 id="hzh" style="margin:0 0 4px;font-size:16px;font-weight:800">Deadline horizon</h2>
+<div style="font-size:12px;color:#4a5a6e;margin-bottom:12px">{{hzNote}}</div>
+<sc-for list="{{horizon}}" as="h" hint-placeholder-count="5">
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:9px;font-size:12.5px">
+<span style="flex:0 0 92px;font-weight:600">{{h.label}}</span>
+<span style="flex:1 1 auto;height:10px;border-radius:999px;background:#eaeff4;position:relative;overflow:hidden"><span style="position:absolute;left:0;top:0;bottom:0;border-radius:999px;width:{{h.w}};background:{{h.color}}"></span></span>
+<span style="flex:0 0 22px;text-align:right;font-weight:800">{{h.n}}</span>
+</div>
+</sc-for>
+</section>
+
+<section style="background:#fff;border-radius:16px;padding:18px;box-shadow:0 1px 2px rgba(14,26,43,.06),0 6px 18px rgba(14,26,43,.05)" aria-labelledby="ah">
+<h2 id="ah" style="margin:0 0 12px;font-size:16px;font-weight:800">Recent activity</h2>
+<sc-if value="{{noEvents}}" hint-placeholder-val="{{ false }}"><div style="font-size:13.5px;color:#4a5a6e">No activity recorded yet.</div></sc-if>
+<sc-for list="{{events}}" as="e" hint-placeholder-count="3">
+<div style="display:flex;gap:12px;margin-bottom:14px">
+<div style="flex:0 0 12px;display:flex;flex-direction:column;align-items:center"><span style="width:12px;height:12px;border-radius:50%;background:#007FFF;border:3px solid #dbeaff;box-sizing:content-box;margin-top:2px"></span><span style="flex:1 1 auto;width:2px;background:#e1e7ee;margin-top:4px"></span></div>
+<div style="min-width:0"><div style="font-size:13.5px;line-height:1.45"><span style="font-size:10px;font-weight:800;color:#0b4fb3;border:1px solid #0b4fb3;border-radius:4px;padding:0 4px;margin-right:6px">DEMO</span>{{e.what}}</div><div style="font-size:12px;color:#4a5a6e;margin-top:2px">{{e.when}} · {{e.link}}</div></div>
+</div>
+</sc-for>
+</section>
+</aside>
+</div>
+
+<h2 style="font-size:18px;font-weight:800;margin:0 0 12px">Live records by area</h2>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:26px">
+<sc-for list="{{tiles}}" as="t" hint-placeholder-count="8">
+<div style="background:#fff;border-radius:14px;padding:14px 16px;border:1px solid #e1e7ee;border-top:4px solid {{t.color}}">
+<div style="font-size:12px;color:#4a5a6e;font-weight:600;min-height:32px;line-height:1.35">{{t.label}}</div>
+<div style="font-size:26px;font-weight:800;margin-top:4px;color:#0e1a2b">{{t.value}}</div>
+</div>
+</sc-for>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:#4a5a6e;margin-bottom:18px">
+<span><span style="display:inline-block;width:10px;height:10px;background:#e0b800;border-radius:3px;margin-right:6px"></span>Contract</span>
+<span><span style="display:inline-block;width:10px;height:10px;background:#007FFF;border-radius:3px;margin-right:6px"></span>Delivery</span>
+<span><span style="display:inline-block;width:10px;height:10px;background:#6d5bd0;border-radius:3px;margin-right:6px"></span>Quality and completion</span>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:8px;font-size:12px;font-weight:700">
+<span style="padding:5px 11px;border-radius:999px;background:#e3f3ea;color:#145c36;border:1px solid #9bcdb0">✓ Completed / within deadline</span>
+<span style="padding:5px 11px;border-radius:999px;background:#fff1cc;color:#6b4600;border:1px solid #e0b84f">▲ Pending / approaching</span>
+<span style="padding:5px 11px;border-radius:999px;background:#ffedd5;color:#9a3412;border:1px solid #fdba74">■ Overdue / urgent</span>
+<span style="padding:5px 11px;border-radius:999px;background:#e2ecfb;color:#123f86;border:1px solid #9db9e6">● In progress / awaiting</span>
+<span style="padding:5px 11px;border-radius:999px;background:#eceff2;color:#3f4854;border:1px solid #c3cad2">○ Draft / not applicable</span>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":1500}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const demo = this.state.demo !== false;
+    const rings = ['Overall Project Progress','Design Progress','Construction Progress','Procurement Progress'].map(label => ({ label }));
+    const dates = [
+      { label: 'Planned Completion Date', note: 'Needs Commencement Date and Time for Completion' },
+      { label: 'Current Forecast Completion', note: 'Needs approved programme' },
+      { label: 'Time Elapsed', note: 'Needs Commencement Date' },
+      { label: 'Time Remaining', note: 'Needs Time for Completion' }
+    ];
+    const B = {
+      red: 'background:#ffedd5;color:#9a3412;border:1px solid #fdba74',
+      amber: 'background:#fff1cc;color:#6b4600;border:1px solid #e0b84f',
+      blue: 'background:#e2ecfb;color:#123f86;border:1px solid #9db9e6',
+      grey: 'background:#eceff2;color:#3f4854;border:1px solid #c3cad2'
+    };
+    const BOX = {
+      red: 'background:#ffedd5;color:#9a3412',
+      amber: 'background:#fff1cc;color:#6b4600',
+      blue: 'background:#e2ecfb;color:#123f86',
+      grey: 'background:#eceff2;color:#3f4854'
+    };
+    // ref, desc, who, trigger, clause, days, status, tone
+    const raw = [
+      ['DEMO-NOT-001','Notice of Claim for access delay (sample)','Bethwell (APM)','12 Oct 2026','20.2.1 (sample, unverified)',-5,'■ OVERDUE','red'],
+      ['DEMO-RFI-007','RFI awaiting Engineer response (sample)','Andrew Mwaura (PM)','9 Oct 2026','Sample',2,'▲ DUE SOON','amber'],
+      ['DEMO-DES-003','Design submission under review (sample)','Design Manager (unassigned)','10 Oct 2026','Sample',6,'● UNDER REVIEW','blue'],
+      ['DEMO-IPC-002','Interim payment awaiting processing (sample)','Quantity Surveyor (unassigned)','5 Oct 2026','Sample',11,'● RESPONSE PENDING','blue'],
+      ['DEMO-VAR-004','Variation awaiting assessment (sample)','Contract Manager (unassigned)','1 Oct 2026','Sample',null,'○ DRAFT','grey']
+    ];
+    const alerts = demo ? raw.map(r => {
+      const d = r[5];
+      const num = d === null ? '—' : String(Math.abs(d));
+      const unit = d === null ? 'no deadline' : d < 0 ? (Math.abs(d) === 1 ? 'day overdue' : 'days overdue') : d === 0 ? 'due today' : (d === 1 ? 'day left' : 'days left');
+      return { ref: r[0], desc: r[1], who: r[2], trigger: r[3], clause: r[4], deadline: 'Sample only', status: r[6], badge: B[r[7]], box: BOX[r[7]], num, unit };
+    }) : [];
+    const buckets = [['Overdue', d => d < 0, '#c2410c'], ['Today', d => d === 0, '#b07a00'], ['1 to 3 days', d => d >= 1 && d <= 3, '#b07a00'], ['4 to 7 days', d => d >= 4 && d <= 7, '#1a56b0'], ['8 to 14 days', d => d >= 8 && d <= 14, '#1a56b0'], ['Later', d => d > 14, '#4b5563']];
+    const days = demo ? raw.map(r => r[5]).filter(x => x !== null) : [];
+    const horizon = buckets.map(b => { const n = days.filter(b[1]).length; return { label: b[0], n: String(n), w: (n / 5 * 100) + '%', color: b[2] }; });
+    const events = demo ? [
+      { when: 'Sample · today', what: 'Site photograph uploaded (capture time unverified)', link: 'Site Photos' },
+      { when: 'Sample · yesterday', what: 'Non-conformance raised on a sample inspection', link: 'Inspections and NCRs' },
+      { when: 'Sample · 3 days ago', what: 'Engineer response received to a sample RFI', link: 'RFIs' }
+    ] : [];
+    const C = '#e0b800', D = '#007FFF', Q = '#6d5bd0';
+    const tiles = [
+      ['Active Claims', '0', C], ['Outstanding Notices', '0', C], ['Upcoming Contractual Deadlines', '0', C], ['Overdue Contractual Actions', '0', C], ['Outstanding Instructions and Determinations', '0', C],
+      ['Critical Path Status', 'Not set', D], ['Pending RFIs', '0', D], ['Pending Design Submissions', '0', D], ['Pending Interim Payment Certificates', '0', D],
+      ['Outstanding Inspections', '0', Q], ['Open Non-Conformance Reports', '0', Q], ['Outstanding Tests and Commissioning', '0', Q]
+    ].map(t => ({ label: t[0], value: t[1], color: t[2] }));
+    return {
+      rings, dates, alerts, horizon, events, tiles,
+      hzNote: demo ? 'Built from the five sample alerts. Not live data.' : 'No active deadlines.',
+      noAlerts: demo ? '' : 'yes',
+      noEvents: demo ? '' : 'yes',
+      demoBtn: demo ? 'Remove demo data' : 'Restore demo data (prototype only)',
+      toggleDemo: () => this.setState({ demo: !demo })
+    };
+  }
+}
+</script>
+</body>
+</html>

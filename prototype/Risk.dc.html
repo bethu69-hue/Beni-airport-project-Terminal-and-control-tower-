@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Risk Register</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:"Plus Jakarta Sans",system-ui,sans-serif;color:#0e1a2b;background:#f3f5f9}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="display:flex;flex-wrap:wrap;min-height:100vh">
+<div style="flex:0 0 260px"><dc-import name="Nav" active="risk" hint-size="260px,1000px"></dc-import></div>
+<main style="flex:999 1 560px;min-width:0;padding:24px 28px 40px;box-sizing:border-box">
+<div style="font-size:11px;letter-spacing:.14em;font-weight:700;color:#0067cc">DELIVERY</div>
+<h1 style="margin:4px 0 6px;font-size:28px;font-weight:800">Risk Register and Early Warnings</h1>
+<p style="margin:0 0 22px;font-size:14px;color:#4a5a6e;max-width:760px;line-height:1.55">Score risks by probability times impact. A registered risk can start a linked contractual assessment, but it never creates an entitlement by itself.</p>
+
+<div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start;margin-bottom:28px">
+<section style="flex:0 1 460px;min-width:300px">
+<h2 style="font-size:18px;font-weight:800;margin:0 0 10px">Heat map</h2>
+<div style="display:flex;gap:8px;align-items:stretch">
+<div style="flex:0 0 22px;display:flex;align-items:center;justify-content:center"><span style="transform:rotate(-90deg);white-space:nowrap;font-size:12px;font-weight:700;color:#4a5a6e">PROBABILITY</span></div>
+<div style="flex:1 1 auto">
+<div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px">
+<sc-for list="{{cells}}" as="c" hint-placeholder-count="25">
+<button onClick="{{c.pick}}" aria-label="{{c.aria}}" aria-pressed="{{c.pressed}}" style="aspect-ratio:1;min-height:44px;border-radius:8px;border:{{c.border}};background:{{c.bg}};color:{{c.fg}};font-size:13px;font-weight:800;cursor:pointer">{{c.score}}</button>
+</sc-for>
+</div>
+<div style="text-align:center;font-size:12px;font-weight:700;color:#4a5a6e;margin-top:6px">IMPACT</div>
+</div>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;font-size:12px;font-weight:700">
+<span style="padding:4px 10px;border-radius:999px;background:#e3f3ea;color:#145c36;border:1px solid #9bcdb0">✓ Low 1 to 4</span>
+<span style="padding:4px 10px;border-radius:999px;background:#fff1cc;color:#6b4600;border:1px solid #e0b84f">▲ Medium 5 to 9</span>
+<span style="padding:4px 10px;border-radius:999px;background:#ffe0b8;color:#7a3a00;border:1px solid #e5a15a">▲ High 10 to 16</span>
+<span style="padding:4px 10px;border-radius:999px;background:#ffedd5;color:#9a3412;border:1px solid #fdba74">■ Critical 17 to 25</span>
+</div>
+</section>
+<section style="flex:1 1 300px;min-width:0;background:#fff;border-radius:16px;border:1px solid #e1e7ee;padding:20px 22px">
+<div style="font-size:12px;font-weight:700;color:#4a5a6e">SELECTED CELL</div>
+<div style="font-size:22px;font-weight:800;margin:4px 0">{{sel.title}}</div>
+<div style="font-size:14px;line-height:1.6;color:#0e1a2b">{{sel.text}}</div>
+<div style="margin-top:12px;font-size:13px;color:#4a5a6e">Risks in this cell: <strong>0</strong> (no risks registered).</div>
+<div style="margin-top:16px;padding:12px 14px;background:#fff7dd;border:1px solid #e8c766;border-radius:12px;font-size:13px;line-height:1.5;color:#4a3200">Scale labels and score bands are editable defaults for the team to confirm.</div>
+</section>
+</div>
+
+<h2 style="font-size:18px;font-weight:800;margin:0 0 4px">Risk categories</h2>
+<p style="margin:0 0 12px;font-size:13.5px;color:#4a5a6e">Configurable. Starting list:</p>
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px">
+<sc-for list="{{cats}}" as="k" hint-placeholder-count="17"><span style="padding:7px 13px;border-radius:999px;background:#fff;border:1px solid #cfd8e2;font-size:13px">{{k.label}}</span></sc-for>
+</div>
+<div style="background:#fff;border:1px dashed #9aa9ba;border-radius:16px;padding:26px;text-align:center;font-size:14px;color:#4a5a6e">No risks registered. High-priority list, mitigation tracking and overdue actions appear here once risks are added.</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":1300}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const sel = this.state.sel || null;
+    const probs = ['Very low', 'Low', 'Medium', 'High', 'Very high'];
+    const imps = ['Minor', 'Moderate', 'Significant', 'Major', 'Severe'];
+    const cells = [];
+    for (let p = 5; p >= 1; p--) {
+      for (let i = 1; i <= 5; i++) {
+        const s = p * i;
+        let bg = '#e3f3ea', fg = '#145c36';
+        if (s >= 17) { bg = '#ffedd5'; fg = '#9a3412'; }
+        else if (s >= 10) { bg = '#ffe0b8'; fg = '#7a3a00'; }
+        else if (s >= 5) { bg = '#fff1cc'; fg = '#6b4600'; }
+        const on = sel && sel[0] === p && sel[1] === i;
+        cells.push({ score: String(s), bg, fg, aria: 'Probability ' + probs[p - 1] + ', impact ' + imps[i - 1] + ', score ' + s, pressed: on ? 'true' : 'false', border: on ? '3px solid #0e1a2b' : '1px solid rgba(14,26,43,.12)', pick: () => this.setState({ sel: [p, i] }) });
+      }
+    }
+    let cur = { title: 'None selected', text: 'Select a cell to see its score and band.' };
+    if (sel) {
+      const s = sel[0] * sel[1];
+      const band = s >= 17 ? 'Critical' : s >= 10 ? 'High' : s >= 5 ? 'Medium' : 'Low';
+      cur = { title: 'Score ' + s + ' · ' + band, text: 'Probability: ' + probs[sel[0] - 1] + ' (' + sel[0] + '). Impact: ' + imps[sel[1] - 1] + ' (' + sel[1] + ').' };
+    }
+    const cats = ['Design coordination','Procurement and long-lead equipment','Airport operational requirements','Specialist systems','Contractor performance','Delays','Unforeseen physical conditions','Weather','Logistics','Customs and border clearance','Local regulatory approvals','Security','Utilities','Testing and commissioning','Quality','Health and safety','Environmental and social'].map(label => ({ label }));
+    return { cells, sel: cur, cats };
+  }
+}
+</script>
+</body>
+</html>

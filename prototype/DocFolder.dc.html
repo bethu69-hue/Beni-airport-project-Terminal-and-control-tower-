@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Document folder</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Fraunces:opsz,wght@9..144,600;9..144,700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:"Plus Jakarta Sans",system-ui,sans-serif;color:#0e1a2b;background:#f3f5f9}
+button,input,select{font-family:inherit}
+</style>
+</helmet>
+<div style="display:flex;flex-wrap:wrap;min-height:100vh">
+<div style="flex:0 0 260px"><dc-import name="Nav" active="{{navKey}}" hint-size="260px,1000px"></dc-import></div>
+<main style="flex:999 1 560px;min-width:0;padding:24px 28px 40px;box-sizing:border-box">
+
+<header style="position:relative;overflow:hidden;border-radius:20px;background:linear-gradient(120deg,#0a3d8f 0%,#0a5cc2 68%,#007FFF 100%);color:#fff;padding:26px 30px;margin-bottom:20px">
+<svg width="100%" height="100%" viewBox="0 0 800 200" preserveAspectRatio="xMaxYMid slice" aria-hidden="true" style="position:absolute;right:0;top:0;opacity:.14"><path d="M560 200 650 0M730 200 710 0M900 200 770 0" stroke="#fff" stroke-width="3" fill="none"></path><path d="M710 200V0" stroke="#fff" stroke-width="4" stroke-dasharray="14 12" fill="none"></path></svg>
+<div style="position:relative;display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;align-items:flex-end">
+<div style="flex:1 1 340px;min-width:0">
+<div style="font-size:11px;letter-spacing:.16em;font-weight:700;color:#F7D618">{{kicker}} · FOLDER {{folderNo}}</div>
+<h1 style="margin:6px 0 8px;font-family:Fraunces,Georgia,serif;font-size:34px;line-height:1.15;font-weight:700">{{title}}</h1>
+<p style="margin:0;font-size:14px;line-height:1.55;color:#d3e2ef;max-width:640px">{{blurb}}</p>
+</div>
+<div style="display:flex;gap:10px;flex-wrap:wrap">
+<div style="background:rgba(6,30,74,.45);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:10px 16px;min-width:110px"><div style="font-size:11px;color:#b9d2e6;font-weight:600">Documents</div><div style="font-size:24px;font-weight:800">{{count}}</div></div>
+<div style="background:rgba(6,30,74,.45);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:10px 16px;min-width:150px"><div style="font-size:11px;color:#b9d2e6;font-weight:600">Last upload</div><div style="font-size:13px;font-weight:700;margin-top:6px">{{lastUpload}}</div></div>
+</div>
+</div>
+</header>
+
+<div style="background:#fff7dd;border:1px solid #e8c766;border-radius:12px;padding:10px 14px;margin-bottom:18px;font-size:13px;line-height:1.55;color:#4a3200"><strong>Prototype behaviour.</strong> The list below records each upload with its time, but the files themselves are not stored anywhere, and the time comes from this device's clock. In the real build, files go to secure storage and the timestamp is set by the server.</div>
+
+<section aria-labelledby="uph" style="background:#fff;border-radius:16px;border:1px solid #e1e7ee;padding:18px 20px;margin-bottom:20px">
+<h2 id="uph" style="margin:0 0 12px;font-size:18px;font-weight:800">Upload documents</h2>
+<div style="display:flex;flex-wrap:wrap;gap:16px;align-items:stretch">
+<div onDragOver="{{dragOver}}" onDragLeave="{{dragLeave}}" onDrop="{{drop}}" style="flex:2 1 320px;min-width:0;border:2px dashed {{dropBorder}};background:{{dropBg}};border-radius:14px;padding:22px;text-align:center">
+<div style="font-size:15px;font-weight:700;margin-bottom:4px">Drop files here</div>
+<div style="font-size:13px;color:#4a5a6e;margin-bottom:12px">or choose them from your device. You can select several at once.</div>
+<label for="upl" style="position:absolute;left:-9999px">Choose files to upload</label>
+<input id="upl" type="file" multiple="" onChange="{{pick}}" style="max-width:100%;min-height:44px;font-size:14px">
+</div>
+<div style="flex:1 1 240px;min-width:0">
+<label for="ty" style="display:block;font-size:13px;font-weight:700;margin-bottom:4px">Document type</label>
+<select id="ty" onChange="{{setType}}" style="width:100%;box-sizing:border-box;min-height:44px;padding:0 10px;border:1px solid #9aa9ba;border-radius:8px;font-size:14px;background:#fff;margin-bottom:12px">
+<sc-for list="{{typeOptions}}" as="o" hint-placeholder-count="4"><option value="{{o.v}}">{{o.v}}</option></sc-for>
+</select>
+<label for="nt" style="display:block;font-size:13px;font-weight:700;margin-bottom:4px">Note (optional)</label>
+<input id="nt" type="text" value="{{note}}" onInput="{{setNote}}" placeholder="Clause, drawing or notice reference" style="width:100%;box-sizing:border-box;min-height:44px;padding:0 10px;border:1px solid #9aa9ba;border-radius:8px;font-size:14px">
+<div style="font-size:12px;color:#4a5a6e;margin-top:8px;line-height:1.5">Uploaded by: Andrew Mwaura (Project Manager)</div>
+</div>
+</div>
+<sc-if value="{{lastMsg}}" hint-placeholder-val="{{ false }}"><div style="margin-top:12px;font-size:13.5px;font-weight:700;color:#145c36">✓ {{lastMsg}}</div></sc-if>
+</section>
+
+<section aria-labelledby="lsh">
+<div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;margin-bottom:10px">
+<h2 id="lsh" style="margin:0;font-size:18px;font-weight:800">Documents in this folder</h2>
+<div style="flex:0 1 280px;min-width:200px"><label for="sq" style="position:absolute;left:-9999px">Search documents</label><input id="sq" type="search" value="{{q}}" onInput="{{setQ}}" placeholder="Search name or reference" style="width:100%;box-sizing:border-box;min-height:44px;padding:0 12px;border:1px solid #cfd8e2;border-radius:10px;font-size:14px;background:#fff"></div>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+<sc-for list="{{chips}}" as="c" hint-placeholder-count="5">
+<button onClick="{{c.pick}}" aria-pressed="{{c.pressed}}" style="min-height:44px;padding:0 14px;border-radius:999px;border:1px solid {{c.border}};background:{{c.bg}};color:{{c.fg}};font-size:13px;font-weight:700;cursor:pointer">{{c.label}} · {{c.n}}</button>
+</sc-for>
+</div>
+<div style="background:#fff;border-radius:16px;border:1px solid #e1e7ee;overflow-x:auto">
+<sc-if value="{{noDocs}}" hint-placeholder-val="{{ true }}"><div style="padding:34px 20px;text-align:center;font-size:14px;color:#4a5a6e;line-height:1.6">{{emptyText}}</div></sc-if>
+<sc-if value="{{hasDocs}}" hint-placeholder-val="{{ false }}">
+<table style="width:100%;border-collapse:collapse;font-size:13px;min-width:860px">
+<thead><tr style="background:#eef2f6;text-align:left">
+<th style="padding:10px 14px">Reference</th><th style="padding:10px 14px">Document</th><th style="padding:10px 14px">Type</th><th style="padding:10px 14px">Uploaded at</th><th style="padding:10px 14px">By</th><th style="padding:10px 14px">File date (unverified)</th><th style="padding:10px 14px">Fingerprint</th><th style="padding:10px 14px">Version</th><th style="padding:10px 14px">Status</th>
+</tr></thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="3">
+<tr style="border-top:1px solid #e6ebf0;vertical-align:top">
+<td style="padding:10px 14px;font-weight:700;white-space:nowrap">{{r.ref}}</td>
+<td style="padding:10px 14px;min-width:200px"><div style="font-weight:600;word-break:break-word">{{r.name}}</div><div style="font-size:12px;color:#4a5a6e">{{r.size}}{{r.noteText}}</div></td>
+<td style="padding:10px 14px">{{r.type}}</td>
+<td style="padding:10px 14px;white-space:nowrap;font-weight:700">{{r.at}}<div style="font-size:11.5px;font-weight:500;color:#4a5a6e">{{r.tz}}</div></td>
+<td style="padding:10px 14px;white-space:nowrap">{{r.by}}</td>
+<td style="padding:10px 14px;white-space:nowrap;color:#4a5a6e">{{r.fileDate}}</td>
+<td style="padding:10px 14px;font-family:ui-monospace,Menlo,monospace;font-size:12px">{{r.hash}}</td>
+<td style="padding:10px 14px">v{{r.ver}}</td>
+<td style="padding:10px 14px;white-space:nowrap"><span style="font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;{{r.badge}}">{{r.status}}</span></td>
+</tr>
+</sc-for>
+</tbody></table>
+</sc-if>
+</div>
+<div style="font-size:12.5px;color:#4a5a6e;margin-top:10px;line-height:1.6">Records are never deleted or overwritten. Uploading a file with the same name adds a new version and marks the earlier one as superseded. The fingerprint (SHA-256) helps detect later changes to a file. File date is the device's last-modified date and does not prove when a document was created.</div>
+</section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"navKey":{"editor":null,"default":"eng"},"kicker":{"editor":null,"default":"CONTRACT"},"title":{"editor":null,"default":"Engineer&#39;s Communications"},"blurb":{"editor":null,"default":"Instructions, determinations, approvals and responses."},"folderNo":{"editor":null,"default":"04"},"types":{"editor":null,"default":"Engineer&#39;s Instruction,Determination,Notice,Approval or consent,Response,Site instruction,Other"},"prefix":{"editor":null,"default":"EIN"},"storeKey":{"editor":null,"default":"eng"},"$preview":{"width":1360,"height":1100}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    try {
+      const raw = window.localStorage.getItem('beni-docs-' + (this.props.storeKey || 'x'));
+      if (raw) { const d = JSON.parse(raw); if (Array.isArray(d)) this.setState({ docs: d }); }
+    } catch (e) {}
+  }
+  save(docs) {
+    try { window.localStorage.setItem('beni-docs-' + (this.props.storeKey || 'x'), JSON.stringify(docs)); } catch (e) {}
+  }
+  async addFiles(list) {
+    const files = Array.from(list || []);
+    if (!files.length) return;
+    const when = new Date();
+    const prefix = this.props.prefix || 'DOC';
+    const types = (this.props.types || 'Other').split(',');
+    const type = this.state.type || types[0];
+    const note = this.state.note || '';
+    let docs = (this.state.docs || []).slice();
+    const tz = (() => { try { return Intl.DateTimeFormat().resolvedOptions().timeZone; } catch (e) { return ''; } })();
+    for (const f of files) {
+      let hash = 'unavailable';
+      try {
+        const buf = await f.arrayBuffer();
+        const h = await window.crypto.subtle.digest('SHA-256', buf);
+        hash = Array.from(new Uint8Array(h)).map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 12);
+      } catch (e) {}
+      const same = docs.filter(d => d.name === f.name).length;
+      docs.push({
+        ref: prefix + '-' + String(docs.length + 1).padStart(3, '0'),
+        name: f.name, bytes: f.size, type, note,
+        at: when.toISOString(), tz,
+        fileDate: f.lastModified ? new Date(f.lastModified).toISOString() : '',
+        hash, ver: same + 1, by: 'Andrew Mwaura'
+      });
+    }
+    this.save(docs);
+    this.setState({ docs, lastMsg: files.length + (files.length === 1 ? ' file' : ' files') + ' recorded at ' + when.toLocaleTimeString('en-GB') });
+  }
+  renderVals() {
+    const types = (this.props.types || 'Other').split(',');
+    const docs = this.state.docs || [];
+    const f = this.state.f || '';
+    const q = (this.state.q || '').toLowerCase();
+    const fmtSize = (b) => b < 1024 ? b + ' B' : b < 1048576 ? (b / 1024).toFixed(1) + ' KB' : (b / 1048576).toFixed(1) + ' MB';
+    const fmt = (iso) => new Date(iso).toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const maxVer = {};
+    docs.forEach(d => { maxVer[d.name] = Math.max(maxVer[d.name] || 0, d.ver); });
+    const all = docs.map(d => {
+      const cur = d.ver === maxVer[d.name];
+      return {
+        ref: d.ref, name: d.name, size: fmtSize(d.bytes), type: d.type, noteText: d.note ? ' · ' + d.note : '',
+        at: fmt(d.at), tz: d.tz, by: d.by, fileDate: d.fileDate ? new Date(d.fileDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Not available',
+        hash: d.hash, ver: String(d.ver),
+        status: cur ? '✓ Current' : '○ Superseded',
+        badge: cur ? 'background:#e3f3ea;color:#145c36;border:1px solid #9bcdb0' : 'background:#eceff2;color:#3f4854;border:1px solid #c3cad2',
+        _type: d.type, _q: (d.name + ' ' + d.ref).toLowerCase()
+      };
+    });
+    const rows = all.filter(r => (!f || r._type === f) && (!q || r._q.indexOf(q) >= 0)).reverse();
+    const chips = [''].concat(types).map(t => ({
+      label: t || 'All', n: String(t ? docs.filter(d => d.type === t).length : docs.length),
+      pick: () => this.setState({ f: t }), pressed: f === t ? 'true' : 'false',
+      bg: f === t ? '#0a5cc2' : '#ffffff', fg: f === t ? '#ffffff' : '#0e1a2b', border: f === t ? '#0a5cc2' : '#cfd8e2'
+    }));
+    const drag = !!this.state.drag;
+    const last = docs.length ? fmt(docs[docs.length - 1].at) : 'None yet';
+    return {
+      navKey: this.props.navKey || 'eng', kicker: this.props.kicker || '', title: this.props.title || '', blurb: this.props.blurb || '', folderNo: this.props.folderNo || '00',
+      count: String(docs.length), lastUpload: last, rows, chips,
+      typeOptions: types.map(v => ({ v })),
+      hasDocs: rows.length ? 'yes' : '', noDocs: rows.length ? '' : 'yes',
+      emptyText: docs.length ? 'No documents match this filter.' : 'No documents yet. Upload the first one above and it will appear here with its date and time.',
+      note: this.state.note || '', q: this.state.q || '', lastMsg: this.state.lastMsg || '',
+      dropBorder: drag ? '#0067cc' : '#9aa9ba', dropBg: drag ? '#e6f1ff' : '#f7f9fb',
+      setType: (e) => this.setState({ type: e.target.value }),
+      setNote: (e) => this.setState({ note: e.target.value }),
+      setQ: (e) => this.setState({ q: e.target.value }),
+      pick: (e) => { const input = e.target; const list = Array.from(input.files || []); input.value = ''; this.addFiles(list); },
+      dragOver: (e) => { e.preventDefault(); if (!drag) this.setState({ drag: true }); },
+      dragLeave: () => this.setState({ drag: false }),
+      drop: (e) => { e.preventDefault(); this.setState({ drag: false }); this.addFiles(e.dataTransfer ? e.dataTransfer.files : []); }
+    };
+  }
+}
+</script>
+</body>
+</html>

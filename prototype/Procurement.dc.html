@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Procurement</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><style>body{margin:0}</style></helmet>
+<dc-import name="DocFolder" nav-key="proc" kicker="DELIVERY" title="Procurement" blurb="Subcontracts, purchase orders, delivery records and long-lead equipment documents." folder-no="09" types="Subcontract,Purchase order,Delivery record,Material approval request,Long-lead item tracker,Supplier certificate,Other" prefix="PRO" store-key="proc" hint-size="100%,1100px"></dc-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":1100}}'>
+class Component extends DCLogic { renderVals() { return {}; } }
+</script>
+</body>
+</html>

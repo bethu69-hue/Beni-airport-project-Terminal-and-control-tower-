@@ -1,0 +1,20 @@
+insert into auth.users(id,email) values ('11111111-1111-1111-1111-111111111111','pm@x'),('22222222-2222-2222-2222-222222222222','site@x'),('33333333-3333-3333-3333-333333333333','out@x');
+set role authenticated;
+select set_config('request.jwt.claim.sub','11111111-1111-1111-1111-111111111111',false);
+select public.create_project('T','Beni') as pid \gset
+reset role;
+insert into project_members values (:'pid','22222222-2222-2222-2222-222222222222','site_engineer');
+set role authenticated;
+insert into chat_channels(project_id,name) values (:'pid','site-queries');
+insert into team_directory(project_id,user_id,work_email,whatsapp_e164,whatsapp_consent) values (:'pid','11111111-1111-1111-1111-111111111111','pm@firm.com','+254700000001',true);
+insert into team_directory(project_id,user_id,work_email,phone_e164) values (:'pid','22222222-2222-2222-2222-222222222222','site@firm.com','+243800000002');
+select set_config('request.jwt.claim.sub','22222222-2222-2222-2222-222222222222',false);
+insert into chat_messages(channel_id,body,mentions) select id,'@PM please review rebar at grid C4','{11111111-1111-1111-1111-111111111111,33333333-3333-3333-3333-333333333333}' from chat_channels;
+select (select count(*) from chat_messages) msgs, (select array_length(mentions,1) from chat_messages) mentions_kept;
+select set_config('request.jwt.claim.sub','11111111-1111-1111-1111-111111111111',false);
+select via,status,skip_reason from message_alerts order by via;
+do $$ begin begin delete from chat_messages; raise notice 'FAIL delete allowed'; exception when others then raise notice 'PASS delete blocked: %', sqlerrm; end; end $$;
+do $$ begin begin update chat_messages set body='x'; raise notice 'FAIL edit allowed'; exception when others then raise notice 'PASS edit blocked: %', sqlerrm; end; end $$;
+do $$ begin begin perform record_alert_result(1,'delivered'); raise notice 'FAIL'; exception when others then raise notice 'PASS member cannot mark delivered: %', sqlerrm; end; end $$;
+select set_config('request.jwt.claim.sub','33333333-3333-3333-3333-333333333333',false);
+select count(*) outsider_sees from chat_messages;

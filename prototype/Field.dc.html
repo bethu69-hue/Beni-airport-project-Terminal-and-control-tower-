@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Field Management</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><style>body{margin:0}</style></helmet>
+<dc-import name="DocFolder" nav-key="field" kicker="SITE AND QUALITY" title="Field Management" blurb="Daily site reports, site diaries, labour, plant and weather records, observations and snagging lists." folder-no="15" types="Daily site report,Site diary,Labour record,Plant and equipment record,Weather record,Site observation,Snagging list,Other" prefix="FLD" store-key="field" hint-size="100%,1100px"></dc-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":1100}}'>
+class Component extends DCLogic { renderVals() { return {}; } }
+</script>
+</body>
+</html>

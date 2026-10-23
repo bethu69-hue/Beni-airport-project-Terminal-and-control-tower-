@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Contract Administration</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:"Plus Jakarta Sans",system-ui,sans-serif;color:#1b2430;background:#f2f5f8}
+a{color:#0f4c99}a:hover{color:#0a3166}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="display:flex;flex-wrap:wrap;min-height:100vh">
+
+<div style="flex:0 0 260px"><dc-import name="Nav" active="contract" hint-size="260px,1000px"></dc-import></div>
+
+<main style="flex:999 1 560px;min-width:0;padding:24px;box-sizing:border-box">
+<h1 style="margin:0 0 4px;font-size:26px">CONTRACT ADMINISTRATION</h1>
+<p style="margin:0 0 20px;color:#3f4854;font-size:14px">Notices, claims, variations, payments, securities and obligations, each with its clause, evidence and deadline.</p>
+
+<div style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start;margin-bottom:28px">
+
+<div style="flex:1 1 280px;max-width:420px;background:#fff;border:1px solid #d5dce4;border-radius:8px;padding:8px">
+<div style="font-size:13px;font-weight:700;color:#3f4854;padding:8px 8px 4px">Sections A to S</div>
+<sc-for list="{{sections}}" as="s" hint-placeholder-count="6">
+<button onClick="{{s.pick}}" aria-pressed="{{s.pressed}}" style="display:flex;width:100%;gap:10px;text-align:left;align-items:center;min-height:44px;padding:6px 10px;border:1px solid {{s.border}};background:{{s.bg}};border-radius:6px;font-size:14px;color:#1b2430;cursor:pointer;margin-bottom:2px">
+<span style="flex:0 0 22px;font-weight:700;color:#0b4fb3">{{s.letter}}</span>
+<span style="flex:1 1 auto">{{s.title}}</span>
+</button>
+</sc-for>
+</div>
+
+<div style="flex:999 1 340px;min-width:0;background:#fff;border:1px solid #d5dce4;border-radius:8px;padding:20px">
+<div style="font-size:13px;color:#3f4854">Section {{cur.letter}}</div>
+<h2 style="margin:2px 0 8px;font-size:20px">{{cur.title}}</h2>
+<p style="margin:0 0 16px;font-size:14px;line-height:1.55">{{cur.purpose}}</p>
+<div style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+<div style="flex:1 1 140px;border:1px solid #d5dce4;border-radius:8px;padding:10px 12px"><div style="font-size:12px;color:#3f4854">Live records</div><div style="font-size:22px;font-weight:700;color:#4b5563">0</div></div>
+<div style="flex:1 1 140px;border:1px solid #d5dce4;border-radius:8px;padding:10px 12px"><div style="font-size:12px;color:#3f4854">Rules Approved for Use</div><div style="font-size:22px;font-weight:700;color:#4b5563">0</div></div>
+<div style="flex:1 1 140px;border:1px solid #d5dce4;border-radius:8px;padding:10px 12px"><div style="font-size:12px;color:#3f4854">Status</div><div style="font-size:14px;font-weight:700;margin-top:6px;color:#3f4854">○ Not configured</div></div>
+</div>
+<div style="font-size:13px;font-weight:700;margin-bottom:6px">Safeguards in this section</div>
+<ul style="margin:0 0 16px;padding-left:20px;font-size:14px;line-height:1.6">
+<li>{{cur.guard}}</li>
+<li>Every record carries a unique reference, clause link, responsible person, evidence and history.</li>
+<li>Issued records are versioned, never overwritten or deleted.</li>
+</ul>
+<sc-if value="{{cur.link}}" hint-placeholder-val="{{ false }}">
+<a href="Notices.dc.html" style="display:inline-flex;align-items:center;min-height:44px;padding:0 16px;background:#0b4fb3;color:#fff;border-radius:8px;text-decoration:none;font-size:14px">Open Notices and Deadlines</a>
+</sc-if>
+</div>
+</div>
+
+<h2 style="font-size:16px;margin:0 0 4px">Record lifecycle</h2>
+<p style="margin:0 0 10px;font-size:13px;color:#3f4854">Each stage is a separate recorded event. A draft is not an issued notice, and a prepared email is not delivery evidence.</p>
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px">
+<sc-for list="{{lifecycle}}" as="l" hint-placeholder-count="6">
+<span style="padding:6px 10px;border-radius:999px;font-size:12px;font-weight:700;{{l.style}}">{{l.label}}</span>
+</sc-for>
+</div>
+
+<h2 style="font-size:16px;margin:0 0 4px">Project setup checklist</h2>
+<p style="margin:0 0 10px;font-size:13px;color:#3f4854">Dashboard values and deadlines stay blank until the authorised team completes these.</p>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px;margin-bottom:24px">
+<sc-for list="{{setup}}" as="x" hint-placeholder-count="6">
+<div style="background:#fff;border:1px solid #d5dce4;border-radius:8px;padding:10px 12px;font-size:14px;display:flex;justify-content:space-between;gap:8px"><span>{{x.name}}</span><span style="font-size:12px;font-weight:700;color:#3f4854;white-space:nowrap">○ Not configured</span></div>
+</sc-for>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":1300}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const names = ['Project Overview','Contract Administration','Notices and Deadlines','Claims and EOT',"Engineer's Communications",'Variations and Change Control','Payments and IPCs','Programme and Progress','Design Management','Drawings and Documents','RFIs and Technical Queries','Quality Management','Inspections and NCRs','Field Management','Site Photos and Evidence','Procurement','Risk Register','HSE','Meetings and Actions','Testing and Commissioning','Taking-Over and Handover','Defects Notification Period','Reports','Notifications','Users and Permissions','System Settings'];
+    const hrefs = { 0: 'Main.dc.html', 1: 'Contract.dc.html', 2: 'Notices.dc.html' };
+    const nav = names.map((label, i) => ({ label: (i + 1) + '. ' + label, href: hrefs[i] || '', off: hrefs[i] ? '' : 'yes', bg: i === 1 ? '#2a5a8c' : 'transparent', weight: i === 1 ? '700' : '500' }));
+    const secs = [
+      ['Contract Particulars and Administration Setup','Holds the executed contract documents, Particular Conditions, Contract Data, Contract Price, Commencement Date, Time for Completion and the authorised parties.','No figure or date is pre-filled. Values come only from the executed contract.',false],
+      ['Notice Register','Records each notice from event to delivery to response, with separate timestamps for event, awareness, preparation, approval, issue, delivery and receipt.','Deadlines are calculated only from an Approved for Use rule. Uncertain triggers are flagged for review.',true],
+      ['Claims Register','Tracks Contractor and Employer claims from event identification through notice, particulars, Engineer response, determination and any DAAB referral.','Claimed, assessed, determined and paid amounts are held separately. A passed response date never means acceptance.',false],
+      ['Contractual Deadline Tracker','Single view of every active deadline with its rule, trigger, calculation and countdown, kept apart from internal targets and statutory dates.','Changing a deadline needs an authorised user and a documented reason. The original is preserved.',true],
+      ["Engineer's Communications and Determinations",'Instructions, determinations, approvals and responses with sender, recipient, issue and receipt evidence.','Administrative status never decides contractual validity.',false],
+      ['Variations and Change Management','Change workflow from identification to instruction, quotation, assessment and recorded approval.','Contract Price and Time for Completion change only after the contractual action is recorded.',false],
+      ['Extensions of Time','Claimed, assessed and determined extensions linked to delay events and programme versions.','No extension is granted merely because a delay event was registered.',false],
+      ['Delay and Disruption Records','Delay events linked to activities, the approved programme, critical path, mitigation and evidence.','Contemporaneous records are kept alongside each event.',false],
+      ['Payment Applications and Interim Payment Certificates','Application, assessment, certification, payment due date and actual payment as separate events.','Certification and payment periods are never assumed equal.',false],
+      ['Advance Payment and Recovery','Advance payment amount, security and recovery schedule.','Terms come from the executed contract only.',false],
+      ['Performance Security and Other Securities','Securities, validity dates and expiry alerts.','Expiry reminders follow configured intervals.',false],
+      ['Risk and Early Warning Register','Risks and early warnings with option to start a linked contractual assessment.','A registered risk does not create entitlement.',false],
+      ['Suspension and Termination Records','Suspension and termination events, notices and consequences.','Every notice follows the draft, approved, issued, delivered sequence.',false],
+      ['Disputes, DAAB and Amicable Settlement','Notices of Dissatisfaction, DAAB referrals and decisions, amicable settlement periods.','Periods are taken from the approved rule library.',false],
+      ['Taking-Over and Completion','Contractor application, Engineer inspection, outstanding items and certificate record.','The system never issues a Taking-Over Certificate or decides that Taking-Over occurred.',false],
+      ['Defects Notification Period','Start date, duration, calculated end date, defect notifications and rectification.','Duration and any extension are set by the contract.',false],
+      ['Final Statement and Final Payment Certificate','Final account reconciliation, statement, certificate and release of securities.','Closeout is blocked while obligations remain outstanding.',false],
+      ['Contractual Correspondence Register','Formal communications with authorised sender, recipient, delivery method and evidence.','An email being prepared is not proof of delivery.',false],
+      ['Contractual Obligations and Compliance Matrix','Obligations of each party mapped to clause, owner, due date and evidence.','Items from AI extraction stay unverified until a Contract Manager approves them.',false]
+    ];
+    const sel = this.state.sel || 0;
+    const sections = secs.map((s, i) => ({
+      letter: String.fromCharCode(65 + i), title: s[0],
+      pick: () => this.setState({ sel: i }),
+      pressed: i === sel ? 'true' : 'false',
+      bg: i === sel ? '#e2ecfb' : '#ffffff',
+      border: i === sel ? '#9db9e6' : 'transparent'
+    }));
+    const c = secs[sel];
+    const cur = { letter: String.fromCharCode(65 + sel), title: c[0], purpose: c[1], guard: c[2], link: c[3] ? 'yes' : '' };
+    const st = {
+      grey: 'background:#eceff2;color:#3f4854;border:1px solid #c3cad2',
+      blue: 'background:#e2ecfb;color:#123f86;border:1px solid #9db9e6',
+      amber: 'background:#fff1cc;color:#6b4600;border:1px solid #e0b84f',
+      green: 'background:#e3f3ea;color:#145c36;border:1px solid #9bcdb0',
+      red: 'background:#ffedd5;color:#9a3412;border:1px solid #fdba74'
+    };
+    const lc = [['○ Draft','grey'],['○ Internally reviewed','grey'],['▲ Approved for issue','amber'],['● Formally issued','blue'],['▲ Delivery pending','amber'],['✓ Delivered','green'],['✓ Receipt confirmed','green'],['● Response pending','blue'],['● Response received','blue'],['● Under assessment','blue'],['✓ Determined','green'],['✓ Closed','green'],['■ Overdue','red']];
+    const lifecycle = lc.map(x => ({ label: x[0], style: st[x[1]] }));
+    const setupNames = ['Executed Contract Agreement','General Conditions of Contract','Particular Conditions','Contract Data',"Employer's Requirements","Contractor's Proposal",'Accepted programme','Contract Price and payment terms','Time for Completion','Commencement Date','Key milestones','Notice and response periods','Communication procedures','Authorised parties and roles','Document numbering','Reporting requirements'];
+    return { nav, sections, cur, lifecycle, setup: setupNames.map(n => ({ name: n })) };
+  }
+}
+</script>
+</body>
+</html>

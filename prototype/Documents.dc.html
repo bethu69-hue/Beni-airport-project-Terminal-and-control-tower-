@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Drawings and Documents</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:"Plus Jakarta Sans",system-ui,sans-serif;color:#0e1a2b;background:#f3f5f9}
+button,input{font-family:inherit}
+</style>
+</helmet>
+<div style="display:flex;flex-wrap:wrap;min-height:100vh">
+<div style="flex:0 0 260px"><dc-import name="Nav" active="docs" hint-size="260px,1000px"></dc-import></div>
+<main style="flex:999 1 560px;min-width:0;padding:24px 28px 40px;box-sizing:border-box">
+<div style="font-size:11px;letter-spacing:.14em;font-weight:700;color:#0067cc">DOCUMENT CONTROL</div>
+<h1 style="margin:4px 0 6px;font-size:28px;font-weight:800">Drawings and Documents</h1>
+<p style="margin:0 0 22px;font-size:14px;color:#4a5a6e;max-width:760px;line-height:1.55">A structured project filing system with version control. A superseded drawing is clearly marked so it cannot be mistaken for the current construction revision.</p>
+
+<div style="display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start;margin-bottom:28px">
+<section style="flex:1 1 340px;max-width:460px;background:#fff;border-radius:16px;border:1px solid #e1e7ee;padding:10px">
+<label for="ff" style="position:absolute;left:-9999px">Filter folders</label>
+<input id="ff" type="search" value="{{q}}" onInput="{{setQ}}" placeholder="Filter folders" style="width:100%;box-sizing:border-box;min-height:44px;padding:0 12px;border:1px solid #cfd8e2;border-radius:10px;font-size:14px;margin-bottom:6px">
+<sc-for list="{{folders}}" as="f" hint-placeholder-count="8">
+<button onClick="{{f.pick}}" aria-pressed="{{f.pressed}}" style="display:flex;width:100%;gap:10px;align-items:center;text-align:left;min-height:40px;padding:2px 10px;border:1px solid {{f.border}};background:{{f.bg}};border-radius:9px;font-size:13.5px;color:#0e1a2b;cursor:pointer;margin-bottom:1px">
+<span style="flex:0 0 26px;font-weight:800;color:#0a5cc2">{{f.no}}</span><span>{{f.title}}</span>
+</button>
+</sc-for>
+<sc-if value="{{none}}" hint-placeholder-val="{{ false }}"><div style="padding:14px;font-size:13.5px;color:#4a5a6e">No folder matches.</div></sc-if>
+</section>
+
+<section style="flex:999 1 340px;min-width:0;background:#fff;border-radius:16px;border:1px solid #e1e7ee;padding:20px 22px">
+<div style="font-size:12px;font-weight:700;color:#0067cc">FOLDER {{cur.no}}</div>
+<h2 style="margin:2px 0 10px;font-size:20px;font-weight:800">{{cur.title}}</h2>
+<div style="background:#f3f5f9;border:1px dashed #9aa9ba;border-radius:12px;padding:26px;text-align:center;font-size:14px;color:#4a5a6e;margin-bottom:14px">No documents in this folder.<br><button style="margin-top:12px;min-height:44px;padding:0 18px;border:1px solid #0a5cc2;background:#0a5cc2;color:#fff;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer">Upload document</button></div>
+<div style="font-size:13px;color:#4a5a6e;line-height:1.6">Each folder supports subfolders, metadata, access permissions, version history and links to notices, claims, RFIs and instructions.</div>
+</section>
+</div>
+
+<h2 style="font-size:18px;font-weight:800;margin:0 0 4px">Revision lifecycle</h2>
+<p style="margin:0 0 12px;font-size:13.5px;color:#4a5a6e">Example of how one drawing is shown. Marked as a sample.</p>
+<div style="background:#fff;border-radius:16px;border:1px solid #e1e7ee;overflow-x:auto;margin-bottom:28px">
+<table style="width:100%;border-collapse:collapse;font-size:13.5px;min-width:600px">
+<caption style="text-align:left;padding:12px 16px;font-size:12px;font-weight:800;color:#0b4fb3">DEMO DATA</caption>
+<thead><tr style="background:#eef2f6;text-align:left"><th style="padding:10px 16px">Reference</th><th style="padding:10px 16px">Revision</th><th style="padding:10px 16px">Issued</th><th style="padding:10px 16px">Status</th></tr></thead>
+<tbody>
+<sc-for list="{{revs}}" as="r" hint-placeholder-count="3">
+<tr style="border-top:1px solid #e6ebf0"><td style="padding:10px 16px">DEMO-DWG-001</td><td style="padding:10px 16px;font-weight:700">{{r.rev}}</td><td style="padding:10px 16px">{{r.when}}</td><td style="padding:10px 16px"><span style="font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;{{r.style}}">{{r.status}}</span></td></tr>
+</sc-for>
+</tbody></table>
+</div>
+
+<h2 style="font-size:18px;font-weight:800;margin:0 0 10px">Metadata on every document</h2>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<sc-for list="{{meta}}" as="m" hint-placeholder-count="12"><span style="padding:6px 12px;border-radius:999px;background:#fff;border:1px solid #cfd8e2;font-size:12.5px">{{m.label}}</span></sc-for>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":1500}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const names = ['Project Administration and Governance','Executed Contract and Particular Conditions','Contractual Correspondence and Notices','Claims, EOT and Delay Analysis',"Engineer's Instructions and Determinations",'Design Management','Drawings and Specifications','Technical Submissions and RFIs','Programme and Progress Reports','Procurement and Subcontracts','Quality Assurance and Quality Control','Inspection and Test Plans','Non-Conformance Reports and Corrective Actions','Health, Safety and Environment','Environmental and Social Management','Site Diaries and Daily Reports','Site Photographs and Video Evidence','Meetings and Minutes','Payment Applications and IPCs','Variations and Commercial Management','Risk Register and Early Warnings','Testing, Commissioning and Handover','Taking-Over and Completion','Defects Notification Period','As-Built Drawings and Operation Manuals','Final Accounts and Project Closeout'];
+    const sel = this.state.sel || 0;
+    const q = (this.state.q || '').toLowerCase();
+    const all = names.map((title, i) => ({ title, i, no: String(i).padStart(2, '0') }));
+    const folders = all.filter(f => !q || f.title.toLowerCase().indexOf(q) >= 0 || f.no.indexOf(q) >= 0).map(f => ({
+      no: f.no, title: f.title, pick: () => this.setState({ sel: f.i }),
+      pressed: f.i === sel ? 'true' : 'false', bg: f.i === sel ? '#e6f1ff' : '#ffffff', border: f.i === sel ? '#7fb9ff' : 'transparent'
+    }));
+    const S = {
+      green: 'background:#e3f3ea;color:#145c36;border:1px solid #9bcdb0',
+      grey: 'background:#eceff2;color:#3f4854;border:1px solid #c3cad2',
+      amber: 'background:#fff1cc;color:#6b4600;border:1px solid #e0b84f'
+    };
+    const revs = [
+      { rev: 'C', when: 'Sample date', status: '✓ CURRENT FOR CONSTRUCTION', style: S.green },
+      { rev: 'B', when: 'Sample date', status: '○ SUPERSEDED', style: S.grey },
+      { rev: 'A', when: 'Sample date', status: '○ SUPERSEDED', style: S.grey }
+    ];
+    const meta = ['Document reference','Title','Document type','Discipline','Originator','Recipient','Revision','Issue date','Receipt date','Status','Contract clause','Related notice or claim','Related RFI or instruction','Related activity or location','Uploaded by','Upload timestamp','Version history'].map(label => ({ label }));
+    return { folders, none: folders.length ? '' : 'yes', cur: { no: String(sel).padStart(2, '0'), title: names[sel] }, revs, meta, q: this.state.q || '', setQ: (e) => this.setState({ q: e.target.value }) };
+  }
+}
+</script>
+</body>
+</html>

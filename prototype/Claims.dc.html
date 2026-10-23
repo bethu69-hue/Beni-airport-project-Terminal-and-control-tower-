@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Claims and EOT</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:"Plus Jakarta Sans",system-ui,sans-serif;color:#0e1a2b;background:#f3f5f9}
+a{color:#0f4c99}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="display:flex;flex-wrap:wrap;min-height:100vh">
+<div style="flex:0 0 260px"><dc-import name="Nav" active="claims" hint-size="260px,1000px"></dc-import></div>
+<main style="flex:999 1 560px;min-width:0;padding:24px 28px 40px;box-sizing:border-box">
+
+<div style="font-size:11px;letter-spacing:.14em;font-weight:700;color:#0067cc">CONTRACT · SUB-CLAUSE 20.2 AND RELATED PROCEDURES</div>
+<h1 style="margin:4px 0 6px;font-size:28px;font-weight:800">Claims and Extensions of Time</h1>
+<p style="margin:0 0 22px;font-size:14px;color:#4a5a6e;max-width:760px;line-height:1.55">Contractor and Employer claims, tracked from event to outcome. Not every claim follows the same path, so steps can be skipped or repeated for continuing claims when the contract procedure differs.</p>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:12px">
+<sc-for list="{{stats}}" as="s" hint-placeholder-count="6">
+<div style="background:#fff;border-radius:14px;padding:14px 16px;border:1px solid #e1e7ee"><div style="font-size:12px;font-weight:600;color:#4a5a6e;min-height:30px;line-height:1.35">{{s.label}}</div><div style="font-size:24px;font-weight:800;margin-top:2px">{{s.value}}</div></div>
+</sc-for>
+</div>
+<div style="font-size:12.5px;color:#4a5a6e;margin-bottom:26px">Counts show live records only. No claims are registered yet.</div>
+
+<h2 style="font-size:18px;font-weight:800;margin:0 0 4px">Four amounts, never merged</h2>
+<p style="margin:0 0 12px;font-size:13.5px;color:#4a5a6e">A claimed sum is not an assessed sum, a determined sum, or money certified and paid.</p>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0;margin-bottom:28px;background:#fff;border-radius:16px;overflow:hidden;border:1px solid #e1e7ee">
+<sc-for list="{{amounts}}" as="m" hint-placeholder-count="4">
+<div style="padding:16px 18px;border-left:4px solid {{m.color}}">
+<div style="font-size:12px;font-weight:700;color:#4a5a6e">{{m.label}}</div>
+<div style="font-size:20px;font-weight:800;margin-top:6px;color:#4a5a6e">—</div>
+<div style="font-size:12px;color:#4a5a6e;margin-top:2px">{{m.note}}</div>
+</div>
+</sc-for>
+</div>
+
+<h2 style="font-size:18px;font-weight:800;margin:0 0 4px">Claim workflow</h2>
+<p style="margin:0 0 12px;font-size:13.5px;color:#4a5a6e">Select a step to see what is recorded and what the system will not do for you.</p>
+<div style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start;margin-bottom:28px">
+<div style="flex:1 1 300px;max-width:440px;background:#fff;border-radius:16px;padding:10px;border:1px solid #e1e7ee">
+<sc-for list="{{steps}}" as="p" hint-placeholder-count="8">
+<button onClick="{{p.pick}}" aria-pressed="{{p.pressed}}" style="display:flex;width:100%;gap:10px;align-items:center;text-align:left;min-height:44px;padding:4px 10px;border:1px solid {{p.border}};background:{{p.bg}};border-radius:10px;font-size:13.5px;color:#0e1a2b;cursor:pointer;margin-bottom:2px">
+<span style="flex:0 0 26px;height:26px;border-radius:50%;background:{{p.dot}};color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center">{{p.n}}</span>
+<span style="flex:1 1 auto">{{p.title}}</span>
+</button>
+</sc-for>
+</div>
+<div style="flex:999 1 320px;min-width:0;background:#fff;border-radius:16px;padding:22px;border:1px solid #e1e7ee">
+<div style="font-size:12px;font-weight:700;color:#0067cc">STEP {{cur.n}} OF 19</div>
+<h3 style="margin:4px 0 10px;font-size:20px;font-weight:800">{{cur.title}}</h3>
+<p style="margin:0 0 14px;font-size:14px;line-height:1.6">{{cur.what}}</p>
+<div style="background:#fff7dd;border:1px solid #e8c766;border-radius:12px;padding:12px 14px;font-size:13.5px;line-height:1.55;color:#4a3200"><strong>Guardrail:</strong> {{cur.guard}}</div>
+<div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">
+<button onClick="{{prev}}" style="min-height:44px;padding:0 16px;border:1px solid #b8c3cf;background:#fff;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer">Previous</button>
+<button onClick="{{next}}" style="min-height:44px;padding:0 16px;border:1px solid #0a5cc2;background:#0a5cc2;color:#fff;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer">Next step</button>
+</div>
+</div>
+</div>
+
+<h2 style="font-size:18px;font-weight:800;margin:0 0 4px">Evidence that links back to a claim</h2>
+<p style="margin:0 0 12px;font-size:13.5px;color:#4a5a6e">Every attachment keeps its link to the claim and its own audit history.</p>
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px">
+<sc-for list="{{evidence}}" as="v" hint-placeholder-count="8"><span style="padding:7px 13px;border-radius:999px;background:#fff;border:1px solid #cfd8e2;font-size:13px">{{v.label}}</span></sc-for>
+</div>
+
+<h2 style="font-size:18px;font-weight:800;margin:0 0 10px">Claims register</h2>
+<div style="background:#fff;border:1px dashed #9aa9ba;border-radius:16px;padding:30px;text-align:center;margin-bottom:10px">
+<div style="font-size:15px;font-weight:700;margin-bottom:6px">No claims registered</div>
+<div style="font-size:13.5px;color:#4a5a6e;max-width:520px;margin:0 auto 14px;line-height:1.55">A claim needs a linked Notice of Claim record. The notice deadline comes from an Approved for Use rule, and a passed response date is never treated as acceptance.</div>
+<a href="Notices.dc.html" style="display:inline-flex;align-items:center;min-height:44px;padding:0 18px;background:#0a5cc2;color:#fff;border-radius:10px;font-size:14px;font-weight:600;text-decoration:none">Go to Notices and Deadlines</a>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":1500}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const stats = ['Total open claims','Awaiting notices','Awaiting Detailed Particulars','Awaiting Engineer action','Under assessment','Determined','Subject to disagreement','Claims with approaching deadlines','Overdue claim actions'].map(label => ({ label, value: '0' }));
+    const amounts = [
+      { label: 'Amount claimed', note: 'Value in the claimant’s submission', color: '#0a5cc2' },
+      { label: 'Amount assessed', note: 'Value in the Engineer’s assessment', color: '#007FFF' },
+      { label: 'Amount determined', note: 'Value in a recorded determination', color: '#6d5bd0' },
+      { label: 'Certified or paid', note: 'Value in an IPC or payment record', color: '#b07a00' }
+    ];
+    const S = [
+      ['Event identified','Someone on site or in the office spots an event that may give rise to a claim.','Identifying an event is not a finding of entitlement.'],
+      ['Event registered','The event is entered with its date, date of awareness, cause and a unique reference.','Event date and awareness date are stored separately.'],
+      ['Contractual entitlement reviewed','The Contract Manager reviews the clause basis, including Particular Conditions.','Uncertain interpretation is flagged for review, not guessed.'],
+      ['Notice requirement assessed','Whether a notice is required, and which rule applies, is recorded.','Only an Approved for Use rule can generate a live deadline.'],
+      ['Notice prepared','A draft Notice of Claim is prepared and linked to the event.','A draft is not a formally issued notice.'],
+      ['Notice internally reviewed','A reviewer comments or clears the draft.','Review is recorded with name and timestamp.'],
+      ['Notice approved','An authorised approver signs off for issue.','The system never issues a notice without human approval.'],
+      ['Notice formally issued','Issue date, time, sender, recipient and method are recorded.','An email being prepared is not an issue event.'],
+      ['Delivery evidenced','Courier receipt, signed copy or other delivery evidence is attached.','Receipt confirmation is a separate, later event.'],
+      ['Relevant deadline calculated','The engine shows the rule used, the calculation and a countdown.','Deadlines never reset when a document is uploaded.'],
+      ['Detailed Particulars submitted','Particulars are prepared and submitted as the procedure requires, including interim and final submissions for continuing events.','A late submission shows the actual timeline and is flagged for assessment, not silently adjusted.'],
+      ['Engineer acknowledgment and response tracked','The Engineer’s acknowledgment and response are logged with dates.','A passed response date does not mean the claim is accepted.'],
+      ['Claim substantiated','Records are attached: reports, photographs, programmes, cost records.','Photograph upload time is shown separately from capture time.'],
+      ['Time and cost impacts assessed','Time and cost impact are assessed against the approved programme.','No extension is granted merely because a delay was registered.'],
+      ['Engineer’s determination tracked','The determination, its date and the amount are recorded.','Determined amounts are kept apart from claimed amounts.'],
+      ['Notice of Dissatisfaction recorded','Where applicable, a Notice of Dissatisfaction and its dates are recorded.','Its period comes from the approved rule library.'],
+      ['DAAB referral tracked','Referral, decision and any follow-up notices are recorded.','Periods are configured, never hard-coded.'],
+      ['Amicable settlement and proceedings','Settlement discussions and later proceedings are logged.','Each stage keeps its own evidence and history.'],
+      ['Claim closed with outcome','The final outcome is documented and the claim is closed.','Closing needs a recorded outcome and authorisation.']
+    ];
+    const sel = this.state.sel || 0;
+    const steps = S.map((s, i) => ({
+      n: String(i + 1), title: s[0],
+      pick: () => this.setState({ sel: i }),
+      pressed: i === sel ? 'true' : 'false',
+      bg: i === sel ? '#e6f1ff' : '#ffffff',
+      border: i === sel ? '#7fb9ff' : 'transparent',
+      dot: i === sel ? '#0067cc' : '#7a8ba0'
+    }));
+    const cur = { n: String(sel + 1), title: S[sel][0], what: S[sel][1], guard: S[sel][2] };
+    const ev = ['Daily site reports','Weather records','Site photographs','Instructions','Approved and revised drawings','Programme updates','Labour and equipment records','Cost records','Delivery records','Meeting minutes','Correspondence','Inspection records','Other evidence'].map(label => ({ label }));
+    return {
+      stats, amounts, steps, cur, evidence: ev,
+      prev: () => this.setState({ sel: Math.max(0, sel - 1) }),
+      next: () => this.setState({ sel: Math.min(S.length - 1, sel + 1) })
+    };
+  }
+}
+</script>
+</body>
+</html>

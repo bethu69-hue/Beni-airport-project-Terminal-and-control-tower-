@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>System Settings</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><style>body{margin:0}</style></helmet>
+<dc-import name="DocFolder" nav-key="settings" kicker="ADMINISTRATION" title="System Settings and Project Setup" blurb="Upload the contract documents used to set up the project. A Contract Manager must verify each deadline rule before it can generate live deadlines." folder-no="01" types="Executed Contract Agreement,General Conditions,Particular Conditions,Contract Data,Employer's Requirements,Contractor's Proposal,Accepted programme,Other" prefix="SET" store-key="settings" hint-size="100%,1100px"></dc-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":1100}}'>
+class Component extends DCLogic { renderVals() { return {}; } }
+</script>
+</body>
+</html>

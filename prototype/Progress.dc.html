@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Project Progress</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Fraunces:opsz,wght@9..144,600;9..144,700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:"Plus Jakarta Sans",system-ui,sans-serif;color:#0e1a2b;background:#e9edf2}
+button{font-family:inherit}
+@keyframes pulse{0%{opacity:1}50%{opacity:.35}100%{opacity:1}}
+</style>
+</helmet>
+<div style="display:flex;flex-wrap:wrap;min-height:100vh">
+<div style="flex:0 0 260px"><dc-import name="Nav" active="progress" tone="sky" hint-size="260px,1000px"></dc-import></div>
+<main style="flex:999 1 560px;min-width:0;padding:20px 24px 40px;box-sizing:border-box">
+
+<div style="position:relative;overflow:hidden;border-radius:18px;background:#0a5cc2;color:#fff;padding:54px 26px 20px;margin-bottom:16px">
+<img src="/_blob/46171ba6995dc37df5b45594d674ab24" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 55%">
+<div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,100,220,.05) 0%,rgba(0,90,200,.9) 100%)"></div>
+<div style="position:relative;font-family:Fraunces,Georgia,serif;font-size:30px;font-weight:700;line-height:1.15;text-shadow:0 2px 16px rgba(0,0,0,.45)">Where the project stands</div>
+<div style="position:relative;font-size:13px;color:#d3e2ef;margin-top:4px">Beni Airport · Terminal and Control Tower</div>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:flex-end;margin-bottom:14px">
+<div style="min-width:0">
+<div style="font-size:11px;letter-spacing:.14em;font-weight:700;color:#0067cc">PROGRESS REPORT</div>
+<h1 style="margin:2px 0 0;font-size:26px;font-weight:800">Beni Airport · Terminal and Control Tower</h1>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+<span style="display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:#145c36;background:#e3f3ea;border:1px solid #9bcdb0;border-radius:999px;padding:6px 12px"><span style="width:8px;height:8px;border-radius:50%;background:#1f9d5b;animation:pulse 1.6s infinite"></span>{{liveLabel}}</span>
+<button onClick="{{simulate}}" style="min-height:44px;padding:0 16px;border:1px solid #0a5cc2;background:#0a5cc2;color:#fff;border-radius:10px;font-size:13.5px;font-weight:700;cursor:pointer">Simulate site update</button>
+<button onClick="{{toggleDemo}}" style="min-height:44px;padding:0 16px;border:1px solid #6b4600;background:#fff7dd;color:#4a3200;border-radius:10px;font-size:13.5px;font-weight:600;cursor:pointer">{{demoBtn}}</button>
+</div>
+</div>
+
+<div style="background:#fff7dd;border:1px solid #e8c766;border-radius:12px;padding:10px 14px;margin-bottom:14px;font-size:13px;line-height:1.5;color:#4a3200"><strong>{{bannerTitle}}</strong> {{bannerText}}</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;background:#fff;border-radius:14px;padding:10px 16px;margin-bottom:14px;border:1px solid #d3dbe5">
+<div style="font-size:12px;font-weight:800;color:#4a5a6e;letter-spacing:.08em">SLICER</div>
+<div style="display:flex;flex-wrap:wrap;gap:6px" role="group" aria-label="Scope">
+<sc-for list="{{scopes}}" as="s" hint-placeholder-count="3">
+<button onClick="{{s.pick}}" aria-pressed="{{s.pressed}}" style="min-height:44px;padding:0 16px;border-radius:8px;border:1px solid {{s.border}};background:{{s.bg}};color:{{s.fg}};font-size:13.5px;font-weight:700;cursor:pointer">{{s.label}}</button>
+</sc-for>
+</div>
+<div style="font-size:12.5px;color:#4a5a6e">Click a workstream bar to highlight it everywhere. <button onClick="{{clearWs}}" style="min-height:44px;padding:0 10px;border:none;background:transparent;color:#0f4c99;font-size:12.5px;font-weight:700;cursor:pointer;text-decoration:underline">{{clearLabel}}</button></div>
+</div>
+
+<sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
+<div style="background:#fff;border:1px dashed #9aa9ba;border-radius:16px;padding:44px 24px;text-align:center;font-size:14.5px;line-height:1.7;color:#4a5a6e">No progress data yet.<br>Import the accepted baseline programme and record progress updates, and this report fills from those records.</div>
+</sc-if>
+
+<sc-if value="{{hasData}}" hint-placeholder-val="{{ true }}">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:14px">
+<sc-for list="{{kpis}}" as="k" hint-placeholder-count="6">
+<div style="background:#fff;border-radius:14px;padding:14px 16px;border:1px solid #d3dbe5;border-top:4px solid {{k.color}}">
+<div style="font-size:12px;font-weight:700;color:#4a5a6e">{{k.label}}</div>
+<div style="font-size:28px;font-weight:800;margin-top:4px;line-height:1.1">{{k.value}}</div>
+<div style="font-size:12px;font-weight:700;margin-top:4px;color:{{k.noteColor}}">{{k.note}}</div>
+</div>
+</sc-for>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:14px;align-items:stretch">
+<section style="flex:999 1 460px;min-width:0;background:#fff;border-radius:16px;padding:16px 18px;border:1px solid #d3dbe5" aria-labelledby="sch">
+<h2 id="sch" style="margin:0 0 2px;font-size:16px;font-weight:800">Cumulative progress (S-curve)</h2>
+<div style="font-size:12px;color:#4a5a6e;margin-bottom:6px">Planned versus actual, as a percentage of the whole project.</div>
+<svg viewBox="0 0 520 260" width="100%" role="img" aria-label="{{curveAria}}" style="display:block">
+<g stroke="#e3e9f0" stroke-width="1"><path d="M44 220H500M44 170H500M44 120H500M44 70H500M44 20H500"></path></g>
+<g font-size="11" fill="#4a5a6e"><text x="36" y="224" text-anchor="end">0</text><text x="36" y="174" text-anchor="end">25</text><text x="36" y="124" text-anchor="end">50</text><text x="36" y="74" text-anchor="end">75</text><text x="36" y="24" text-anchor="end">100%</text>
+<text x="44" y="240" text-anchor="middle">M0</text><text x="120" y="240" text-anchor="middle">M2</text><text x="196" y="240" text-anchor="middle">M4</text><text x="272" y="240" text-anchor="middle">M6</text><text x="348" y="240" text-anchor="middle">M8</text><text x="424" y="240" text-anchor="middle">M10</text><text x="500" y="240" text-anchor="middle">M12</text></g>
+<path d="{{curve.areaActual}}" fill="#007FFF" fill-opacity=".14"></path>
+<path d="{{curve.planned}}" fill="none" stroke="#6d7f94" stroke-width="2.5" stroke-dasharray="6 5"></path>
+<path d="{{curve.actual}}" fill="none" stroke="#0067cc" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"></path>
+<line x1="{{curve.tx}}" x2="{{curve.tx}}" y1="20" y2="220" stroke="#c2410c" stroke-width="2" stroke-dasharray="3 4"></line>
+<circle cx="{{curve.tx}}" cy="{{curve.ay}}" r="6" fill="#0067cc" stroke="#fff" stroke-width="2.5"></circle>
+<text x="{{curve.tlx}}" y="34" font-size="11.5" font-weight="700" fill="#c2410c" text-anchor="{{curve.anchor}}">Today · month {{curve.tm}}</text>
+</svg>
+<div style="display:flex;flex-wrap:wrap;gap:16px;font-size:12px;color:#4a5a6e;margin-top:4px">
+<span><span style="display:inline-block;width:22px;border-top:3px dashed #6d7f94;vertical-align:middle;margin-right:6px"></span>Planned</span>
+<span><span style="display:inline-block;width:22px;border-top:4px solid #0067cc;vertical-align:middle;margin-right:6px"></span>Actual</span>
+<span style="color:#c2410c;font-weight:700">¦ Today marker</span>
+</div>
+</section>
+
+<section style="flex:1 1 280px;min-width:0;background:#fff;border-radius:16px;padding:16px 18px;border:1px solid #d3dbe5;display:flex;flex-direction:column;align-items:center" aria-labelledby="dnh">
+<h2 id="dnh" style="margin:0 0 8px;font-size:16px;font-weight:800;align-self:flex-start">Overall completion</h2>
+<svg viewBox="0 0 160 160" width="200" height="200" role="img" aria-label="Overall progress {{kpiActual}} percent, planned {{kpiPlanned}} percent">
+<circle cx="80" cy="80" r="70" fill="none" stroke="#e3e9f0" stroke-width="7"></circle>
+<circle cx="80" cy="80" r="70" fill="none" stroke="#6d7f94" stroke-width="7" stroke-linecap="round" stroke-dasharray="{{ring.pDash}}" transform="rotate(-90 80 80)"></circle>
+<circle cx="80" cy="80" r="54" fill="none" stroke="#e3e9f0" stroke-width="16"></circle>
+<circle cx="80" cy="80" r="54" fill="none" stroke="#007FFF" stroke-width="16" stroke-linecap="round" stroke-dasharray="{{ring.aDash}}" transform="rotate(-90 80 80)"></circle>
+<text x="80" y="82" text-anchor="middle" font-size="26" font-weight="800" fill="#0e1a2b">{{kpiActual}}%</text>
+<text x="80" y="100" text-anchor="middle" font-size="11" font-weight="600" fill="#4a5a6e">actual</text>
+</svg>
+<div style="display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:#4a5a6e;margin-top:6px;justify-content:center">
+<span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#007FFF;margin-right:6px"></span>Actual {{kpiActual}}%</span>
+<span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#6d7f94;margin-right:6px"></span>Planned {{kpiPlanned}}%</span>
+</div>
+</section>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:14px;align-items:flex-start">
+<section style="flex:1 1 380px;min-width:0;background:#fff;border-radius:16px;padding:16px 18px;border:1px solid #d3dbe5" aria-labelledby="wsh">
+<h2 id="wsh" style="margin:0 0 2px;font-size:16px;font-weight:800">Progress by workstream</h2>
+<div style="font-size:12px;color:#4a5a6e;margin-bottom:10px">Bar is actual. The dark tick is planned.</div>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="6">
+<button onClick="{{r.pick}}" aria-pressed="{{r.pressed}}" style="display:block;width:100%;text-align:left;border:1px solid {{r.border}};background:{{r.bg}};border-radius:10px;padding:8px 10px;margin-bottom:6px;cursor:pointer;opacity:{{r.op}}">
+<div style="display:flex;justify-content:space-between;gap:8px;font-size:13px;font-weight:700"><span>{{r.name}}</span><span style="color:{{r.color}}">{{r.icon}} {{r.actual}}% <span style="font-weight:600;color:#4a5a6e">of {{r.planned}}% planned</span></span></div>
+<div style="position:relative;height:12px;border-radius:999px;background:#e3e9f0;margin-top:6px;overflow:visible">
+<div style="position:absolute;left:0;top:0;bottom:0;border-radius:999px;width:{{r.aw}};background:{{r.fill}}"></div>
+<div style="position:absolute;top:-3px;bottom:-3px;width:3px;border-radius:2px;background:#0e1a2b;left:{{r.pw}}"></div>
+</div>
+</button>
+</sc-for>
+</section>
+
+<section style="flex:1 1 420px;min-width:0;background:#fff;border-radius:16px;padding:16px 18px;border:1px solid #d3dbe5" aria-labelledby="gnh">
+<h2 id="gnh" style="margin:0 0 2px;font-size:16px;font-weight:800">Where we are in the programme</h2>
+<div style="font-size:12px;color:#4a5a6e;margin-bottom:10px">Light bar is the planned window. Dark fill is progress achieved. Red line is today.</div>
+<div style="display:flex;margin-left:112px;font-size:11px;color:#4a5a6e;margin-bottom:4px"><span style="flex:1 1 0">M1</span><span style="flex:1 1 0">M4</span><span style="flex:1 1 0">M7</span><span style="flex:1 1 0;text-align:right">M12</span></div>
+<sc-for list="{{gantt}}" as="g" hint-placeholder-count="6">
+<div style="display:flex;align-items:center;min-height:38px;border-top:1px solid #edf1f5;opacity:{{g.op}}">
+<div style="flex:0 0 112px;font-size:12.5px;font-weight:600;padding-right:8px">{{g.name}}</div>
+<div style="flex:1 1 auto;position:relative;height:20px;background:repeating-linear-gradient(90deg,#f1f4f8 0,#f1f4f8 1px,transparent 1px,transparent 8.3333%)">
+<div style="position:absolute;top:2px;bottom:2px;border-radius:5px;background:#cfe0ee;left:{{g.left}};width:{{g.width}};overflow:hidden"><div style="height:100%;width:{{g.done}};background:#0a5cc2"></div></div>
+<div style="position:absolute;top:-10px;bottom:-10px;width:2px;background:#c2410c;left:{{g.today}}"></div>
+</div>
+</div>
+</sc-for>
+</section>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start">
+<section style="flex:1 1 400px;min-width:0;background:#fff;border-radius:16px;padding:16px 18px;border:1px solid #d3dbe5" aria-labelledby="mih">
+<div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline;flex-wrap:wrap;margin-bottom:10px">
+<h2 id="mih" style="margin:0;font-size:16px;font-weight:800">Milestones</h2>
+<span style="font-size:12.5px;font-weight:700;color:#145c36">{{msDone}} of {{msTotal}} achieved</span>
+</div>
+<div style="height:8px;border-radius:999px;background:#e3e9f0;overflow:hidden;margin-bottom:12px"><div style="height:100%;width:{{msPct}};background:#1f9d5b"></div></div>
+<sc-for list="{{milestones}}" as="m" hint-placeholder-count="6">
+<div style="display:flex;gap:12px;padding:8px 0">
+<div style="flex:0 0 26px;height:26px;border-radius:50%;background:{{m.bg}};color:{{m.fg}};border:2px solid {{m.fg}};display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;box-sizing:border-box">{{m.icon}}</div>
+<div style="flex:1 1 auto;min-width:0"><div style="font-size:13.5px;font-weight:700">{{m.name}}</div><div style="font-size:12px;color:#4a5a6e">{{m.area}} · planned month {{m.month}} · <span style="font-weight:700;color:{{m.fg}}">{{m.status}}</span></div></div>
+</div>
+</sc-for>
+</section>
+
+<section style="flex:1 1 340px;min-width:0;background:#fff;border-radius:16px;padding:16px 18px;border:1px solid #d3dbe5" aria-labelledby="fdh">
+<h2 id="fdh" style="margin:0 0 10px;font-size:16px;font-weight:800">Latest site updates</h2>
+<sc-for list="{{feed}}" as="f" hint-placeholder-count="5">
+<div style="display:flex;gap:12px;padding:9px 0;border-bottom:1px solid #edf1f5">
+<span style="flex:0 0 10px;height:10px;border-radius:50%;background:{{f.dot}};margin-top:5px"></span>
+<div style="min-width:0;font-size:13px;line-height:1.45"><div><span style="font-size:10px;font-weight:800;border:1px solid {{f.tagColor}};color:{{f.tagColor}};border-radius:4px;padding:0 4px;margin-right:6px">{{f.tag}}</span>{{f.text}}</div><div style="font-size:11.5px;color:#4a5a6e;margin-top:2px">{{f.when}}</div></div>
+</div>
+</sc-for>
+</section>
+</div>
+</sc-if>
+
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":1900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const demo = this.state.demo !== false;
+    const scope = this.state.scope || 'all';
+    const sel = this.state.ws === undefined ? -1 : this.state.ws;
+    const bump = this.state.bump || [0, 0, 0, 0, 0, 0];
+    const extra = this.state.extra || [];
+    const W = [
+      { n: 'Design', wt: 0.15, span: [1, 6], t: [72, 68], w: [85, 80] },
+      { n: 'Procurement', wt: 0.15, span: [2, 9], t: [55, 46], w: [60, 52] },
+      { n: 'Substructure', wt: 0.20, span: [2, 7], t: [80, 78], w: [90, 90] },
+      { n: 'Superstructure', wt: 0.25, span: [5, 11], t: [45, 38], w: [55, 50] },
+      { n: 'Systems and finishes', wt: 0.15, span: [7, 12], t: [20, 12], w: [25, 18] },
+      { n: 'Testing and commissioning', wt: 0.10, span: [11, 12], t: [0, 0], w: [0, 0] }
+    ];
+    const mix = (i, k) => {
+      const t = W[i].t[k], w = W[i].w[k];
+      return scope === 'terminal' ? t : scope === 'tower' ? w : 0.7 * t + 0.3 * w;
+    };
+    const vals = W.map((x, i) => {
+      const p = mix(i, 0);
+      const a = Math.min(100, mix(i, 1) + bump[i]);
+      return { p, a };
+    });
+    let P = 0, A = 0;
+    W.forEach((x, i) => { P += x.wt * vals[i].p; A += x.wt * vals[i].a; });
+    const r1 = (v) => Math.round(v * 10) / 10;
+    const S = (x) => 3 * x * x - 2 * x * x * x;
+    // find today month so that planned curve equals overall planned
+    let lo = 0, hi = 1;
+    for (let k = 0; k < 40; k++) { const mid = (lo + hi) / 2; if (100 * S(mid) < P) lo = mid; else hi = mid; }
+    const tStar = Math.max(0.2, 12 * lo);
+    const X = (t) => 44 + 456 * t / 12;
+    const Y = (v) => 220 - 2 * v;
+    let planned = '';
+    for (let t = 0; t <= 12; t++) planned += (t ? 'L' : 'M') + X(t).toFixed(1) + ' ' + Y(100 * S(t / 12)).toFixed(1);
+    const ratio = P > 0 ? A / P : 1;
+    let actual = 'M' + X(0).toFixed(1) + ' ' + Y(0).toFixed(1);
+    for (let t = 1; t <= Math.floor(tStar); t++) actual += 'L' + X(t).toFixed(1) + ' ' + Y(100 * S(t / 12) * ratio).toFixed(1);
+    actual += 'L' + X(tStar).toFixed(1) + ' ' + Y(A).toFixed(1);
+    const areaActual = actual + 'L' + X(tStar).toFixed(1) + ' 220L44 220Z';
+    const tx = X(tStar);
+    const curve = { planned, actual, areaActual, tx: tx.toFixed(1), ay: Y(A).toFixed(1), tm: String(r1(tStar)), tlx: (tx > 420 ? tx - 6 : tx + 6).toFixed(1), anchor: tx > 420 ? 'end' : 'start' };
+
+    const spi = P > 0 ? A / P : 1;
+    const status = spi >= 0.95 ? ['✓ On track', '#145c36', '#1f9d5b'] : spi >= 0.85 ? ['▲ Behind plan', '#6b4600', '#d99a00'] : ['■ Critical', '#9a3412', '#c2410c'];
+
+    const M = [
+      ['Commencement and mobilisation', 'all', 1],
+      ['Concept design reviewed', 'all', 2],
+      ['Tower foundations complete', 'tower', 4],
+      ['Terminal substructure complete', 'terminal', 6],
+      ['Tower structure topped out', 'tower', 8],
+      ['Terminal structure complete', 'terminal', 10],
+      ['Systems installation starts', 'all', 9],
+      ['Tests on Completion', 'all', 12]
+    ];
+    const state = (name, i) => {
+      if (name === 'Commencement and mobilisation' || name === 'Concept design reviewed' || name === 'Tower foundations complete') return 'done';
+      if (name === 'Terminal substructure complete' || name === 'Tower structure topped out') return 'prog';
+      if (name === 'Terminal structure complete') return 'risk';
+      return 'next';
+    };
+    const SM = {
+      done: ['✓', '#145c36', '#e3f3ea', 'Achieved'],
+      prog: ['●', '#123f86', '#e2ecfb', 'In progress'],
+      risk: ['▲', '#7a4b00', '#fff1cc', 'At risk'],
+      next: ['○', '#3f4854', '#eceff2', 'Upcoming']
+    };
+    const AREA = { all: 'Whole project', terminal: 'Terminal', tower: 'Control Tower' };
+    const ms = M.filter(m => scope === 'all' || m[1] === 'all' || m[1] === scope).sort((a, b) => a[2] - b[2]);
+    const milestones = ms.map(m => { const s = SM[state(m[0])]; return { name: m[0], area: AREA[m[1]], month: String(m[2]), icon: s[0], fg: s[1], bg: s[2], status: s[3] }; });
+    const msDone = ms.filter(m => state(m[0]) === 'done').length;
+
+    const rows = W.map((x, i) => {
+      const v = vals[i]; const d = v.a - v.p;
+      const c = x.n && v.p === 0 ? ['○', '#3f4854', '#8b9bb0'] : d >= -3 ? ['✓', '#145c36', '#007FFF'] : d >= -10 ? ['▲', '#7a4b00', '#d99a00'] : ['■', '#9a3412', '#c2410c'];
+      const on = sel === i;
+      return {
+        name: x.n, planned: String(Math.round(v.p)), actual: String(Math.round(v.a)),
+        icon: c[0], color: c[1], fill: c[2], aw: v.a + '%', pw: 'calc(' + v.p + '% - 1px)',
+        pick: () => this.setState({ ws: on ? -1 : i }),
+        pressed: on ? 'true' : 'false',
+        bg: on ? '#e6f1ff' : '#ffffff', border: on ? '#7fb9ff' : '#e3e9f0',
+        op: sel === -1 || on ? '1' : '0.4'
+      };
+    });
+    const gantt = W.map((x, i) => {
+      const v = vals[i];
+      const span = x.span[1] - x.span[0] + 1;
+      return {
+        name: x.n, left: ((x.span[0] - 1) / 12 * 100) + '%', width: (span / 12 * 100) + '%',
+        done: (v.p > 0 ? Math.min(100, v.a / Math.max(v.p, 0.0001) * Math.min(100, (tStar - (x.span[0] - 1)) / span * 100)) : 0).toFixed(1) + '%',
+        today: (tStar / 12 * 100) + '%',
+        op: sel === -1 || sel === i ? '1' : '0.4'
+      };
+    });
+    const behind = vals.filter((v, i) => v.p > 0 && v.a - v.p < -3).length;
+    const kpis = [
+      { label: 'Overall progress', value: r1(A) + '%', note: 'Actual', color: '#007FFF', noteColor: '#4a5a6e' },
+      { label: 'Planned to date', value: r1(P) + '%', note: 'Per programme', color: '#6d7f94', noteColor: '#4a5a6e' },
+      { label: 'Schedule performance', value: spi.toFixed(2), note: status[0], color: status[2], noteColor: status[1] },
+      { label: 'Variance', value: (A - P >= 0 ? '+' : '') + r1(A - P) + ' pts', note: 'Actual minus planned', color: '#F7D618', noteColor: '#4a5a6e' },
+      { label: 'Milestones achieved', value: msDone + ' / ' + ms.length, note: 'In current scope', color: '#1f9d5b', noteColor: '#4a5a6e' },
+      { label: 'Workstreams behind', value: String(behind), note: 'More than 3 pts behind', color: behind ? '#d99a00' : '#1f9d5b', noteColor: '#4a5a6e' }
+    ];
+
+    const base = [
+      { text: 'Tower foundations signed off after inspection', when: 'Sample · 2 days ago', dot: '#1f9d5b' },
+      { text: 'Design package B resubmitted to the Engineer', when: 'Sample · 3 days ago', dot: '#1a56b0' },
+      { text: 'Long-lead lift equipment order placed', when: 'Sample · 5 days ago', dot: '#1a56b0' },
+      { text: 'Terminal slab pour at sample grid C delayed by weather', when: 'Sample · 6 days ago', dot: '#d99a00' },
+      { text: 'Monthly progress meeting held', when: 'Sample · 8 days ago', dot: '#6d7f94' }
+    ].map(f => ({ text: f.text, when: f.when, dot: f.dot, tag: 'DEMO', tagColor: '#0b4fb3' }));
+    const feed = demo ? extra.concat(base).slice(0, 7) : [];
+
+    const demoOff = !demo;
+    const sim = () => {
+      const i = (this.state.cnt || 0) % 5;
+      const nb = bump.slice(); nb[i] += 2;
+      const nm = W[i].n;
+      const stamp = new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+      const ex = [{ text: nm + ' progress updated by +2 points after a site report (' + (scope === 'all' ? 'whole project' : AREA[scope]) + ')', when: 'Just now · ' + stamp, dot: '#007FFF', tag: 'SIMULATED', tagColor: '#0f4c99' }].concat(extra).slice(0, 4);
+      this.setState({ bump: nb, extra: ex, cnt: (this.state.cnt || 0) + 1, stamp });
+    };
+    const scopes = [['all', 'Whole project'], ['terminal', 'Terminal'], ['tower', 'Control Tower']].map(s => ({
+      label: s[1], pick: () => this.setState({ scope: s[0] }), pressed: scope === s[0] ? 'true' : 'false',
+      bg: scope === s[0] ? '#0a5cc2' : '#ffffff', fg: scope === s[0] ? '#ffffff' : '#0e1a2b', border: scope === s[0] ? '#0a5cc2' : '#cfd8e2'
+    }));
+    const C = 2 * Math.PI;
+    return {
+      hasData: demo ? 'yes' : '', empty: demo ? '' : 'yes',
+      scopes, kpis, rows, gantt, milestones, feed, curve,
+      curveAria: 'S-curve: planned ' + r1(P) + ' percent and actual ' + r1(A) + ' percent at month ' + r1(tStar),
+      kpiActual: String(r1(A)), kpiPlanned: String(r1(P)),
+      ring: { aDash: (C * 54 * A / 100).toFixed(1) + ' ' + (C * 54).toFixed(1), pDash: (C * 70 * P / 100).toFixed(1) + ' ' + (C * 70).toFixed(1) },
+      msDone: String(msDone), msTotal: String(ms.length), msPct: (ms.length ? msDone / ms.length * 100 : 0) + '%',
+      liveLabel: demo ? (this.state.stamp ? 'Sample feed · refreshed ' + this.state.stamp : 'Sample feed') : 'No data connected',
+      bannerTitle: demo ? 'Sample figures.' : 'Not connected.',
+      bannerText: demo ? 'Every number on this page is invented sample data to show the layout. It becomes live when your baseline programme and site progress updates are entered. Use Simulate site update to see how the charts react.' : 'Demo data is removed. This report shows only what the team records.',
+      simulate: sim,
+      demoBtn: demo ? 'Remove demo data' : 'Restore demo data (prototype only)',
+      toggleDemo: () => this.setState({ demo: !demo }),
+      clearWs: () => this.setState({ ws: -1 }),
+      clearLabel: sel === -1 ? '' : 'Clear highlight'
+    };
+  }
+}
+</script>
+</body>
+</html>

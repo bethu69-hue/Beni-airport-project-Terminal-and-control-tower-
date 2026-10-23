@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Payments and IPCs</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:"Plus Jakarta Sans",system-ui,sans-serif;color:#0e1a2b;background:#f3f5f9}
+a{color:#0f4c99}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="display:flex;flex-wrap:wrap;min-height:100vh">
+<div style="flex:0 0 260px"><dc-import name="Nav" active="payments" hint-size="260px,1000px"></dc-import></div>
+<main style="flex:999 1 560px;min-width:0;padding:24px 28px 40px;box-sizing:border-box">
+
+<div style="font-size:11px;letter-spacing:.14em;font-weight:700;color:#0067cc">COMMERCIAL</div>
+<h1 style="margin:4px 0 6px;font-size:28px;font-weight:800">Payments and IPCs</h1>
+<p style="margin:0 0 22px;font-size:14px;color:#4a5a6e;max-width:760px;line-height:1.55">From measurement and valuation through certification to payment. Certification, payment due date and actual payment are separate events with separate dates.</p>
+
+<h2 style="font-size:18px;font-weight:800;margin:0 0 10px">Contract sums</h2>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:26px">
+<sc-for list="{{sums}}" as="s" hint-placeholder-count="8">
+<div style="background:#fff;border-radius:14px;padding:14px 16px;border:1px solid #e1e7ee;border-top:4px solid #0a5cc2">
+<div style="font-size:12px;font-weight:600;color:#4a5a6e;min-height:30px;line-height:1.35">{{s.label}}</div>
+<div style="font-size:18px;font-weight:800;margin-top:4px;color:#4a5a6e">Not configured</div>
+</div>
+</sc-for>
+</div>
+
+<h2 style="font-size:18px;font-weight:800;margin:0 0 4px">Payment timeline</h2>
+<p style="margin:0 0 12px;font-size:13.5px;color:#4a5a6e">Select a stage. Each one records its own date, and the gaps between them come from the approved rules.</p>
+<div style="display:flex;flex-wrap:wrap;gap:0;margin-bottom:14px">
+<sc-for list="{{stages}}" as="g" hint-placeholder-count="5">
+<button onClick="{{g.pick}}" aria-pressed="{{g.pressed}}" style="flex:1 1 150px;min-height:64px;padding:10px 14px;border:1px solid {{g.border}};background:{{g.bg}};color:{{g.fg}};font-size:13.5px;font-weight:700;cursor:pointer;text-align:left">
+<span style="display:block;font-size:11px;font-weight:600;opacity:.85">Stage {{g.n}}</span>{{g.title}}
+</button>
+</sc-for>
+</div>
+<div style="background:#fff;border-radius:16px;padding:20px 22px;border:1px solid #e1e7ee;margin-bottom:28px">
+<h3 style="margin:0 0 8px;font-size:17px;font-weight:800">{{cur.title}}</h3>
+<p style="margin:0 0 12px;font-size:14px;line-height:1.6">{{cur.what}}</p>
+<div style="font-size:13px;color:#4a5a6e"><strong>Recorded:</strong> {{cur.fields}}</div>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start;margin-bottom:28px">
+<section style="flex:1 1 360px;min-width:0">
+<h2 style="font-size:18px;font-weight:800;margin:0 0 10px">Amounts, kept separate</h2>
+<div style="background:#fff;border-radius:16px;border:1px solid #e1e7ee;overflow:hidden">
+<sc-for list="{{amts}}" as="a" hint-placeholder-count="5">
+<div style="display:flex;justify-content:space-between;gap:12px;padding:13px 18px;border-bottom:1px solid #edf1f5;font-size:14px"><span style="font-weight:600">{{a.label}}</span><span style="color:#4a5a6e;font-weight:700">—</span></div>
+</sc-for>
+</div>
+</section>
+<section style="flex:1 1 360px;min-width:0">
+<h2 style="font-size:18px;font-weight:800;margin:0 0 10px">Cumulative certified value</h2>
+<div style="background:#fff;border-radius:16px;border:1px solid #e1e7ee;padding:16px">
+<svg viewBox="0 0 360 180" width="100%" role="img" aria-label="Empty chart: no certified payments yet" style="display:block">
+<g stroke="#e1e7ee" stroke-width="1"><path d="M40 20H350M40 60H350M40 100H350M40 140H350"></path></g>
+<path d="M40 20V140H350" stroke="#9aa9ba" stroke-width="1.5" fill="none"></path>
+<path d="M40 140 350 140" stroke="#007FFF" stroke-width="2" stroke-dasharray="5 5"></path>
+<text x="195" y="88" text-anchor="middle" font-size="13" font-weight="600" fill="#4a5a6e">No certified payments yet</text>
+<text x="40" y="162" font-size="11" fill="#4a5a6e">First IPC</text><text x="350" y="162" text-anchor="end" font-size="11" fill="#4a5a6e">Latest IPC</text>
+</svg>
+<div style="font-size:12px;color:#4a5a6e;margin-top:6px">Charts fill from actual payment records. Other charts: applied, paid, outstanding, delays, forecast cash flow, approved versus pending variations.</div>
+</div>
+</section>
+</div>
+
+<h2 style="font-size:18px;font-weight:800;margin:0 0 4px">Recorded for every payment cycle</h2>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px;margin-bottom:26px">
+<sc-for list="{{fields}}" as="f" hint-placeholder-count="10">
+<div style="background:#fff;border:1px solid #e1e7ee;border-radius:10px;padding:9px 12px;font-size:13px;display:flex;gap:8px"><span style="color:#0067cc;font-weight:800">{{f.n}}</span><span>{{f.label}}</span></div>
+</sc-for>
+</div>
+<div style="background:#fff;border:1px dashed #9aa9ba;border-radius:16px;padding:26px;text-align:center;font-size:14px;color:#4a5a6e">No payment applications registered. Payment deadlines will be calculated only from Approved for Use rules.</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":1500}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const sums = ['Original Contract Price','Current adjusted Contract Price','Approved Variations','Pending Variations','Claims affecting the Price','Advance Payment','Advance Payment recovery','Retention','Performance Security'].map(label => ({ label }));
+    const G = [
+      ['Payment Application Submitted','The Contractor submits an application with valuation and supporting records.','Reference, date and time, claimed amount, measurement and valuation records, variations included, Materials and Plant where applicable.'],
+      ['Assessment','The Engineer assesses the application against measured work and contract terms.','Engineer’s assessment, deductions, Advance Payment recovery, retention, disputed or excluded amounts.'],
+      ['IPC Issued','The Interim Payment Certificate is issued for the certified amount.','Certified amount and certification date, tracked against its own certification rule.'],
+      ['Payment Due','The due date is calculated from the approved payment rule.','Contractual payment deadline. This is not assumed equal to the certification period.'],
+      ['Payment Received','The Employer’s actual payment is recorded.','Payment date, amount paid and outstanding balance, plus any related notices.']
+    ];
+    const sel = this.state.sel || 0;
+    const stages = G.map((g, i) => ({
+      n: String(i + 1), title: g[0],
+      pick: () => this.setState({ sel: i }),
+      pressed: i === sel ? 'true' : 'false',
+      bg: i === sel ? '#0a5cc2' : '#ffffff',
+      fg: i === sel ? '#ffffff' : '#0e1a2b',
+      border: i === sel ? '#0a5cc2' : '#cfd8e2'
+    }));
+    const cur = { title: G[sel][0], what: G[sel][1], fields: G[sel][2] };
+    const amts = ['Applied for','Certified','Paid','Outstanding balance','Disputed or excluded'].map(label => ({ label }));
+    const names = ['Payment application reference','Submission date and time','Claimed amount','Measurement and valuation records','Supporting documents','Variations included','Materials and Plant','Advance Payment recovery','Retention','Other contractual deductions','Engineer’s assessment','Certified amount','Certification date','Contractual payment deadline','Employer’s payment date','Amount paid','Outstanding balance','Disputed or excluded amounts','Relevant correspondence','Status'];
+    const fields = names.map((label, i) => ({ n: String(i + 1), label }));
+    return { sums, stages, cur, amts, fields };
+  }
+}
+</script>
+</body>
+</html>

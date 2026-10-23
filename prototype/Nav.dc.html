@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Navigation</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:"Plus Jakarta Sans",system-ui,sans-serif}
+a{text-decoration:none}
+</style>
+</helmet>
+<nav aria-label="Main navigation" style="width:260px;min-height:100vh;background:{{t.bg}};color:#e8eef5;padding:22px 14px 28px;box-sizing:border-box;font-family:'Plus Jakarta Sans',system-ui,sans-serif">
+<div aria-hidden="true" style="height:6px;margin:-22px -14px 20px;background:linear-gradient(90deg,#007FFF 0 50%,#F7D618 50% 100%)"></div>
+<div style="display:flex;gap:12px;align-items:center;padding:0 8px 20px;border-bottom:1px solid {{t.line}};margin-bottom:10px">
+<svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="11" fill="#F7D618"></rect><path d="M20 7v26" stroke="{{t.bg}}" stroke-width="3" stroke-dasharray="4 3"></path><path d="M12 33 17 7M28 33 23 7" stroke="{{t.bg}}" stroke-width="2" stroke-linecap="round"></path></svg>
+<div>
+<div style="font-size:15px;font-weight:800;letter-spacing:.01em;color:#fff">BENI Airport DRC</div>
+<div style="font-size:11px;color:{{t.sub}};margin-top:2px">Terminal and Control Tower</div>
+</div>
+</div>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="8">
+<sc-if value="{{r.head}}" hint-placeholder-val="{{ false }}">
+<div style="font-size:10.5px;font-weight:700;letter-spacing:.14em;color:{{t.head}};padding:16px 10px 6px">{{r.label}}</div>
+</sc-if>
+<sc-if value="{{r.link}}" hint-placeholder-val="{{ true }}">
+<a href="{{r.href}}" style="display:flex;align-items:center;gap:10px;min-height:38px;padding:0 10px;border-radius:9px;font-size:13.5px;color:{{r.fg}};background:{{r.bg}};font-weight:{{r.weight}}"><span style="width:6px;height:6px;border-radius:50%;background:{{r.dot}};flex:0 0 6px"></span>{{r.label}}</a>
+</sc-if>
+<sc-if value="{{r.off}}" hint-placeholder-val="{{ false }}">
+<div aria-disabled="true" style="display:flex;align-items:center;gap:10px;min-height:34px;padding:0 10px;font-size:13px;color:{{t.sub}}"><span style="width:6px;height:6px;border-radius:50%;background:{{t.dotOff}};flex:0 0 6px"></span>{{r.label}}</div>
+</sc-if>
+</sc-for>
+<div style="margin:18px 10px 0;padding:12px;border:1px solid {{t.line}};border-radius:10px;font-size:11.5px;line-height:1.5;color:{{t.sub}}">Muted items belong to later phases. Prototype only: no data is saved.</div>
+</nav>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"active":{"editor":null,"default":"overview"},"tone":{"editor":null,"default":"red"},"$preview":{"width":260,"height":1100}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const active = this.props.active || 'overview';
+    const sky = this.props.tone === 'sky';
+    const t = sky
+      ? { bg: '#0a5cc2', line: '#3d86dc', sub: '#d6e8ff', head: '#c4dcff', dotOff: '#7fb2f0', fg: '#ffffff', dot: '#a9cdfa', actBg: '#F7D618', actFg: '#2a2000', actDot: '#2a2000' }
+      : { bg: '#0b4fb3', line: '#3f7fdc', sub: '#d9e8ff', head: '#F7D618', dotOff: '#7ea9ea', fg: '#ffffff', dot: '#F7D618', actBg: '#F7D618', actFg: '#1b2a00', actDot: '#0b4fb3' };
+    const items = [
+      ['', 'Home', 'home', 'Landing.dc.html'],
+      ['', 'Progress Dashboard', 'progress', 'Progress.dc.html'],
+      ['', 'Project Overview', 'overview', 'Main.dc.html'],
+      ['COLLABORATE', 'Team Chat', 'chat', 'Chat.dc.html'],
+      ['', 'Contract Assistant', 'assistant', 'Assistant.dc.html'],
+      ['CONTRACT', 'Contract Administration', 'contract', 'Contract.dc.html'],
+      ['', 'Notices and Deadlines', 'notices', 'Notices.dc.html'],
+      ['', 'Claims and EOT', 'claims', 'Claims.dc.html'],
+      ['', "Engineer's Communications", 'eng', 'Engineer.dc.html'],
+      ['', 'Variations and Change Control', 'var', 'Variations.dc.html'],
+      ['', 'Payments and IPCs', 'payments', 'Payments.dc.html'],
+      ['DELIVERY', 'Programme and Progress', 'programme', 'Programme.dc.html'],
+      ['', 'Design Management', 'design', 'Design.dc.html'],
+      ['', 'Drawings and Documents', 'docs', 'Documents.dc.html'],
+      ['', 'RFIs and Technical Queries', 'rfi', 'Rfis.dc.html'],
+      ['', 'Procurement', 'proc', 'Procurement.dc.html'],
+      ['', 'Risk Register', 'risk', 'Risk.dc.html'],
+      ['SITE AND QUALITY', 'Quality Management', 'qms', 'Qms.dc.html'],
+      ['', 'Inspections and NCRs', 'quality', 'Quality.dc.html'],
+      ['', 'Field Management', 'field', 'Field.dc.html'],
+      ['', 'Site Photos and Evidence', 'photos', 'Photos.dc.html'],
+      ['', 'HSE', 'hse', 'Hse.dc.html'],
+      ['', 'Meetings and Actions', 'meet', 'Meetings.dc.html'],
+      ['COMPLETION', 'Testing and Commissioning', 'test', 'Testing.dc.html'],
+      ['', 'Taking-Over and Handover', 'toc', 'TakingOver.dc.html'],
+      ['', 'Defects Notification Period', 'dnp', 'TakingOver.dc.html'],
+      ['ADMIN', 'Reports', 'reports', 'Reports.dc.html'],
+      ['', 'Notifications', 'notif', 'Notifications.dc.html'],
+      ['', 'Users and Permissions', 'users', 'Users.dc.html'],
+      ['', 'System Settings', 'settings', 'Settings.dc.html']
+    ];
+    const rows = [];
+    items.forEach(it => {
+      if (it[0]) rows.push({ head: 'yes', link: '', off: '', label: it[0] });
+      const on = it[2] === active;
+      if (it[3]) rows.push({ head: '', link: 'yes', off: '', label: it[1], href: it[3], bg: on ? t.actBg : 'transparent', fg: on ? t.actFg : t.fg, weight: on ? '700' : '500', dot: on ? t.actDot : t.dot });
+      else rows.push({ head: '', link: '', off: 'yes', label: it[1] });
+    });
+    return { rows, t };
+  }
+}
+</script>
+</body>
+</html>

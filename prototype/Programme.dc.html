@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Programme and Progress</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:"Plus Jakarta Sans",system-ui,sans-serif;color:#0e1a2b;background:#f3f5f9}
+a{color:#0f4c99}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="display:flex;flex-wrap:wrap;min-height:100vh">
+<div style="flex:0 0 260px"><dc-import name="Nav" active="programme" hint-size="260px,1000px"></dc-import></div>
+<main style="flex:999 1 560px;min-width:0;padding:24px 28px 40px;box-sizing:border-box">
+
+<div style="font-size:11px;letter-spacing:.14em;font-weight:700;color:#0067cc">TIME MANAGEMENT</div>
+<h1 style="margin:4px 0 6px;font-size:28px;font-weight:800">Programme and Progress</h1>
+<p style="margin:0 0 22px;font-size:14px;color:#4a5a6e;max-width:760px;line-height:1.55">Baseline and approved programmes, submissions, critical path and delay records in one place. Registering a delay event never grants an extension of time.</p>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:24px">
+<div style="background:#fff;border-radius:16px;padding:16px 18px;border:1px solid #e1e7ee"><div style="font-size:12px;font-weight:600;color:#4a5a6e">Contractual Time for Completion</div><div style="font-size:19px;font-weight:800;margin-top:6px;color:#4a5a6e">Not set</div></div>
+<div style="background:#fff;border-radius:16px;padding:16px 18px;border:1px solid #e1e7ee"><div style="font-size:12px;font-weight:600;color:#4a5a6e">Current forecast completion</div><div style="font-size:19px;font-weight:800;margin-top:6px;color:#4a5a6e">Not set</div></div>
+<div style="background:#fff;border-radius:16px;padding:16px 18px;border:1px solid #e1e7ee"><div style="font-size:12px;font-weight:600;color:#4a5a6e">Difference</div><div style="font-size:19px;font-weight:800;margin-top:6px;color:#4a5a6e">Needs both dates</div></div>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:10px">
+<h2 style="margin:0;font-size:18px;font-weight:800">Gantt view</h2>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<button style="min-height:44px;padding:0 14px;border:1px solid #b8c3cf;background:#fff;border-radius:10px;font-size:13.5px;font-weight:600;cursor:pointer">Import P6 XML or spreadsheet</button>
+<button style="min-height:44px;padding:0 14px;border:1px solid #b8c3cf;background:#fff;border-radius:10px;font-size:13.5px;font-weight:600;cursor:pointer">Export</button>
+<button onClick="{{toggleDemo}}" style="min-height:44px;padding:0 14px;border:1px solid #6b4600;background:#fff7dd;color:#4a3200;border-radius:10px;font-size:13.5px;font-weight:600;cursor:pointer">{{demoBtn}}</button>
+</div>
+</div>
+
+<div style="background:#fff;border-radius:16px;border:1px solid #e1e7ee;padding:16px 18px;margin-bottom:12px;overflow-x:auto">
+<div style="min-width:640px">
+<sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
+<div style="padding:40px 0;text-align:center;color:#4a5a6e;font-size:14px;line-height:1.6">No programme loaded. Import the accepted baseline or enter activities after the Commencement Date is set.</div>
+</sc-if>
+<sc-if value="{{hasDemo}}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;gap:10px;align-items:center;margin-bottom:10px"><span style="font-size:10.5px;font-weight:800;color:#0b4fb3;border:1px solid #0b4fb3;border-radius:5px;padding:1px 6px;letter-spacing:.05em">DEMO DATA</span><span style="font-size:12.5px;color:#4a5a6e">Sample activities on a relative week scale. Not a project programme.</span></div>
+<div style="display:flex;margin-left:190px;margin-bottom:4px;font-size:11px;color:#4a5a6e"><span style="flex:1 1 0">Wk 1</span><span style="flex:1 1 0">Wk 14</span><span style="flex:1 1 0">Wk 27</span><span style="flex:1 1 0;text-align:right">Wk 52</span></div>
+<sc-for list="{{bars}}" as="b" hint-placeholder-count="6">
+<div style="display:flex;align-items:center;gap:0;min-height:44px;border-top:1px solid #edf1f5">
+<div style="flex:0 0 190px;font-size:13px;font-weight:600;padding-right:10px">{{b.name}}<div style="font-size:11px;font-weight:700;color:{{b.tagColor}}">{{b.tag}}</div></div>
+<div style="flex:1 1 auto;position:relative;height:22px;background:repeating-linear-gradient(90deg,#f1f4f8 0,#f1f4f8 1px,transparent 1px,transparent 25%)">
+<div style="position:absolute;top:2px;bottom:2px;border-radius:6px;left:{{b.left}};width:{{b.width}};background:{{b.fill}};border:{{b.border}}"></div>
+</div>
+</div>
+</sc-for>
+</sc-if>
+</div>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:#4a5a6e;margin-bottom:28px">
+<span><span style="display:inline-block;width:18px;height:10px;background:#0a5cc2;border-radius:3px;margin-right:6px"></span>Activity</span>
+<span><span style="display:inline-block;width:18px;height:10px;background:#0a5cc2;border:2px solid #c2410c;border-radius:3px;margin-right:6px"></span>Critical path (red outline and label)</span>
+<span>▲ At risk</span>
+</div>
+
+<h2 style="font-size:18px;font-weight:800;margin:0 0 10px">Programme records</h2>
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+<sc-for list="{{tabs}}" as="t" hint-placeholder-count="4">
+<button onClick="{{t.pick}}" aria-pressed="{{t.pressed}}" style="min-height:44px;padding:0 16px;border-radius:999px;border:1px solid {{t.border}};background:{{t.bg}};color:{{t.fg}};font-size:13.5px;font-weight:700;cursor:pointer">{{t.title}}</button>
+</sc-for>
+</div>
+<div style="background:#fff;border-radius:16px;border:1px solid #e1e7ee;padding:20px 22px;margin-bottom:28px">
+<p style="margin:0 0 10px;font-size:14px;line-height:1.6">{{cur.what}}</p>
+<div style="font-size:13px;color:#4a5a6e"><strong>Rule:</strong> {{cur.rule}}</div>
+</div>
+
+<h2 style="font-size:18px;font-weight:800;margin:0 0 4px">Delay events link to</h2>
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+<sc-for list="{{links}}" as="l" hint-placeholder-count="9"><span style="padding:7px 13px;border-radius:999px;background:#fff;border:1px solid #cfd8e2;font-size:13px">{{l.label}}</span></sc-for>
+</div>
+<div style="font-size:12.5px;color:#4a5a6e">Claimed, assessed and determined extensions are held as three separate values.</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":1500}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const demo = this.state.demo !== false;
+    const raw = [
+      ['Design development', 1, 14, false, false],
+      ['Long-lead procurement', 8, 26, false, true],
+      ['Substructure', 12, 24, true, false],
+      ['Superstructure', 22, 40, true, false],
+      ['Systems installation', 34, 48, false, true],
+      ['Testing and commissioning', 46, 52, true, false]
+    ];
+    const bars = demo ? raw.map(r => {
+      const crit = r[3], risk = r[4];
+      return {
+        name: r[0],
+        tag: crit ? 'Critical path' : risk ? '▲ At risk' : '',
+        tagColor: crit ? '#c2410c' : '#8a5a00',
+        left: ((r[1] - 1) / 52 * 100) + '%',
+        width: ((r[2] - r[1] + 1) / 52 * 100) + '%',
+        fill: '#0a5cc2',
+        border: crit ? '2px solid #c2410c' : risk ? '2px dashed #b07a00' : '2px solid #0a5cc2'
+      };
+    }) : [];
+    const T = [
+      ['Baseline','The programme accepted at the start, kept unchanged as the comparison point.','Replaced only through a recorded, authorised version, never overwritten.'],
+      ['Current approved','The latest programme accepted under the contract, with float and critical path.','Each version keeps its approval date and approver.'],
+      ['Contractor submissions','Programme submissions and updates, with the review period tracked.','The review period comes from an Approved for Use rule.'],
+      ['Recovery and mitigation','Recovery programmes and mitigation measures recorded against delay events.','Mitigation records are kept as evidence for delay analysis.']
+    ];
+    const sel = this.state.sel || 0;
+    const tabs = T.map((t, i) => ({
+      title: t[0], pick: () => this.setState({ sel: i }),
+      pressed: i === sel ? 'true' : 'false',
+      bg: i === sel ? '#0a5cc2' : '#ffffff', fg: i === sel ? '#ffffff' : '#0e1a2b', border: i === sel ? '#0a5cc2' : '#cfd8e2'
+    }));
+    const links = ['Affected activities','Approved programme version','Contemporaneous update','Critical path implications','Instructions and notices','Mitigation records','Claimed EOT','Assessed EOT','Determined EOT'].map(label => ({ label }));
+    return {
+      bars, tabs, links,
+      cur: { what: T[sel][1], rule: T[sel][2] },
+      hasDemo: demo ? 'yes' : '', empty: demo ? '' : 'yes',
+      demoBtn: demo ? 'Remove demo data' : 'Restore demo data (prototype only)',
+      toggleDemo: () => this.setState({ demo: !demo })
+    };
+  }
+}
+</script>
+</body>
+</html>

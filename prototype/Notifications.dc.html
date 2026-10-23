@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Notifications</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:"Plus Jakarta Sans",system-ui,sans-serif;color:#0e1a2b;background:#f3f5f9}
+button,input{font-family:inherit}
+</style>
+</helmet>
+<div style="display:flex;flex-wrap:wrap;min-height:100vh">
+<div style="flex:0 0 260px"><dc-import name="Nav" active="notif" hint-size="260px,1000px"></dc-import></div>
+<main style="flex:999 1 560px;min-width:0;padding:24px 28px 40px;box-sizing:border-box">
+<div style="font-size:11px;letter-spacing:.14em;font-weight:700;color:#0067cc">ADMINISTRATION</div>
+<h1 style="margin:4px 0 6px;font-size:28px;font-weight:800">Notifications and Escalation</h1>
+<p style="margin:0 0 22px;font-size:14px;color:#4a5a6e;max-width:760px;line-height:1.55">In-app and email alerts. Notifications remind people to act. They never issue a contractual notice or make a contractual decision.</p>
+
+<h2 style="font-size:18px;font-weight:800;margin:0 0 4px">Reminder schedule</h2>
+<p style="margin:0 0 12px;font-size:13.5px;color:#4a5a6e">Toggle the intervals the administrator wants. Suggested defaults are on.</p>
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px">
+<sc-for list="{{intervals}}" as="i" hint-placeholder-count="6">
+<button onClick="{{i.flip}}" aria-pressed="{{i.pressed}}" style="min-height:44px;padding:0 16px;border-radius:999px;border:1px solid {{i.border}};background:{{i.bg}};color:{{i.fg}};font-size:13.5px;font-weight:700;cursor:pointer">{{i.mark}} {{i.label}}</button>
+</sc-for>
+</div>
+
+<h2 style="font-size:18px;font-weight:800;margin:0 0 4px">Escalation matrix</h2>
+<p style="margin:0 0 12px;font-size:13.5px;color:#4a5a6e">If a critical deadline is close and no action is recorded, notify the assigned person, then the designated manager. Set the timing and the manager below.</p>
+<div style="background:#fff;border-radius:16px;border:1px solid #e1e7ee;padding:8px 18px;margin-bottom:28px">
+<sc-for list="{{levels}}" as="l" hint-placeholder-count="3">
+<div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid #edf1f5">
+<span style="flex:0 0 28px;height:28px;border-radius:50%;background:#0a5cc2;color:#fff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center">{{l.n}}</span>
+<span style="flex:1 1 200px;font-size:14px;font-weight:600">{{l.who}}</span>
+<span style="flex:1 1 200px;font-size:13px;color:#4a5a6e">{{l.when}}</span>
+</div>
+</sc-for>
+</div>
+
+<h2 style="font-size:18px;font-weight:800;margin:0 0 4px">Alert types</h2>
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px">
+<sc-for list="{{types}}" as="t" hint-placeholder-count="18"><span style="padding:6px 12px;border-radius:999px;background:#fff;border:1px solid #cfd8e2;font-size:12.5px">{{t.label}}</span></sc-for>
+</div>
+
+<h2 style="font-size:18px;font-weight:800;margin:0 0 10px">Notification centre</h2>
+<div style="background:#fff;border:1px dashed #9aa9ba;border-radius:16px;padding:28px;text-align:center;font-size:14px;color:#4a5a6e;line-height:1.6">No notifications. Each one will show its record reference, description, responsible person, due date, time remaining, required action and a link.</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":1300}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const base = [['14 days before', true], ['7 days before', true], ['3 days before', true], ['1 day before', true], ['On the deadline date', true], ['Daily after, until closed', true]];
+    const on = this.state.on || base.map(b => b[1]);
+    const intervals = base.map((b, i) => ({
+      label: b[0], flip: () => { const n = on.slice(); n[i] = !n[i]; this.setState({ on: n }); },
+      pressed: on[i] ? 'true' : 'false', mark: on[i] ? '✓' : '○',
+      bg: on[i] ? '#0a5cc2' : '#ffffff', fg: on[i] ? '#ffffff' : '#0e1a2b', border: on[i] ? '#0a5cc2' : '#cfd8e2'
+    }));
+    const levels = [
+      { n: '1', who: 'Assigned person', when: 'At each reminder interval' },
+      { n: '2', who: 'Designated manager (to be set)', when: 'When no action is recorded as the deadline nears (timing to be set)' },
+      { n: '3', who: 'Project Manager', when: 'When a critical deadline passes unresolved (timing to be set)' }
+    ];
+    const types = ['Approaching contractual deadlines','Overdue notices','Claims requiring action','Pending Engineer responses','Outstanding determinations','Programme submission deadlines','Design submission deadlines','RFI response deadlines','Payment certification deadlines','Payment due dates','Expiring securities','Pending inspections','Overdue NCRs','Incomplete corrective actions','Critical procurement delays','Outstanding meeting actions','Testing and commissioning deadlines','Handover requirements'].map(label => ({ label }));
+    return { intervals, levels, types };
+  }
+}
+</script>
+</body>
+</html>

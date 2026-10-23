@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Reports</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:"Plus Jakarta Sans",system-ui,sans-serif;color:#0e1a2b;background:#f3f5f9}
+button,input,select{font-family:inherit}
+</style>
+</helmet>
+<div style="display:flex;flex-wrap:wrap;min-height:100vh">
+<div style="flex:0 0 260px"><dc-import name="Nav" active="reports" hint-size="260px,1000px"></dc-import></div>
+<main style="flex:999 1 560px;min-width:0;padding:24px 28px 40px;box-sizing:border-box">
+<div style="font-size:11px;letter-spacing:.14em;font-weight:700;color:#0067cc">ADMINISTRATION</div>
+<h1 style="margin:4px 0 6px;font-size:28px;font-weight:800">Reports</h1>
+<p style="margin:0 0 22px;font-size:14px;color:#4a5a6e;max-width:760px;line-height:1.55">PDF and Excel reports built only from actual project records, each showing its reporting period, generation time, responsible person and data source.</p>
+
+<div style="display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start">
+<div style="flex:999 1 420px;min-width:0">
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+<sc-for list="{{groups}}" as="g" hint-placeholder-count="5">
+<button onClick="{{g.pick}}" aria-pressed="{{g.pressed}}" style="min-height:44px;padding:0 16px;border-radius:999px;border:1px solid {{g.border}};background:{{g.bg}};color:{{g.fg}};font-size:13.5px;font-weight:700;cursor:pointer">{{g.label}}</button>
+</sc-for>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px">
+<sc-for list="{{items}}" as="r" hint-placeholder-count="6">
+<button onClick="{{r.pick}}" aria-pressed="{{r.pressed}}" style="text-align:left;min-height:56px;padding:12px 14px;border-radius:12px;border:1px solid {{r.border}};background:{{r.bg}};font-size:14px;font-weight:600;color:#0e1a2b;cursor:pointer"><span style="color:#0067cc;font-weight:800;margin-right:8px">{{r.n}}</span>{{r.title}}</button>
+</sc-for>
+</div>
+</div>
+
+<aside style="flex:1 1 300px;max-width:400px;background:#fff;border-radius:16px;border:1px solid #e1e7ee;padding:20px 22px">
+<div style="font-size:12px;font-weight:700;color:#4a5a6e">SELECTED REPORT</div>
+<h2 style="margin:4px 0 14px;font-size:18px;font-weight:800">{{cur}}</h2>
+<label for="p1" style="display:block;font-size:13px;font-weight:700;margin-bottom:4px">From</label>
+<input id="p1" type="date" style="width:100%;box-sizing:border-box;min-height:44px;padding:0 10px;border:1px solid #9aa9ba;border-radius:8px;font-size:14px;margin-bottom:10px">
+<label for="p2" style="display:block;font-size:13px;font-weight:700;margin-bottom:4px">To</label>
+<input id="p2" type="date" style="width:100%;box-sizing:border-box;min-height:44px;padding:0 10px;border:1px solid #9aa9ba;border-radius:8px;font-size:14px;margin-bottom:10px">
+<label for="f1" style="display:block;font-size:13px;font-weight:700;margin-bottom:4px">Filter by</label>
+<select id="f1" style="width:100%;box-sizing:border-box;min-height:44px;padding:0 10px;border:1px solid #9aa9ba;border-radius:8px;font-size:14px;background:#fff;margin-bottom:14px">
+<option>All records</option><option>Discipline</option><option>Responsible party</option><option>Location</option><option>Status</option><option>Work package</option>
+</select>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<button onClick="{{gen}}" style="flex:1 1 120px;min-height:44px;border:1px solid #0a5cc2;background:#0a5cc2;color:#fff;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer">Generate PDF</button>
+<button onClick="{{gen}}" style="flex:1 1 120px;min-height:44px;border:1px solid #0a5cc2;background:#fff;color:#0a5cc2;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer">Excel</button>
+</div>
+<sc-if value="{{msg}}" hint-placeholder-val="{{ false }}">
+<div style="margin-top:14px;padding:12px 14px;background:#fff7dd;border:1px solid #e8c766;border-radius:12px;font-size:13px;line-height:1.5;color:#4a3200">Prototype only: nothing is generated. In the real build this report would be created from live records, and it would stay empty until records exist.</div>
+</sc-if>
+</aside>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":1300}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const G = [
+      ['Progress', ['Weekly Project Progress Report', 'Monthly Project Management Report', 'Programme and Critical Path Report', 'Outstanding Actions Report', 'Site Photograph Report']],
+      ['Contract', ['Contract Administration Report', 'Notices and Deadlines Report', 'Claims and Extension of Time Report', 'Variations Report', 'Payment and IPC Report']],
+      ['Technical', ['Design Status Report', 'RFI Report', 'Procurement Status Report', 'Risk Register Report']],
+      ['Quality and HSE', ['Quality and NCR Report', 'Inspection Report', 'HSE Report']],
+      ['Completion', ['Testing and Commissioning Report', 'Taking-Over Readiness Report', 'Final Closeout Report']]
+    ];
+    const g = this.state.g || 0;
+    const sel = this.state.sel || G[g][1][0];
+    const groups = G.map((x, i) => ({ label: x[0], pick: () => this.setState({ g: i, sel: G[i][1][0], msg: false }), pressed: i === g ? 'true' : 'false', bg: i === g ? '#0a5cc2' : '#ffffff', fg: i === g ? '#ffffff' : '#0e1a2b', border: i === g ? '#0a5cc2' : '#cfd8e2' }));
+    let count = 0;
+    G.forEach((x, gi) => x[1].forEach(t => { if (t === sel) count = 0; }));
+    const items = G[g][1].map((title, i) => {
+      let n = 0; for (let a = 0; a < g; a++) n += G[a][1].length;
+      return { n: String(n + i + 1), title, pick: () => this.setState({ sel: title, msg: false }), pressed: title === sel ? 'true' : 'false', bg: title === sel ? '#e6f1ff' : '#ffffff', border: title === sel ? '#7fb9ff' : '#cfd8e2' };
+    });
+    return { groups, items, cur: sel, msg: this.state.msg ? 'yes' : '', gen: () => this.setState({ msg: true }) };
+  }
+}
+</script>
+</body>
+</html>
