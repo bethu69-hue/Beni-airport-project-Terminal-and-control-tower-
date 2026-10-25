@@ -14,6 +14,13 @@
 body{margin:0;font-family:"Plus Jakarta Sans",system-ui,sans-serif;color:#0e1a2b;background:#f3f5f9}
 a{color:#0f4c99}
 button{font-family:inherit}
+
+.gq{display:grid;align-items:stretch}
+.gq>*{box-sizing:border-box;min-width:0;height:100%}
+.c3{grid-template-columns:repeat(3,minmax(0,1fr))}.c4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.c5{grid-template-columns:repeat(5,minmax(0,1fr))}.c6{grid-template-columns:repeat(6,minmax(0,1fr))}
+@media (max-width:1000px){.c5,.c6{grid-template-columns:repeat(3,minmax(0,1fr))}.c4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.c3,.c4,.c5,.c6{grid-template-columns:minmax(0,1fr)}}
 </style>
 </helmet>
 <div style="display:flex;flex-wrap:wrap;min-height:100vh">
@@ -25,7 +32,7 @@ button{font-family:inherit}
 <p style="margin:0 0 22px;font-size:14px;color:#4a5a6e;max-width:760px;line-height:1.55">From measurement and valuation through certification to payment. Certification, payment due date and actual payment are separate events with separate dates.</p>
 
 <h2 style="font-size:18px;font-weight:800;margin:0 0 10px">Contract sums</h2>
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:26px">
+<div class="gq c3" style="gap:12px;margin-bottom:26px">
 <sc-for list="{{sums}}" as="s" hint-placeholder-count="8">
 <div style="background:#fff;border-radius:14px;padding:14px 16px;border:1px solid #e1e7ee;border-top:4px solid #0a5cc2">
 <div style="font-size:12px;font-weight:600;color:#4a5a6e;min-height:30px;line-height:1.35">{{s.label}}</div>
@@ -49,7 +56,7 @@ button{font-family:inherit}
 <div style="font-size:13px;color:#4a5a6e"><strong>Recorded:</strong> {{cur.fields}}</div>
 </div>
 
-<div style="display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start;margin-bottom:28px">
+<div style="display:flex;flex-wrap:wrap;gap:22px;align-items:stretch;margin-bottom:28px">
 <section style="flex:1 1 360px;min-width:0">
 <h2 style="font-size:18px;font-weight:800;margin:0 0 10px">Amounts, kept separate</h2>
 <div style="background:#fff;border-radius:16px;border:1px solid #e1e7ee;overflow:hidden">
@@ -74,7 +81,7 @@ button{font-family:inherit}
 </div>
 
 <h2 style="font-size:18px;font-weight:800;margin:0 0 4px">Recorded for every payment cycle</h2>
-<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px;margin-bottom:26px">
+<div class="gq c4" style="gap:8px;margin-bottom:26px">
 <sc-for list="{{fields}}" as="f" hint-placeholder-count="10">
 <div style="background:#fff;border:1px solid #e1e7ee;border-radius:10px;padding:9px 12px;font-size:13px;display:flex;gap:8px"><span style="color:#0067cc;font-weight:800">{{f.n}}</span><span>{{f.label}}</span></div>
 </sc-for>

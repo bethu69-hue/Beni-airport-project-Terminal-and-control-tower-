@@ -32,7 +32,7 @@ button,input{font-family:inherit}
 
 <h2 style="font-size:18px;font-weight:800;margin:0 0 4px">Readiness checklist</h2>
 <p style="margin:0 0 12px;font-size:13.5px;color:#4a5a6e">Items are configured for the actual scope. Tick to see the readiness figure. This is a prototype checklist only.</p>
-<div style="display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start;margin-bottom:28px">
+<div style="display:flex;flex-wrap:wrap;gap:22px;align-items:stretch;margin-bottom:28px">
 <div style="flex:1 1 360px;min-width:0;background:#fff;border-radius:16px;border:1px solid #e1e7ee;padding:8px 18px">
 <sc-for list="{{checks}}" as="c" hint-placeholder-count="8">
 <label style="display:flex;gap:12px;align-items:center;min-height:44px;font-size:14px;cursor:pointer;border-bottom:1px solid #edf1f5"><input type="checkbox" checked="{{c.on}}" onChange="{{c.flip}}" style="width:20px;height:20px;accent-color:#0a5cc2"><span>{{c.label}}</span></label>
@@ -49,7 +49,7 @@ button,input{font-family:inherit}
 
 <h2 style="font-size:18px;font-weight:800;margin:0 0 4px">Defects Notification Period</h2>
 <p style="margin:0 0 12px;font-size:13.5px;color:#4a5a6e">The contract sets the start, duration and any extension. Try the end-date calculation with your own values.</p>
-<div style="display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start">
+<div style="display:flex;flex-wrap:wrap;gap:22px;align-items:stretch">
 <div style="flex:1 1 300px;max-width:420px;background:#fff;border-radius:16px;border:1px solid #e1e7ee;padding:16px 18px">
 <label for="ds" style="display:block;font-size:13px;font-weight:700;margin-bottom:4px">Start date (simulation)</label>
 <input id="ds" type="date" value="{{start}}" onInput="{{setStart}}" style="width:100%;box-sizing:border-box;min-height:44px;padding:0 10px;border:1px solid #9aa9ba;border-radius:8px;font-size:14px;margin-bottom:12px">

@@ -22,14 +22,14 @@ button,input,select{font-family:inherit}
 <h1 style="margin:4px 0 6px;font-size:28px;font-weight:800">Reports</h1>
 <p style="margin:0 0 22px;font-size:14px;color:#4a5a6e;max-width:760px;line-height:1.55">PDF and Excel reports built only from actual project records, each showing its reporting period, generation time, responsible person and data source.</p>
 
-<div style="display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start">
+<div style="display:flex;flex-wrap:wrap;gap:22px;align-items:stretch">
 <div style="flex:999 1 420px;min-width:0">
 <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">
 <sc-for list="{{groups}}" as="g" hint-placeholder-count="5">
 <button onClick="{{g.pick}}" aria-pressed="{{g.pressed}}" style="min-height:44px;padding:0 16px;border-radius:999px;border:1px solid {{g.border}};background:{{g.bg}};color:{{g.fg}};font-size:13.5px;font-weight:700;cursor:pointer">{{g.label}}</button>
 </sc-for>
 </div>
-<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px">
 <sc-for list="{{items}}" as="r" hint-placeholder-count="6">
 <button onClick="{{r.pick}}" aria-pressed="{{r.pressed}}" style="text-align:left;min-height:56px;padding:12px 14px;border-radius:12px;border:1px solid {{r.border}};background:{{r.bg}};font-size:14px;font-weight:600;color:#0e1a2b;cursor:pointer"><span style="color:#0067cc;font-weight:800;margin-right:8px">{{r.n}}</span>{{r.title}}</button>
 </sc-for>

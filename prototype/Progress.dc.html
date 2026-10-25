@@ -14,6 +14,16 @@
 body{margin:0;font-family:"Plus Jakarta Sans",system-ui,sans-serif;color:#0e1a2b;background:#e9edf2}
 button{font-family:inherit}
 @keyframes pulse{0%{opacity:1}50%{opacity:.35}100%{opacity:1}}
+
+.gq{display:grid;align-items:stretch}
+.gq>*{box-sizing:border-box;min-width:0;height:100%}
+.c3{grid-template-columns:repeat(3,minmax(0,1fr))}.c4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.c5{grid-template-columns:repeat(5,minmax(0,1fr))}.c6{grid-template-columns:repeat(6,minmax(0,1fr))}
+@media (max-width:1000px){.c5,.c6{grid-template-columns:repeat(3,minmax(0,1fr))}.c4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.c3,.c4,.c5,.c6{grid-template-columns:minmax(0,1fr)}}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:stretch;margin-bottom:14px}.g2>*{min-width:0;box-sizing:border-box}.g21{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:14px;align-items:stretch;margin-bottom:14px}.g21>*{min-width:0;box-sizing:border-box}
+.col{display:flex;flex-direction:column}.col>.fill{flex:1 1 0}
+@media (max-width:900px){.g2,.g21{grid-template-columns:minmax(0,1fr)}}
 </style>
 </helmet>
 <div style="display:flex;flex-wrap:wrap;min-height:100vh">
@@ -56,7 +66,7 @@ button{font-family:inherit}
 </sc-if>
 
 <sc-if value="{{hasData}}" hint-placeholder-val="{{ true }}">
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:14px">
+<div class="gq c6" style="gap:12px;margin-bottom:14px">
 <sc-for list="{{kpis}}" as="k" hint-placeholder-count="6">
 <div style="background:#fff;border-radius:14px;padding:14px 16px;border:1px solid #d3dbe5;border-top:4px solid {{k.color}}">
 <div style="font-size:12px;font-weight:700;color:#4a5a6e">{{k.label}}</div>
@@ -66,8 +76,8 @@ button{font-family:inherit}
 </sc-for>
 </div>
 
-<div style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:14px;align-items:stretch">
-<section style="flex:999 1 460px;min-width:0;background:#fff;border-radius:16px;padding:16px 18px;border:1px solid #d3dbe5" aria-labelledby="sch">
+<div class="g21">
+<section style="min-width:0;background:#fff;border-radius:16px;padding:16px 18px;border:1px solid #d3dbe5" aria-labelledby="sch">
 <h2 id="sch" style="margin:0 0 2px;font-size:16px;font-weight:800">Cumulative progress (S-curve)</h2>
 <div style="font-size:12px;color:#4a5a6e;margin-bottom:6px">Planned versus actual, as a percentage of the whole project.</div>
 <svg viewBox="0 0 520 260" width="100%" role="img" aria-label="{{curveAria}}" style="display:block">
@@ -88,7 +98,7 @@ button{font-family:inherit}
 </div>
 </section>
 
-<section style="flex:1 1 280px;min-width:0;background:#fff;border-radius:16px;padding:16px 18px;border:1px solid #d3dbe5;display:flex;flex-direction:column;align-items:center" aria-labelledby="dnh">
+<section style="min-width:0;background:#fff;border-radius:16px;padding:16px 18px;border:1px solid #d3dbe5;display:flex;flex-direction:column;align-items:center" aria-labelledby="dnh">
 <h2 id="dnh" style="margin:0 0 8px;font-size:16px;font-weight:800;align-self:flex-start">Overall completion</h2>
 <svg viewBox="0 0 160 160" width="200" height="200" role="img" aria-label="Overall progress {{kpiActual}} percent, planned {{kpiPlanned}} percent">
 <circle cx="80" cy="80" r="70" fill="none" stroke="#e3e9f0" stroke-width="7"></circle>
@@ -105,12 +115,12 @@ button{font-family:inherit}
 </section>
 </div>
 
-<div style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:14px;align-items:flex-start">
-<section style="flex:1 1 380px;min-width:0;background:#fff;border-radius:16px;padding:16px 18px;border:1px solid #d3dbe5" aria-labelledby="wsh">
+<div class="g2">
+<section class="col" style="min-width:0;background:#fff;border-radius:16px;padding:16px 18px;border:1px solid #d3dbe5" aria-labelledby="wsh">
 <h2 id="wsh" style="margin:0 0 2px;font-size:16px;font-weight:800">Progress by workstream</h2>
 <div style="font-size:12px;color:#4a5a6e;margin-bottom:10px">Bar is actual. The dark tick is planned.</div>
 <sc-for list="{{rows}}" as="r" hint-placeholder-count="6">
-<button onClick="{{r.pick}}" aria-pressed="{{r.pressed}}" style="display:block;width:100%;text-align:left;border:1px solid {{r.border}};background:{{r.bg}};border-radius:10px;padding:8px 10px;margin-bottom:6px;cursor:pointer;opacity:{{r.op}}">
+<button class="fill" onClick="{{r.pick}}" aria-pressed="{{r.pressed}}" style="display:flex;flex-direction:column;justify-content:center;min-height:56px;width:100%;text-align:left;border:1px solid {{r.border}};background:{{r.bg}};border-radius:10px;padding:8px 10px;margin-bottom:6px;cursor:pointer;opacity:{{r.op}}">
 <div style="display:flex;justify-content:space-between;gap:8px;font-size:13px;font-weight:700"><span>{{r.name}}</span><span style="color:{{r.color}}">{{r.icon}} {{r.actual}}% <span style="font-weight:600;color:#4a5a6e">of {{r.planned}}% planned</span></span></div>
 <div style="position:relative;height:12px;border-radius:999px;background:#e3e9f0;margin-top:6px;overflow:visible">
 <div style="position:absolute;left:0;top:0;bottom:0;border-radius:999px;width:{{r.aw}};background:{{r.fill}}"></div>
@@ -120,12 +130,12 @@ button{font-family:inherit}
 </sc-for>
 </section>
 
-<section style="flex:1 1 420px;min-width:0;background:#fff;border-radius:16px;padding:16px 18px;border:1px solid #d3dbe5" aria-labelledby="gnh">
+<section class="col" style="min-width:0;background:#fff;border-radius:16px;padding:16px 18px;border:1px solid #d3dbe5" aria-labelledby="gnh">
 <h2 id="gnh" style="margin:0 0 2px;font-size:16px;font-weight:800">Where we are in the programme</h2>
 <div style="font-size:12px;color:#4a5a6e;margin-bottom:10px">Light bar is the planned window. Dark fill is progress achieved. Red line is today.</div>
 <div style="display:flex;margin-left:112px;font-size:11px;color:#4a5a6e;margin-bottom:4px"><span style="flex:1 1 0">M1</span><span style="flex:1 1 0">M4</span><span style="flex:1 1 0">M7</span><span style="flex:1 1 0;text-align:right">M12</span></div>
 <sc-for list="{{gantt}}" as="g" hint-placeholder-count="6">
-<div style="display:flex;align-items:center;min-height:38px;border-top:1px solid #edf1f5;opacity:{{g.op}}">
+<div class="fill" style="display:flex;align-items:center;min-height:56px;border-top:1px solid #edf1f5;opacity:{{g.op}}">
 <div style="flex:0 0 112px;font-size:12.5px;font-weight:600;padding-right:8px">{{g.name}}</div>
 <div style="flex:1 1 auto;position:relative;height:20px;background:repeating-linear-gradient(90deg,#f1f4f8 0,#f1f4f8 1px,transparent 1px,transparent 8.3333%)">
 <div style="position:absolute;top:2px;bottom:2px;border-radius:5px;background:#cfe0ee;left:{{g.left}};width:{{g.width}};overflow:hidden"><div style="height:100%;width:{{g.done}};background:#0a5cc2"></div></div>
@@ -136,8 +146,8 @@ button{font-family:inherit}
 </section>
 </div>
 
-<div style="display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start">
-<section style="flex:1 1 400px;min-width:0;background:#fff;border-radius:16px;padding:16px 18px;border:1px solid #d3dbe5" aria-labelledby="mih">
+<div class="g2" style="margin-bottom:0">
+<section class="col" style="min-width:0;background:#fff;border-radius:16px;padding:16px 18px;border:1px solid #d3dbe5" aria-labelledby="mih">
 <div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline;flex-wrap:wrap;margin-bottom:10px">
 <h2 id="mih" style="margin:0;font-size:16px;font-weight:800">Milestones</h2>
 <span style="font-size:12.5px;font-weight:700;color:#145c36">{{msDone}} of {{msTotal}} achieved</span>
@@ -151,10 +161,10 @@ button{font-family:inherit}
 </sc-for>
 </section>
 
-<section style="flex:1 1 340px;min-width:0;background:#fff;border-radius:16px;padding:16px 18px;border:1px solid #d3dbe5" aria-labelledby="fdh">
+<section class="col" style="min-width:0;background:#fff;border-radius:16px;padding:16px 18px;border:1px solid #d3dbe5" aria-labelledby="fdh">
 <h2 id="fdh" style="margin:0 0 10px;font-size:16px;font-weight:800">Latest site updates</h2>
 <sc-for list="{{feed}}" as="f" hint-placeholder-count="5">
-<div style="display:flex;gap:12px;padding:9px 0;border-bottom:1px solid #edf1f5">
+<div class="fill" style="display:flex;gap:12px;padding:9px 0;border-bottom:1px solid #edf1f5;align-items:center">
 <span style="flex:0 0 10px;height:10px;border-radius:50%;background:{{f.dot}};margin-top:5px"></span>
 <div style="min-width:0;font-size:13px;line-height:1.45"><div><span style="font-size:10px;font-weight:800;border:1px solid {{f.tagColor}};color:{{f.tagColor}};border-radius:4px;padding:0 4px;margin-right:6px">{{f.tag}}</span>{{f.text}}</div><div style="font-size:11.5px;color:#4a5a6e;margin-top:2px">{{f.when}}</div></div>
 </div>

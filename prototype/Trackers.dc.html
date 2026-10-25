@@ -37,7 +37,7 @@ label.f>*{margin-top:4px;font-weight:400}
 </sc-for>
 </div>
 
-<div style="display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start">
+<div style="display:flex;flex-wrap:wrap;gap:22px;align-items:stretch">
 <section style="flex:2 1 520px;min-width:0">
 <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">
 <sc-for list="{{chips}}" as="c" hint-placeholder-count="6">
@@ -88,6 +88,8 @@ label.f>*{margin-top:4px;font-weight:400}
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":1500}}'>
 class Component extends DCLogic {
+  componentDidMount() { try { this._h = () => this.setState({ lg: Date.now() }); window.addEventListener('beni-lang', this._h); } catch (e) {} }
+  componentWillUnmount() { try { window.removeEventListener('beni-lang', this._h); } catch (e) {} }
   load() {
     if (this._d) return this._d;
     let d = null;

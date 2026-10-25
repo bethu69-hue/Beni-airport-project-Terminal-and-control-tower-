@@ -14,6 +14,13 @@
 body{margin:0;font-family:"Plus Jakarta Sans",system-ui,sans-serif;color:#1b2430;background:#f2f5f8}
 a{color:#0f4c99}a:hover{color:#0a3166}
 button{font-family:inherit}
+
+.gq{display:grid;align-items:stretch}
+.gq>*{box-sizing:border-box;min-width:0;height:100%}
+.c3{grid-template-columns:repeat(3,minmax(0,1fr))}.c4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.c5{grid-template-columns:repeat(5,minmax(0,1fr))}.c6{grid-template-columns:repeat(6,minmax(0,1fr))}
+@media (max-width:1000px){.c5,.c6{grid-template-columns:repeat(3,minmax(0,1fr))}.c4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.c3,.c4,.c5,.c6{grid-template-columns:minmax(0,1fr)}}
 </style>
 </helmet>
 <div style="display:flex;flex-wrap:wrap;min-height:100vh">
@@ -24,7 +31,7 @@ button{font-family:inherit}
 <h1 style="margin:0 0 4px;font-size:26px">CONTRACT ADMINISTRATION</h1>
 <p style="margin:0 0 20px;color:#3f4854;font-size:14px">Notices, claims, variations, payments, securities and obligations, each with its clause, evidence and deadline.</p>
 
-<div style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start;margin-bottom:28px">
+<div style="display:flex;flex-wrap:wrap;gap:20px;align-items:stretch;margin-bottom:28px">
 
 <div style="flex:1 1 280px;max-width:420px;background:#fff;border:1px solid #d5dce4;border-radius:8px;padding:8px">
 <div style="font-size:13px;font-weight:700;color:#3f4854;padding:8px 8px 4px">Sections A to S</div>
@@ -67,7 +74,7 @@ button{font-family:inherit}
 
 <h2 style="font-size:16px;margin:0 0 4px">Project setup checklist</h2>
 <p style="margin:0 0 10px;font-size:13px;color:#3f4854">Dashboard values and deadlines stay blank until the authorised team completes these.</p>
-<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px;margin-bottom:24px">
+<div class="gq c4" style="gap:8px;margin-bottom:24px">
 <sc-for list="{{setup}}" as="x" hint-placeholder-count="6">
 <div style="background:#fff;border:1px solid #d5dce4;border-radius:8px;padding:10px 12px;font-size:14px;display:flex;justify-content:space-between;gap:8px"><span>{{x.name}}</span><span style="font-size:12px;font-weight:700;color:#3f4854;white-space:nowrap">○ Not configured</span></div>
 </sc-for>

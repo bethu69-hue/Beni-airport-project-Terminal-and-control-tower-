@@ -26,7 +26,7 @@ label.f>*{margin-top:4px;font-weight:400}
 <p style="margin:0 0 6px;font-size:14px;color:#4a5a6e;max-width:820px;line-height:1.55">Raise a quick query with the team. Tag someone with @name. If they are not online, they are alerted on WhatsApp and by email. Every message is kept for at least 30 days for review.</p>
 <div style="background:#fff7dd;border:1px solid #e0b84f;border-radius:10px;padding:10px 14px;font-size:13px;color:#4a3200;margin-bottom:20px;max-width:820px;line-height:1.5"><b>Prototype:</b> nothing is sent from this page. It shows what the live system queues. Chat is for simple queries. A contractual notice must still be issued from Notices and Deadlines.</div>
 
-<div style="display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start">
+<div style="display:flex;flex-wrap:wrap;gap:22px;align-items:stretch">
 
 <section style="flex:2 1 460px;min-width:0">
 <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px">
@@ -100,6 +100,7 @@ class Component extends DCLogic {
     let d = null;
     try { d = JSON.parse(localStorage.getItem('beni_chat_v1') || 'null'); } catch (e) {}
     this._d = d || { people: [], msgs: [], channel: 'general', as: '', draft: '', urgent: false, admin: '', n: { name: '', role: '', email: '', phone: '', consent: false }, msg: '', bad: false, addErr: '', online: {} };
+    if (!this._d.admin) this._d.admin = '+254725309557';
     const cut = Date.now() - 30 * 86400000;
     this._d.msgs = this._d.msgs.filter(m => m.t >= cut);
     return this._d;

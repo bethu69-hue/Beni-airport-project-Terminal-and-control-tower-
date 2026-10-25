@@ -18,6 +18,13 @@ label.f{display:block;font-size:12px;font-weight:700;color:#4a5a6e;margin-bottom
 label.f>*{margin-top:4px;font-weight:400}
 th{font-size:11.5px;letter-spacing:.04em;text-align:left;color:#4a5a6e;padding:8px 10px;border-bottom:2px solid #e1e7ee}
 td{padding:9px 10px;border-bottom:1px solid #edf1f5;font-size:13.5px;vertical-align:top}
+
+.gq{display:grid;align-items:stretch}
+.gq>*{box-sizing:border-box;min-width:0;height:100%}
+.c3{grid-template-columns:repeat(3,minmax(0,1fr))}.c4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.c5{grid-template-columns:repeat(5,minmax(0,1fr))}.c6{grid-template-columns:repeat(6,minmax(0,1fr))}
+@media (max-width:1000px){.c5,.c6{grid-template-columns:repeat(3,minmax(0,1fr))}.c4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.c3,.c4,.c5,.c6{grid-template-columns:minmax(0,1fr)}}
 </style>
 </helmet>
 <div style="display:flex;flex-wrap:wrap;min-height:100vh">
@@ -34,14 +41,14 @@ td{padding:9px 10px;border-bottom:1px solid #edf1f5;font-size:13.5px;vertical-al
 </sc-for>
 </div>
 
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:24px">
+<div class="gq c5" style="gap:12px;margin-bottom:24px">
 <sc-for list="{{stats}}" as="s" hint-placeholder-count="5">
 <div style="background:#fff;border-radius:14px;padding:14px 16px;border:1px solid #e1e7ee;border-top:4px solid {{s.color}}"><div style="font-size:12px;font-weight:600;color:#4a5a6e;min-height:30px;line-height:1.35">{{s.label}}</div><div style="font-size:24px;font-weight:800;margin-top:2px">{{s.value}}</div></div>
 </sc-for>
 </div>
 
 <sc-if value="{{isReq}}" hint-placeholder-val="{{ true }}">
-<div style="display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start">
+<div style="display:flex;flex-wrap:wrap;gap:22px;align-items:stretch">
 <section style="flex:1 1 340px;max-width:460px;background:#fff;border:1px solid #e1e7ee;border-radius:16px;padding:18px 20px">
 <h2 style="margin:0 0 12px;font-size:18px;font-weight:800">Add a requirement</h2>
 <label class="f">Employer's Requirements clause<input value="{{d.section}}" onInput="{{setSection}}" placeholder="Clause or section number as written"></label>

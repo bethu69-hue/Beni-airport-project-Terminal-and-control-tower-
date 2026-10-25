@@ -14,6 +14,13 @@
 body{margin:0;font-family:"Plus Jakarta Sans",system-ui,sans-serif;color:#0e1a2b;background:#f3f5f9}
 a{color:#0f4c99}
 button,input{font-family:inherit}
+
+.gq{display:grid;align-items:stretch}
+.gq>*{box-sizing:border-box;min-width:0;height:100%}
+.c3{grid-template-columns:repeat(3,minmax(0,1fr))}.c4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.c5{grid-template-columns:repeat(5,minmax(0,1fr))}.c6{grid-template-columns:repeat(6,minmax(0,1fr))}
+@media (max-width:1000px){.c5,.c6{grid-template-columns:repeat(3,minmax(0,1fr))}.c4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.c3,.c4,.c5,.c6{grid-template-columns:minmax(0,1fr)}}
 </style>
 </helmet>
 <div style="display:flex;flex-wrap:wrap;min-height:100vh">
@@ -63,7 +70,7 @@ button,input{font-family:inherit}
 <button onClick="{{toggleDemo}}" style="min-height:44px;padding:0 16px;border:1px solid #6b4600;background:#fff;color:#4a3200;border-radius:10px;font-size:13.5px;font-weight:600;cursor:pointer">{{demoBtn}}</button>
 </div>
 
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-bottom:14px">
+<div class="gq c4" style="gap:14px;margin-bottom:14px">
 <sc-for list="{{rings}}" as="g" hint-placeholder-count="4">
 <div style="background:#fff;border-radius:16px;padding:16px 18px;display:flex;gap:16px;align-items:center;box-shadow:0 1px 2px rgba(14,26,43,.06),0 6px 18px rgba(14,26,43,.05)">
 <svg width="76" height="76" viewBox="0 0 76 76" role="img" aria-label="{{g.label}} not configured" style="flex:0 0 76px">
@@ -75,7 +82,7 @@ button,input{font-family:inherit}
 </sc-for>
 </div>
 
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-bottom:26px">
+<div class="gq c4" style="gap:14px;margin-bottom:26px">
 <sc-for list="{{dates}}" as="d" hint-placeholder-count="4">
 <div style="background:#fff;border-radius:16px;padding:14px 18px;border:1px solid #e1e7ee">
 <div style="font-size:12px;color:#4a5a6e;font-weight:600">{{d.label}}</div>
@@ -85,7 +92,7 @@ button,input{font-family:inherit}
 </sc-for>
 </div>
 
-<div style="display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start;margin-bottom:26px">
+<div style="display:flex;flex-wrap:wrap;gap:22px;align-items:stretch;margin-bottom:26px">
 
 <section aria-labelledby="alh" style="flex:999 1 520px;min-width:0">
 <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:10px;flex-wrap:wrap">
@@ -143,7 +150,7 @@ button,input{font-family:inherit}
 </div>
 
 <h2 style="font-size:18px;font-weight:800;margin:0 0 12px">Live records by area</h2>
-<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:26px">
+<div class="gq c4" style="gap:12px;margin-bottom:26px">
 <sc-for list="{{tiles}}" as="t" hint-placeholder-count="8">
 <div style="background:#fff;border-radius:14px;padding:14px 16px;border:1px solid #e1e7ee;border-top:4px solid {{t.color}}">
 <div style="font-size:12px;color:#4a5a6e;font-weight:600;min-height:32px;line-height:1.35">{{t.label}}</div>

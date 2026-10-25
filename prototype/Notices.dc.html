@@ -14,6 +14,13 @@
 body{margin:0;font-family:"Plus Jakarta Sans",system-ui,sans-serif;color:#1b2430;background:#f2f5f8}
 a{color:#0f4c99}a:hover{color:#0a3166}
 button,input,select{font-family:inherit}
+
+.gq{display:grid;align-items:stretch}
+.gq>*{box-sizing:border-box;min-width:0;height:100%}
+.c3{grid-template-columns:repeat(3,minmax(0,1fr))}.c4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.c5{grid-template-columns:repeat(5,minmax(0,1fr))}.c6{grid-template-columns:repeat(6,minmax(0,1fr))}
+@media (max-width:1000px){.c5,.c6{grid-template-columns:repeat(3,minmax(0,1fr))}.c4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.c3,.c4,.c5,.c6{grid-template-columns:minmax(0,1fr)}}
 </style>
 </helmet>
 <div style="display:flex;flex-wrap:wrap;min-height:100vh">
@@ -32,7 +39,7 @@ button,input,select{font-family:inherit}
 <button onClick="{{modeSim}}" aria-pressed="{{simOn}}" style="min-height:44px;padding:0 14px;border-radius:8px;font-size:14px;border:1px solid #0b4fb3;background:{{simBg}};color:{{simFg}};cursor:pointer">Simulation (what-if)</button>
 </div>
 
-<div style="display:flex;flex-wrap:wrap;gap:20px;margin-bottom:28px;align-items:flex-start">
+<div style="display:flex;flex-wrap:wrap;gap:20px;margin-bottom:28px;align-items:stretch">
 <div style="flex:1 1 300px;max-width:460px;background:#fff;border:1px solid #d5dce4;border-radius:8px;padding:16px">
 <sc-if value="{{isRule}}" hint-placeholder-val="{{ true }}">
 <label for="rule" style="display:block;font-size:13px;font-weight:700;margin-bottom:4px">Rule</label>
@@ -65,7 +72,7 @@ button,input,select{font-family:inherit}
 <sc-if value="{{showResult}}" hint-placeholder-val="{{ false }}">
 <div style="background:#fff;border:2px dashed #0b4fb3;border-radius:8px;padding:16px">
 <div style="font-size:12px;font-weight:700;color:#0b4fb3;margin-bottom:8px">SIMULATION · not a contractual deadline</div>
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:12px">
+<div class="gq c3" style="gap:12px;margin-bottom:12px">
 <div><div style="font-size:12px;color:#3f4854">Trigger date</div><div style="font-size:16px;font-weight:700">{{res.trigger}}</div></div>
 <div><div style="font-size:12px;color:#3f4854">Period</div><div style="font-size:16px;font-weight:700">{{res.period}}</div></div>
 <div><div style="font-size:12px;color:#3f4854">Calculated date</div><div style="font-size:16px;font-weight:700">{{res.deadline}}</div></div>
@@ -110,7 +117,7 @@ button,input,select{font-family:inherit}
 </div>
 
 <h2 style="font-size:16px;margin:0 0 8px">Deadline types kept separate</h2>
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:24px">
+<div class="gq c4" style="gap:10px;margin-bottom:24px">
 <div style="background:#fff;border:1px solid #d5dce4;border-radius:8px;padding:12px 14px;font-size:14px"><strong>Contractual</strong><br>From the executed contract.</div>
 <div style="background:#fff;border:1px solid #d5dce4;border-radius:8px;padding:12px 14px;font-size:14px"><strong>Statutory</strong><br>From applicable law.</div>
 <div style="background:#fff;border:1px solid #d5dce4;border-radius:8px;padding:12px 14px;font-size:14px"><strong>Internal target</strong><br>Team aim, never a contract date.</div>
