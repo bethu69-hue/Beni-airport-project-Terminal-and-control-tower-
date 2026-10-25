@@ -91,7 +91,7 @@ button,input,select{font-family:inherit}
 </div>
 
 <h2 style="font-size:18px;margin:0 0 4px">Deadline rule library</h2>
-<p style="margin:0 0 12px;font-size:13px;color:#3f4854">All matters start as Not Configured. A Contract Manager or Project Manager must enter the period from the executed contract, verify it and approve it before it can generate live deadlines.</p>
+<p style="margin:0 0 12px;font-size:13px;color:#3f4854">Clause and period shown for 17 matters are proposals read from the FIDIC Plant and Design-Build 2017 General Conditions (2nd edition). They are not approved: the Particular Conditions and Contract Data can change any period. Six matters have no fixed period in the General Conditions and stay Not Configured. A Contract Manager or Project Manager must enter the period from the executed contract, verify it and approve it before it can generate live deadlines.</p>
 
 <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;font-size:12px;font-weight:700">
 <sc-for list="{{states}}" as="s" hint-placeholder-count="6"><span style="padding:4px 10px;border-radius:999px;{{s.style}}">{{s.label}}</span></sc-for>
@@ -107,9 +107,9 @@ button,input,select{font-family:inherit}
 <tr style="border-top:1px solid #e6ebf0">
 <td style="padding:10px 12px;white-space:nowrap">{{r.id}}</td>
 <td style="padding:10px 12px">{{r.name}}</td>
-<td style="padding:10px 12px;color:#3f4854">Not entered</td>
-<td style="padding:10px 12px;color:#3f4854">Not entered</td>
-<td style="padding:10px 12px;white-space:nowrap"><span style="font-size:12px;font-weight:700;padding:3px 8px;border-radius:999px;background:#eceff2;color:#3f4854;border:1px solid #c3cad2">○ Not Configured</span></td>
+<td style="padding:10px 12px;color:#3f4854">{{r.clause}}</td>
+<td style="padding:10px 12px;color:#3f4854">{{r.period}}</td>
+<td style="padding:10px 12px;white-space:nowrap"><sc-if value="{{r.prop}}" hint-placeholder-val=""><span style="font-size:12px;font-weight:700;padding:3px 8px;border-radius:999px;background:#fff1cc;color:#6b4600;border:1px solid #e0b84f">▲ Extracted but Unverified</span></sc-if><sc-if value="{{r.nop}}" hint-placeholder-val="{{ true }}"><span style="font-size:12px;font-weight:700;padding:3px 8px;border-radius:999px;background:#eceff2;color:#3f4854;border:1px solid #c3cad2">○ Not Configured</span></sc-if></td>
 </tr>
 </sc-for>
 </tbody>
@@ -137,7 +137,8 @@ class Component extends DCLogic {
     const nav = names.map((label, i) => ({ label: (i + 1) + '. ' + label, href: hrefs[i] || '', off: hrefs[i] ? '' : 'yes', bg: i === 2 ? '#2a5a8c' : 'transparent', weight: i === 2 ? '700' : '500' }));
 
     const matters = ["Contractor's Notice of Claim","Employer's Notice of Claim","Engineer's acknowledgment of a Notice of Claim",'Detailed Particulars of Claim','Responses to claims','Interim and final particulars for continuing claims',"Engineer's determination",'Notice of Dissatisfaction','DAAB referral','DAAB decision','Amicable settlement period',"Contractor's programme submission and updates","Engineer's response to programme submissions",'Design submission and review periods','Requests for information','Variation quotations','Payment applications','Interim Payment Certificates','Payment deadlines','Tests on Completion','Taking-Over procedures','Defects Notification Period obligations','Final Statement and Final Payment Certificate'];
-    const rules = matters.map((m, i) => ({ id: 'R-' + String(i + 1).padStart(3, '0'), name: m }));
+    const P = {1:['20.2.1','28 days'],2:['20.2.1','28 days'],3:['20.2.2','14 days'],4:['20.2.4','84 days'],6:['20.2.6','28 days (final); monthly interim'],7:['3.7.3','42 days'],8:['3.7.5','28 days'],9:['21.4.1','42 days'],10:['21.4.3','84 days'],11:['21.5','28 days'],12:['8.3','28 days'],13:['8.3','21 days (initial); 14 (revised)'],16:['13.3.2','7 days'],18:['14.6','28 days'],19:['14.7','56 days'],21:['10.1','28 days'],23:['14.11.1','56 days']};
+    const rules = matters.map((m, i) => { const q = P[i + 1]; return { id: 'R-' + String(i + 1).padStart(3, '0'), name: m, clause: q ? q[0] : 'Not entered', period: q ? q[1] : 'Not entered', prop: q ? 'yes' : '', nop: q ? '' : 'yes' }; });
 
     const mode = this.state.mode || 'rule';
     const today = new Date();
@@ -150,7 +151,7 @@ class Component extends DCLogic {
     let blocked = '', blockMsg = '', showResult = '', res = {}, reminders = [];
     if (mode === 'rule') {
       blocked = 'yes';
-      blockMsg = rules[ruleIdx].id + ' (' + rules[ruleIdx].name + ') is Not Configured. It has no clause, period or counting convention, so no deadline can be calculated.';
+      blockMsg = rules[ruleIdx].prop ? rules[ruleIdx].id + ' (' + rules[ruleIdx].name + ') has a proposed period of ' + rules[ruleIdx].period + ' (clause ' + rules[ruleIdx].clause + ', FIDIC 2017 General Conditions) but it is not Verified or Approved for Use, so no deadline can be calculated.' : rules[ruleIdx].id + ' (' + rules[ruleIdx].name + ') is Not Configured. It has no clause, period or counting convention, so no deadline can be calculated.';
     } else {
       const n = parseInt(days, 10);
       if (isNaN(n) || n < 0 || !trigger) {
@@ -187,7 +188,7 @@ class Component extends DCLogic {
 
     return {
       nav, rules, states, reminders, res, blocked, blockMsg, showResult,
-      ruleOptions: rules.map((r, i) => ({ v: String(i), t: r.id + ' · ' + r.name + ' (Not Configured)' })),
+      ruleOptions: rules.map((r, i) => ({ v: String(i), t: r.id + ' · ' + r.name + (r.prop ? ' (Unverified proposal)' : ' (Not Configured)') })),
       isRule: mode === 'rule' ? 'yes' : '', isSim: mode === 'sim' ? 'yes' : '',
       ruleOn: mode === 'rule' ? 'true' : 'false', simOn: mode === 'sim' ? 'true' : 'false',
       ruleBg: mode === 'rule' ? '#0b4fb3' : '#ffffff', ruleFg: mode === 'rule' ? '#ffffff' : '#0b4fb3',

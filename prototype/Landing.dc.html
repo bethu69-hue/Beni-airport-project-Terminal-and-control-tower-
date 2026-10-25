@@ -34,18 +34,88 @@ a{text-decoration:none}
 <h1 style="margin:0;font-family:Fraunces,Georgia,serif;font-weight:700;font-size:64px;line-height:1.05;letter-spacing:-.01em;text-shadow:0 2px 24px rgba(0,0,0,.45)">Beni Airport Project</h1>
 <h2 style="margin:12px 0 0;font-family:Fraunces,Georgia,serif;font-weight:600;font-size:34px;line-height:1.2;color:#fff2a8;text-shadow:0 2px 18px rgba(0,0,0,.45)">Terminal and Control Tower</h2>
 <p style="margin:18px 0 26px;font-size:16px;line-height:1.6;color:#dbe7f1;max-width:640px">One place to follow progress, contract administration, quality and handover for the new airport terminal and control tower.</p>
-<div style="display:flex;flex-wrap:wrap;gap:12px">
-<a href="Progress.dc.html" style="min-height:52px;padding:0 28px;border-radius:999px;background:#F7D618;color:#2a2000;font-weight:800;font-size:15px;display:inline-flex;align-items:center;gap:10px">View project progress <span aria-hidden="true">→</span></a>
-<a href="Main.dc.html" style="min-height:52px;padding:0 26px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.4);color:#fff;font-weight:700;font-size:15px;display:inline-flex;align-items:center">Project Control Centre</a>
-<a href="Contract.dc.html" style="min-height:52px;padding:0 26px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.4);color:#fff;font-weight:700;font-size:15px;display:inline-flex;align-items:center">Contract Administration</a>
+<sc-if value="{{signedOut}}" hint-placeholder-val="{{ true }}">
+<form onSubmit="{{submit}}" style="max-width:380px;background:rgba(6,30,74,.62);border:1px solid rgba(255,255,255,.28);border-radius:16px;padding:18px 20px;box-sizing:border-box">
+<div style="font-size:15px;font-weight:800;margin-bottom:12px">{{t.signIn}}</div>
+<label for="uid" style="display:block;font-size:12px;font-weight:700;color:#cfe0ee;margin-bottom:4px">{{t.userId}}</label>
+<input id="uid" value="{{uid}}" onInput="{{setUid}}" autocomplete="username" autocapitalize="none" style="width:100%;box-sizing:border-box;min-height:46px;padding:0 12px;border-radius:10px;border:1px solid rgba(255,255,255,.4);background:#fff;color:#0e1a2b;font-size:15px;font-family:inherit;margin-bottom:10px">
+<label for="pw" style="display:block;font-size:12px;font-weight:700;color:#cfe0ee;margin-bottom:4px">{{t.password}}</label>
+<div style="position:relative;margin-bottom:12px">
+<input id="pw" type="{{pwType}}" value="{{pw}}" onInput="{{setPw}}" autocomplete="current-password" style="width:100%;box-sizing:border-box;min-height:46px;padding:0 52px 0 12px;border-radius:10px;border:1px solid rgba(255,255,255,.4);background:#fff;color:#0e1a2b;font-size:15px;font-family:inherit">
+<button type="button" onClick="{{togglePw}}" aria-label="{{eyeLabel}}" aria-pressed="{{eyeOn}}" style="position:absolute;right:2px;top:1px;width:48px;height:44px;border:0;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#4a5a6e">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 12S5.5 5 12 5s10.5 7 10.5 7-4 7-10.5 7S1.5 12 1.5 12Z"></path><circle cx="12" cy="12" r="3"></circle><path d="M3 3l18 18" style="{{slash}}"></path></svg>
+</button>
 </div>
+<button type="submit" onClick="{{submit}}" style="width:100%;min-height:50px;border-radius:999px;border:0;background:#F7D618;color:#2a2000;font-weight:800;font-size:15px;cursor:pointer;font-family:inherit">{{t.go}}</button>
+<sc-if value="{{err}}" hint-placeholder-val=""><div role="alert" style="margin-top:10px;padding:9px 12px;border-radius:10px;background:#ffedd5;color:#9a3412;font-size:13px;font-weight:700">{{err}}</div></sc-if>
+<div style="margin-top:10px;font-size:11.5px;line-height:1.5;color:#cfe0ee">{{t.note}}</div>
+</form>
+</sc-if>
+<sc-if value="{{signedIn}}" hint-placeholder-val="">
+<div style="font-size:14px;font-weight:700;color:#fff2a8;margin-bottom:12px">{{t.welcome}} @Bethwell</div>
+<div style="display:flex;flex-wrap:wrap;gap:12px">
+<a href="Progress.dc.html" style="min-height:52px;padding:0 28px;border-radius:999px;background:#F7D618;color:#2a2000;font-weight:800;font-size:15px;display:inline-flex;align-items:center;gap:10px">{{t.view}} <span aria-hidden="true">→</span></a>
+<a href="Main.dc.html" style="min-height:52px;padding:0 26px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.4);color:#fff;font-weight:700;font-size:15px;display:inline-flex;align-items:center">{{t.control}}</a>
+<a href="Contract.dc.html" style="min-height:52px;padding:0 26px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.4);color:#fff;font-weight:700;font-size:15px;display:inline-flex;align-items:center">{{t.contract}}</a>
+<button onClick="{{signOut}}" style="min-height:52px;padding:0 22px;border-radius:999px;background:transparent;border:1px solid rgba(255,255,255,.4);color:#fff;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit">{{t.out}}</button>
+</div>
+</sc-if>
 <div style="margin-top:26px;font-size:13px;color:#cfe0ee">Project Manager: Andrew Mwaura · Assistant Project Manager: Bethwell</div>
 </section>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":820}}'>
 class Component extends DCLogic {
-  renderVals() { return {}; }
+  componentDidMount() { try { if (sessionStorage.getItem('beni_auth') === 'bethwell') this.setState({ ok: true }); } catch (e) {} }
+  sha(t) {
+    const u = unescape(encodeURIComponent(t)); const K = [], H = [];
+    const isP = (n) => { for (let i = 2; i * i <= n; i++) if (n % i === 0) return false; return true; };
+    const fr = (x) => ((x - Math.floor(x)) * 4294967296) | 0;
+    let c = 0, n = 2; while (c < 64) { if (isP(n)) { if (c < 8) H[c] = fr(Math.pow(n, 1 / 2)); K[c] = fr(Math.pow(n, 1 / 3)); c++; } n++; }
+    const w = []; const bl = u.length * 8; let m = u + '\x80'; while (m.length % 64 !== 56) m += '\x00';
+    for (let i = 0; i < m.length; i++) w[i >> 2] = (w[i >> 2] || 0) | (m.charCodeAt(i) << (24 - (i % 4) * 8));
+    w[w.length] = 0; w[(m.length >> 2)] = Math.floor(bl / 4294967296); w[(m.length >> 2) + 1] = bl | 0;
+    const rr = (x, k) => (x >>> k) | (x << (32 - k));
+    for (let j = 0; j < w.length; j += 16) {
+      const a = w.slice(j, j + 16); const o = H.slice(0);
+      for (let i = 0; i < 64; i++) {
+        if (i >= 16) { const s0 = rr(a[i - 15], 7) ^ rr(a[i - 15], 18) ^ (a[i - 15] >>> 3); const s1 = rr(a[i - 2], 17) ^ rr(a[i - 2], 19) ^ (a[i - 2] >>> 10); a[i] = (a[i - 16] + s0 + a[i - 7] + s1) | 0; }
+        const S1 = rr(o[4], 6) ^ rr(o[4], 11) ^ rr(o[4], 25); const ch = (o[4] & o[5]) ^ (~o[4] & o[6]);
+        const t1 = (o[7] + S1 + ch + K[i] + a[i]) | 0; const S0 = rr(o[0], 2) ^ rr(o[0], 13) ^ rr(o[0], 22);
+        const mj = (o[0] & o[1]) ^ (o[0] & o[2]) ^ (o[1] & o[2]); const t2 = (S0 + mj) | 0;
+        o.pop(); o.unshift((t1 + t2) | 0); o[4] = (o[4] + t1) | 0;
+      }
+      for (let i = 0; i < 8; i++) H[i] = (H[i] + o[i]) | 0;
+    }
+    return H.map(x => ('00000000' + (x >>> 0).toString(16)).slice(-8)).join('');
+  }
+  renderVals() {
+    const fr = (() => { try { return localStorage.getItem('beni_lang') === 'fr'; } catch (e) { return false; } })();
+    const T = (en, f) => fr ? f : en;
+    const st = this.state;
+    const locked = st.until && Date.now() < st.until;
+    const submit = (e) => {
+      if (e && e.preventDefault) e.preventDefault();
+      if (st.until && Date.now() < st.until) return this.setState({ err: T('Too many attempts. Wait 30 seconds.', 'Trop de tentatives. Attendez 30 secondes.') });
+      let rawId = st.uid || '', rawPw = st.pw || '';
+      try { const a = document.getElementById('uid'), b = document.getElementById('pw'); if (a && a.value) rawId = a.value; if (b && b.value) rawPw = b.value; } catch (x) {}
+      const id = rawId.trim().replace(/^@/, '').toLowerCase();
+      let good = false;
+      try { good = this.sha('beni-proto-v1|' + id + '|' + rawPw) === '5a70ce84e0bcd7da7c82c3cd936735905fb35e18e74a082f128f2c00c1f7902b'; } catch (x) { good = false; }
+      if (good) { try { sessionStorage.setItem('beni_auth', 'bethwell'); } catch (x) {} this.setState({ ok: true, err: '', pw: '', tries: 0 }); }
+      else { const n = (st.tries || 0) + 1; this.setState({ tries: n, pw: '', err: T('User ID or password is not correct.', 'Identifiant ou mot de passe incorrect.'), until: n >= 5 ? Date.now() + 30000 : 0 }); }
+    };
+    return {
+      pwType: st.show ? 'text' : 'password', eyeOn: st.show ? 'true' : 'false', slash: st.show ? 'display:none' : '', eyeLabel: st.show ? T('Hide password', 'Masquer le mot de passe') : T('Show password', 'Afficher le mot de passe'),
+      togglePw: () => this.setState({ show: !st.show }),
+      signedOut: st.ok ? '' : 'yes', signedIn: st.ok ? 'yes' : '', uid: st.uid || '', pw: st.pw || '', err: st.err || '',
+      setUid: (e) => this.setState({ uid: e.target.value }), setPw: (e) => this.setState({ pw: e.target.value }), submit,
+      signOut: () => { try { sessionStorage.removeItem('beni_auth'); } catch (x) {} this.setState({ ok: false, uid: '', pw: '', err: '' }); },
+      t: { signIn: T('Sign in', 'Connexion'), userId: T('User ID', 'Identifiant'), password: T('Password', 'Mot de passe'), go: T('Sign in', 'Se connecter'),
+        note: T('Prototype sign-in: this only gates this screen. The live system uses a secure account login with two-step verification.', 'Connexion du prototype : elle ne protège que cet écran. Le système réel utilise un compte sécurisé avec vérification en deux étapes.'),
+        welcome: T('Signed in as', 'Connecté en tant que'), view: T('View project progress', "Voir l'avancement du projet"), control: T('Project Control Centre', 'Centre de contrôle du projet'), contract: T('Contract Administration', 'Administration du contrat'), out: T('Sign out', 'Se déconnecter') }
+    };
+  }
 }
 </script>
 </body>
