@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Monthly Report</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:"Plus Jakarta Sans",system-ui,sans-serif;color:#0e1a2b;background:#f3f5f9}
+button,input,select,textarea{font-family:inherit;font-size:14px}
+input,select,textarea{border:1px solid #b9c4d0;border-radius:8px;padding:9px 10px;box-sizing:border-box;width:100%;background:#fff;color:#0e1a2b}
+label.f{display:block;font-size:12px;font-weight:700;color:#4a5a6e;margin-bottom:8px}
+label.f>*{margin-top:4px;font-weight:400}
+.gq{display:grid;align-items:stretch}
+.gq>*{box-sizing:border-box;min-width:0;height:100%}
+.c3{grid-template-columns:repeat(3,minmax(0,1fr))}.c4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:1000px){.c4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.c3,.c4{grid-template-columns:minmax(0,1fr)}}
+</style>
+</helmet>
+<div style="display:flex;flex-wrap:wrap;min-height:100vh">
+<div style="flex:0 0 260px"><dc-import name="Nav" active="monthly" hint-size="260px,1000px"></dc-import></div>
+<main style="flex:999 1 560px;min-width:0;padding:24px 28px 40px;box-sizing:border-box">
+<div style="font-size:11px;letter-spacing:.14em;font-weight:700;color:#0a5cc2">{{k.eyebrow}}</div>
+<h1 style="margin:4px 0 6px;font-size:28px;font-weight:800">{{k.title}}</h1>
+<p style="margin:0 0 14px;font-size:14px;color:#4a5a6e;max-width:860px;line-height:1.55">{{k.intro}}</p>
+<div style="background:#fff7dd;border:1px solid #e0b84f;border-radius:10px;padding:10px 14px;font-size:13px;color:#4a3200;margin-bottom:18px;max-width:860px;line-height:1.5"><b>{{k.protoB}}</b> {{k.proto}}</div>
+
+<div class="gq c4" style="gap:14px;margin-bottom:18px">
+<div style="background:#fff;border:1px solid #e1e7ee;border-radius:14px;padding:14px 16px"><div style="font-size:12px;color:#4a5a6e;font-weight:600">{{k.period}}</div><div style="font-size:18px;font-weight:800;margin-top:6px">{{periodText}}</div></div>
+<div style="background:#fff;border:1px solid #e1e7ee;border-radius:14px;padding:14px 16px"><div style="font-size:12px;color:#4a5a6e;font-weight:600">{{k.genOn}}</div><div style="font-size:18px;font-weight:800;margin-top:6px">{{genText}}</div></div>
+<div style="background:#fff;border:1px solid #e1e7ee;border-radius:14px;padding:14px 16px"><div style="font-size:12px;color:#4a5a6e;font-weight:600">{{k.dueBy}}</div><div style="font-size:18px;font-weight:800;margin-top:6px">{{dueText}}</div><div style="font-size:12px;margin-top:3px;font-weight:700;{{dueTone}}">{{dueNote}}</div></div>
+<div style="background:#fff;border:1px solid #e1e7ee;border-radius:14px;padding:14px 16px"><div style="font-size:12px;color:#4a5a6e;font-weight:600">{{k.status}}</div><div style="font-size:18px;font-weight:800;margin-top:6px">{{statusText}}</div><div style="font-size:12px;margin-top:3px;color:#4a5a6e">{{k.notIssued}}</div></div>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start">
+<section style="flex:2 1 520px;min-width:0">
+<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:14px">
+<label class="f" style="flex:0 1 200px;margin:0">{{k.pickMonth}}<input type="month" value="{{month}}" onInput="{{setMonth}}"></label>
+<sc-if value="{{canGenerate}}" hint-placeholder-val="{{ true }}"><button onClick="{{generate}}" style="min-height:44px;padding:0 18px;border:1px solid #0a5cc2;background:#0a5cc2;color:#fff;border-radius:10px;font-weight:700;cursor:pointer">{{k.generate}}</button></sc-if>
+</div>
+
+<sc-if value="{{noReport}}" hint-placeholder-val="{{ false }}"><div style="background:#fff;border:1px dashed #9aa9ba;border-radius:16px;padding:22px;font-size:14px;color:#4a5a6e;line-height:1.6">{{k.noReport}}</div></sc-if>
+
+<sc-for list="{{sections}}" as="s" hint-placeholder-count="3">
+<div style="background:#fff;border:1px solid #e1e7ee;border-radius:14px;padding:14px 16px;margin-bottom:12px">
+<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:6px">
+<span style="font-size:12px;font-weight:800;color:#0a5cc2">{{s.clause}}</span>
+<span style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;background:#fff1cc;color:#6b4600;border:1px solid #e0b84f">{{k.unverified}}</span>
+<span style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;background:#e2ecfb;color:#123f86;border:1px solid #9db9e6">{{s.kind}}</span>
+</div>
+<div style="font-size:14.5px;font-weight:700;line-height:1.4">{{s.title}}</div>
+<div style="font-size:12.5px;color:#4a5a6e;margin-top:6px;line-height:1.5">{{s.auto}}</div>
+<sc-if value="{{s.hasInput}}" hint-placeholder-val="{{ true }}">
+<label class="f" style="margin:10px 0 0">{{k.yourText}}<textarea rows="3" value="{{s.text}}" onInput="{{s.set}}" disabled="{{s.locked}}" placeholder="{{k.hint}}"></textarea></label>
+</sc-if>
+</div>
+</sc-for>
+</section>
+
+<aside style="flex:1 1 320px;max-width:430px;min-width:0">
+<div style="background:#fff;border:1px solid #e1e7ee;border-radius:16px;padding:18px;margin-bottom:16px">
+<h2 style="margin:0 0 4px;font-size:16px;font-weight:800">{{k.signTitle}}</h2>
+<div style="font-size:12.5px;color:#4a5a6e;line-height:1.5;margin-bottom:12px">{{k.signNote}}</div>
+<sc-if value="{{canSubmit}}" hint-placeholder-val="{{ true }}"><button onClick="{{submit}}" style="width:100%;min-height:44px;margin-bottom:12px;border:1px solid #0a5cc2;background:#fff;color:#0a5cc2;border-radius:10px;font-weight:700;cursor:pointer">{{k.submit}}</button></sc-if>
+<label class="f">{{k.yourName}}<input value="{{who}}" onInput="{{setWho}}"></label>
+<label class="f">{{k.yourRole}}<select value="{{role}}" onChange="{{setRole}}"><sc-for list="{{roles}}" as="r"><option value="{{r.v}}">{{r.t}}</option></sc-for></select></label>
+<sc-for list="{{steps}}" as="st" hint-placeholder-count="3">
+<div style="border:1px solid {{st.border}};background:{{st.bg}};border-radius:12px;padding:12px 14px;margin-bottom:10px">
+<div style="font-size:13.5px;font-weight:800">{{st.label}}</div>
+<div style="font-size:12.5px;color:#4a5a6e;margin:3px 0 8px;line-height:1.5">{{st.info}}</div>
+<sc-if value="{{st.canSign}}" hint-placeholder-val="{{ false }}"><button onClick="{{st.sign}}" style="width:100%;min-height:44px;border:1px solid #0a5cc2;background:#0a5cc2;color:#fff;border-radius:10px;font-weight:700;cursor:pointer">{{st.btn}}</button></sc-if>
+</div>
+</sc-for>
+<sc-if value="{{canIssue}}" hint-placeholder-val="{{ false }}"><button onClick="{{issue}}" style="width:100%;min-height:46px;border:1px solid #1b2a00;background:#F7D618;color:#1b2a00;border-radius:10px;font-weight:800;cursor:pointer">{{k.issue}}</button></sc-if>
+<sc-if value="{{msg}}" hint-placeholder-val=""><div style="margin-top:12px;padding:10px 12px;border-radius:10px;font-size:13px;line-height:1.5;{{msgTone}}">{{msg}}</div></sc-if>
+</div>
+
+<div style="background:#fff;border:1px solid #e1e7ee;border-radius:16px;padding:18px">
+<h2 style="margin:0 0 4px;font-size:16px;font-weight:800">{{k.dlTitle}}</h2>
+<div style="font-size:12.5px;color:#4a5a6e;line-height:1.5;margin-bottom:12px">{{k.dlNote}}</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<button onClick="{{download}}" disabled="{{noReport}}" style="flex:1 1 140px;min-height:44px;border:1px solid #0a5cc2;background:#0a5cc2;color:#fff;border-radius:10px;font-weight:700;cursor:pointer">{{k.download}}</button>
+<button onClick="{{print}}" disabled="{{noReport}}" style="flex:1 1 140px;min-height:44px;border:1px solid #0a5cc2;background:#fff;color:#0a5cc2;border-radius:10px;font-weight:700;cursor:pointer">{{k.print}}</button>
+</div>
+<div style="font-size:12px;color:#4a5a6e;margin-top:12px;line-height:1.5">{{k.sendNote}}</div>
+</div>
+</aside>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":1900}}'>
+class Component extends DCLogic {
+  lang() { try { return localStorage.getItem('beni_lang') === 'fr' ? 'fr' : 'en'; } catch (e) { return 'en'; } }
+  load() {
+    if (this._d) return this._d;
+    let d = null;
+    try { d = JSON.parse(localStorage.getItem('beni_mrep_v1') || 'null'); } catch (e) {}
+    const now = new Date();
+    const pm = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    this._d = d || { month: pm.getFullYear() + '-' + String(pm.getMonth() + 1).padStart(2, '0'), reports: {}, who: '', role: 'site_engineer', msg: '', bad: false };
+    return this._d;
+  }
+  save() { try { localStorage.setItem('beni_mrep_v1', JSON.stringify(this._d)); } catch (e) {} this.setState({ k: Date.now() }); }
+  async sha(text) {
+    try {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    } catch (e) { return 'unavailable'; }
+  }
+  renderVals() {
+    const D = this.load();
+    const fr = this.lang() === 'fr';
+    const T = (en, f) => fr ? f : en;
+    const loc = fr ? 'fr-FR' : 'en-GB';
+    const dfmt = (d) => d.toLocaleDateString(loc, { day: '2-digit', month: 'long', year: 'numeric' });
+    const [Y, M] = D.month.split('-').map(Number);
+    const first = new Date(Y, M - 1, 1), last = new Date(Y, M, 0), gen = new Date(Y, M, 4), due = new Date(last.getFullYear(), last.getMonth(), last.getDate() + 7);
+    const R = D.reports[D.month] || null;
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const SECT = [
+      ['progress', '4.21 (a)', 'manual', 'Progress charts and descriptions: design, Contractor\'s Documents, procurement, manufacture, delivery, construction, erection and testing', 'Graphiques et descriptions d\'avancement : conception, documents de l\'Entrepreneur, approvisionnement, fabrication, livraison, construction, montage et essais'],
+      ['photographs', '4.21 (b)', 'mixed', 'Photographs of manufacturing status and site progress', 'Photographies de l\'état de fabrication et de l\'avancement du chantier'],
+      ['manufacture', '4.21 (c)', 'manual', 'Main items of manufacture: manufacturer, location, progress, dates of start, inspections, tests, shipment and arrival on site', 'Principaux éléments fabriqués : fabricant, lieu, avancement, dates de début, inspections, essais, expédition et arrivée sur site'],
+      ['resources', '4.21 (d)', 'manual', 'Contractor\'s Personnel and Equipment', 'Personnel et matériel de l\'Entrepreneur'],
+      ['quality', '4.21 (e)', 'mixed', 'Quality assurance documents, test results and material certificates', 'Documents d\'assurance qualité, résultats d\'essais et certificats de matériaux'],
+      ['claims', '4.21 (f)', 'auto', 'List of notices of the Employer\'s and the Contractor\'s claims', 'Liste des notifications de réclamations du Maître de l\'Ouvrage et de l\'Entrepreneur'],
+      ['safety', '4.21 (g)', 'mixed', 'Safety statistics, including hazardous incidents, environmental and public relations activities', 'Statistiques de sécurité, y compris incidents dangereux, activités environnementales et de relations publiques'],
+      ['actual_vs_planned', '4.21 (h)', 'mixed', 'Actual against planned progress, and events or circumstances that may jeopardise completion', 'Avancement réel comparé au planifié, et événements ou circonstances pouvant compromettre l\'achèvement'],
+      ['delay_measures', T('Check the executed contract', 'Vérifier le contrat signé'), 'manual', 'Measures being adopted to overcome delays', 'Mesures adoptées pour surmonter les retards']
+    ];
+    const AUTO = {
+      photographs: T('From the record: 0 site photographs filed in this month (nothing recorded in this prototype).', 'D\'après les enregistrements : 0 photographie du chantier classée ce mois (rien d\'enregistré dans ce prototype).'),
+      quality: T('From the record: 0 inspections, 0 tests, 0 NCRs opened or closed, 0 material submissions reviewed (nothing recorded in this prototype).', 'D\'après les enregistrements : 0 inspection, 0 essai, 0 NCR ouverte ou clôturée, 0 soumission de matériaux examinée (rien d\'enregistré dans ce prototype).'),
+      claims: T('From the record: 0 claim notices issued or prepared this month, 0 open claim deadlines (nothing recorded in this prototype).', 'D\'après les enregistrements : 0 notification de réclamation émise ou préparée ce mois, 0 délai de réclamation ouvert (rien d\'enregistré dans ce prototype).'),
+      safety: T('From the record: 0 HSE documents filed this month (nothing recorded in this prototype).', 'D\'après les enregistrements : 0 document HSE classé ce mois (rien d\'enregistré dans ce prototype).'),
+      actual_vs_planned: T('From the record: Commencement Date and Time for Completion not entered, so no planned-against-actual figures are shown.', 'D\'après les enregistrements : date de commencement et délai d\'achèvement non saisis, donc aucun chiffre réel/planifié n\'est affiché.')
+    };
+    const status = R ? R.status : '';
+    const locked = !R || status !== 'generated';
+    const sections = SECT.map(s => ({
+      clause: s[1], title: fr ? s[4] : s[3],
+      kind: s[2] === 'auto' ? T('Filled from records', 'Rempli depuis les données') : s[2] === 'mixed' ? T('Records + your text', 'Données + votre texte') : T('Your text', 'Votre texte'),
+      auto: AUTO[s[0]] || '', hasInput: R && s[2] !== 'auto' ? 'yes' : '',
+      text: R && R.manual ? (R.manual[s[0]] || '') : '', locked: locked ? 'true' : '',
+      set: (e) => { if (!R || R.status !== 'generated') return; R.manual[s[0]] = e.target.value; this.save(); }
+    }));
+    const missing = SECT.filter(s => s[2] !== 'auto' && !(R && R.manual && (R.manual[s[0]] || '').trim()));
+    const STATUS = { generated: T('Generated', 'Généré'), under_review: T('Under review', 'En revue'), signed: T('Signed', 'Signé'), issued: T('Issued', 'Émis') };
+    const signs = R ? R.signs : [];
+    const got = (st) => signs.find(x => x.step === st);
+    const ROLES = [['site_engineer', T('Site Engineer', 'Ingénieur de chantier')], ['qa_qc_manager', T('QA/QC Manager', 'Responsable QA/QC')], ['planning_engineer', T('Planning Engineer', 'Ingénieur planning')], ['assistant_project_manager', T('Assistant Project Manager', 'Chef de projet adjoint')], ['project_manager', T('Project Manager', 'Chef de projet')], ['contract_manager', T('Contract Manager', 'Responsable contrats')], ['contractor_rep', T('Contractor representative', 'Représentant de l\'Entrepreneur')], ['auditor', T('Auditor (read only)', 'Auditeur (lecture seule)')]];
+    const roleName = (v) => (ROLES.find(r => r[0] === v) || [v, v])[1];
+    const say = (m, bad) => { D.msg = m; D.bad = !!bad; this.save(); };
+    const sign = (step) => async () => {
+      if (!R) return;
+      const nm = (D.who || '').trim();
+      if (!nm) return say(T('Enter your name first.', 'Saisissez d\'abord votre nom.'), true);
+      if (D.role === 'auditor') return say(T('An auditor can read but not sign.', 'Un auditeur peut lire mais pas signer.'), true);
+      if (signs.some(x => x.name.toLowerCase() === nm.toLowerCase())) return say(T('The same person cannot sign more than one step.', 'Une même personne ne peut pas signer plus d\'une étape.'), true);
+      if (step === 'reviewed' && !['project_manager', 'assistant_project_manager', 'contract_manager'].includes(D.role)) return say(T('Only a Project Manager, Assistant Project Manager or Contract Manager can review.', 'Seul un chef de projet, chef de projet adjoint ou responsable contrats peut relire.'), true);
+      if (step === 'approved' && !['project_manager', 'contract_manager'].includes(D.role)) return say(T('Only a Project Manager or Contract Manager can approve.', 'Seul un chef de projet ou un responsable contrats peut approuver.'), true);
+      const hash = await this.sha(JSON.stringify({ m: D.month, x: R.manual }));
+      R.signs.push({ step, name: nm, role: D.role, t: Date.now(), hash });
+      if (step === 'approved') R.status = 'signed';
+      say(T('Signed. The signature is permanent and records a fingerprint of the exact text.', 'Signé. La signature est définitive et enregistre l\'empreinte du texte exact.'), false);
+    };
+    const labels = { prepared: T('1. Prepared by', '1. Préparé par'), reviewed: T('2. Reviewed by', '2. Relu par'), approved: T('3. Approved by', '3. Approuvé par') };
+    const btns = { prepared: T('Sign as preparer', 'Signer comme préparateur'), reviewed: T('Sign as reviewer', 'Signer comme relecteur'), approved: T('Sign as approver', 'Signer comme approbateur') };
+    const prevDone = { prepared: status === 'under_review', reviewed: !!got('prepared'), approved: !!got('reviewed') };
+    const steps = ['prepared', 'reviewed', 'approved'].map(st => {
+      const g = got(st);
+      const can = !!R && !g && prevDone[st] && status !== 'issued' && status !== 'signed';
+      return { label: labels[st], info: g ? g.name + ' (' + roleName(g.role) + ') · ' + new Date(g.t).toLocaleString(loc) + ' · ' + T('fingerprint', 'empreinte') + ' ' + g.hash.slice(0, 12) : (R ? (prevDone[st] ? T('Waiting for signature.', 'En attente de signature.') : T('Not yet available.', 'Pas encore disponible.')) : '—'),
+        bg: g ? '#e3f3ea' : '#fff', border: g ? '#9bcdb0' : '#d3dbe5', canSign: can ? 'yes' : '', btn: btns[st], sign: sign(st) };
+    });
+    const canIssue = !!R && status === 'signed' && ['project_manager', 'contract_manager'].includes(D.role);
+    const issue = async () => {
+      if (!R || R.status !== 'signed') return;
+      const a = got('approved');
+      const now = await this.sha(JSON.stringify({ m: D.month, x: R.manual }));
+      if (!a || a.hash !== now) return say(T('The report changed after it was signed.', 'Le rapport a changé après sa signature.'), true);
+      R.status = 'issued'; R.issuedAt = Date.now();
+      say(T('Issued. In the live system the recipients list is queued for email. Nothing is sent from this prototype.', 'Émis. Dans le système réel, la liste des destinataires est mise en file d\'envoi par e-mail. Rien n\'est envoyé depuis ce prototype.'), false);
+    };
+    const submit = () => {
+      if (!R || R.status !== 'generated') return;
+      if (missing.length) return say(T('These sections need text (write "None this month" if there is nothing to report): ', 'Ces sections doivent être renseignées (écrivez « Rien ce mois-ci » s\'il n\'y a rien à signaler) : ') + missing.map(s => s[1]).join(', '), true);
+      R.status = 'under_review';
+      say(T('Submitted for review. The text is now locked.', 'Soumis pour revue. Le texte est maintenant verrouillé.'), false);
+    };
+    const html = () => {
+      const esc = (x) => String(x).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      const st = R ? R.status : 'generated';
+      const body = SECT.map(s => '<h3>' + esc(s[1]) + ' — ' + esc(fr ? s[4] : s[3]) + '</h3>' + (AUTO[s[0]] ? '<p><i>' + esc(AUTO[s[0]]) + '</i></p>' : '') + (s[2] !== 'auto' ? '<p>' + esc((R && R.manual && R.manual[s[0]]) || T('(not yet entered)', '(pas encore saisi)')).replace(/\n/g, '<br>') + '</p>' : '')).join('');
+      const sg = ['prepared', 'reviewed', 'approved'].map(x => { const g = got(x); return '<tr><td>' + esc(labels[x]) + '</td><td>' + (g ? esc(g.name) + ' (' + esc(roleName(g.role)) + ')' : '—') + '</td><td>' + (g ? esc(new Date(g.t).toLocaleString(loc)) : '—') + '</td><td>' + (g ? esc(g.hash.slice(0, 16)) : '—') + '</td></tr>'; }).join('');
+      return '<!doctype html><html lang="' + (fr ? 'fr' : 'en') + '"><head><meta charset="utf-8"><title>' + esc(T('Monthly Progress Report', 'Rapport mensuel d\'avancement')) + ' ' + D.month + '</title><style>body{font-family:Arial,sans-serif;max-width:820px;margin:30px auto;padding:0 18px;color:#0e1a2b;line-height:1.5}h1{color:#0a5cc2;border-bottom:6px solid #F7D618;padding-bottom:8px}h3{font-size:14px;margin:18px 0 4px}table{border-collapse:collapse;width:100%;font-size:13px}td,th{border:1px solid #b9c4d0;padding:6px 8px;text-align:left}.w{background:#fff1cc;border:1px solid #e0b84f;padding:8px 12px;font-size:13px;margin:10px 0}</style></head><body>' +
+        '<h1>' + esc(T('Monthly Progress Report', 'Rapport mensuel d\'avancement')) + '</h1>' +
+        '<p><b>BENI Airport DRC — ' + esc(T('Terminal and Control Tower', 'Terminal et tour de contrôle')) + '</b><br>' + esc(T('Period', 'Période')) + ': ' + esc(dfmt(first)) + ' → ' + esc(dfmt(last)) + '<br>' + esc(T('Due by', 'À remettre avant le')) + ': ' + esc(dfmt(due)) + '<br>' + esc(T('Status', 'Statut')) + ': <b>' + esc(STATUS[st]) + '</b></p>' +
+        (st === 'issued' ? '' : '<div class="w"><b>' + esc(T('DRAFT — NOT ISSUED.', 'BROUILLON — NON ÉMIS.')) + '</b> ' + esc(T('This copy has not been through the three sign-offs and must not be treated as an issued report.', 'Cette copie n\'a pas reçu les trois signatures et ne doit pas être considérée comme un rapport émis.')) + '</div>') +
+        '<div class="w">' + esc(T('The section list follows the usual FIDIC Sub-Clause 4.21 wording and has not yet been verified against the executed contract and Particular Conditions.', 'La liste des sections suit la rédaction habituelle de la Sous-Clause 4.21 de la FIDIC et n\'a pas encore été vérifiée par rapport au contrat signé et aux Conditions Particulières.')) + '</div>' +
+        body + '<h2>' + esc(T('Sign-off', 'Signatures')) + '</h2><table><tr><th>' + esc(T('Step', 'Étape')) + '</th><th>' + esc(T('Name and role', 'Nom et fonction')) + '</th><th>' + esc(T('Signed at', 'Signé le')) + '</th><th>' + esc(T('Fingerprint', 'Empreinte')) + '</th></tr>' + sg + '</table>' +
+        '<p style="font-size:12px;color:#4a5a6e">' + esc(T('Generated', 'Généré')) + ' ' + esc(new Date().toLocaleString(loc)) + '</p></body></html>';
+    };
+    const download = () => {
+      if (!R) return;
+      try {
+        const b = new Blob([html()], { type: 'text/html' });
+        const a = document.createElement('a'); a.href = URL.createObjectURL(b);
+        a.download = 'BENI-monthly-report-' + D.month + (R.status === 'issued' ? '' : '-DRAFT') + '.html';
+        document.body.appendChild(a); a.click(); a.remove();
+      } catch (e) { say(T('This preview blocks downloads. It works in the live system.', 'Cet aperçu bloque les téléchargements. Cela fonctionne dans le système réel.'), true); }
+    };
+    const print = () => {
+      if (!R) return;
+      try { const w = window.open('', '_blank'); w.document.write(html()); w.document.close(); w.focus(); setTimeout(() => w.print(), 300); }
+      catch (e) { say(T('This preview blocks pop-ups. Use Download instead.', 'Cet aperçu bloque les fenêtres. Utilisez Télécharger.'), true); }
+    };
+    const days = Math.round((due - today) / 86400000);
+    const open = !R || R.status !== 'issued';
+    const dueNote = !open ? T('Issued', 'Émis') : days < 0 ? Math.abs(days) + T(' day(s) overdue', ' jour(s) de retard') : days === 0 ? T('Due today', 'À remettre aujourd\'hui') : days + T(' day(s) left', ' jour(s) restant(s)');
+    const K = {
+      eyebrow: T('ADMIN', 'ADMINISTRATION'), title: T('Monthly Progress Report', 'Rapport mensuel d\'avancement'),
+      intro: T('One report per calendar month, built from the project records and your own text. The live system creates it on the 4th day of each new month. The report is due within 7 days of the end of the month. A report is only issued after three different people have signed it.', 'Un rapport par mois civil, construit à partir des données du projet et de votre texte. Le système réel le crée le 4e jour de chaque nouveau mois. Le rapport est dû dans les 7 jours suivant la fin du mois. Un rapport n\'est émis qu\'après la signature de trois personnes différentes.'),
+      protoB: T('Prototype:', 'Prototype :'), proto: T('Nothing is sent and nothing is saved on a server. The section list is the usual FIDIC 4.21 list and must be checked against the executed contract (Particular Conditions can change it) before the first real report.', 'Rien n\'est envoyé et rien n\'est enregistré sur un serveur. La liste des sections est la liste habituelle de la clause 4.21 de la FIDIC ; elle doit être vérifiée par rapport au contrat signé (les Conditions Particulières peuvent la modifier) avant le premier rapport réel.'),
+      period: T('Reporting period', 'Période couverte'), genOn: T('Auto-generated on', 'Généré automatiquement le'), dueBy: T('Due by', 'À remettre avant le'), status: T('Status', 'Statut'),
+      notIssued: R && R.status === 'issued' ? '' : T('Not yet issued', 'Pas encore émis'),
+      pickMonth: T('Month', 'Mois'), generate: T('Generate now (one click)', 'Générer maintenant (un clic)'),
+      noReport: T('No report exists for this month yet. In the live system it appears by itself on the 4th. You can also generate it now with one click. It is filled from the records and never invents figures.', 'Aucun rapport n\'existe encore pour ce mois. Dans le système réel, il apparaît automatiquement le 4. Vous pouvez aussi le générer maintenant en un clic. Il est rempli à partir des données et n\'invente jamais de chiffres.'),
+      unverified: T('Template unverified', 'Modèle non vérifié'), yourText: T('Your text', 'Votre texte'), hint: T('Write "None this month" if there is nothing to report', 'Écrivez « Rien ce mois-ci » s\'il n\'y a rien à signaler'),
+      signTitle: T('Digital sign-off', 'Signature numérique'), signNote: T('Three different people sign in order: preparer, reviewer, approver. Each signature is permanent and records a fingerprint of the exact text signed.', 'Trois personnes différentes signent dans l\'ordre : préparateur, relecteur, approbateur. Chaque signature est définitive et enregistre l\'empreinte du texte exact signé.'),
+      submit: T('Submit for review (locks the text)', 'Soumettre pour revue (verrouille le texte)'), yourName: T('Your name', 'Votre nom'), yourRole: T('Your role', 'Votre fonction'),
+      issue: T('Issue report', 'Émettre le rapport'),
+      dlTitle: T('Download', 'Téléchargement'), dlNote: T('Download works at any stage. Until the report is issued, the file is marked DRAFT — NOT ISSUED.', 'Le téléchargement fonctionne à tout moment. Tant que le rapport n\'est pas émis, le fichier porte la mention BROUILLON — NON ÉMIS.'),
+      download: T('Download file', 'Télécharger'), print: T('Print / save as PDF', 'Imprimer / enregistrer en PDF'),
+      sendNote: T('Sending by email to the recipients list needs the sending service, which is not connected yet. Queued is not the same as delivered.', 'L\'envoi par e-mail à la liste des destinataires nécessite le service d\'envoi, qui n\'est pas encore connecté. « En file » ne veut pas dire « livré ».')
+    };
+    return {
+      k: K, month: D.month, setMonth: (e) => { if (e.target.value) { D.month = e.target.value; D.msg = ''; this.save(); } },
+      periodText: dfmt(first) + ' → ' + dfmt(last), genText: dfmt(gen), dueText: dfmt(due), dueNote,
+      dueTone: !open ? 'color:#145c36' : days < 0 ? 'color:#9a3412' : days <= 3 ? 'color:#6b4600' : 'color:#4a5a6e',
+      statusText: R ? STATUS[R.status] : T('Not generated', 'Non généré'),
+      canGenerate: R ? '' : 'yes', noReport: R ? '' : 'yes',
+      generate: () => { D.reports[D.month] = { status: 'generated', manual: {}, signs: [], genAt: Date.now() }; D.msg = ''; this.save(); },
+      sections, who: D.who, setWho: (e) => { D.who = e.target.value; this.save(); }, role: D.role, setRole: (e) => { D.role = e.target.value; this.save(); },
+      roles: ROLES.map(r => ({ v: r[0], t: r[1] })), steps, canSubmit: R && R.status === 'generated' ? 'yes' : '', submit,
+      canIssue: canIssue ? 'yes' : '', issue, msg: D.msg, msgTone: D.bad ? 'background:#ffedd5;border:1px solid #fdba74;color:#9a3412' : 'background:#e3f3ea;border:1px solid #9bcdb0;color:#145c36',
+      download, print
+    };
+  }
+}
+</script>
+</body>
+</html>

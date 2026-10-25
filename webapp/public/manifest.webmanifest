@@ -1,0 +1,16 @@
+{
+  "name": "BENI Airport DRC – Project Control Centre",
+  "short_name": "BENI Control",
+  "description": "Contract administration, quality and reporting for the BENI Airport Terminal and Control Tower project.",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0b4fb3",
+  "theme_color": "#0b4fb3",
+  "lang": "en",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

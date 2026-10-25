@@ -20,9 +20,14 @@ a{text-decoration:none}
 <div style="display:flex;gap:12px;align-items:center;padding:0 8px 20px;border-bottom:1px solid {{t.line}};margin-bottom:10px">
 <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="11" fill="#F7D618"></rect><path d="M20 7v26" stroke="{{t.bg}}" stroke-width="3" stroke-dasharray="4 3"></path><path d="M12 33 17 7M28 33 23 7" stroke="{{t.bg}}" stroke-width="2" stroke-linecap="round"></path></svg>
 <div>
-<div style="font-size:15px;font-weight:800;letter-spacing:.01em;color:#fff">BENI Airport DRC</div>
-<div style="font-size:11px;color:{{t.sub}};margin-top:2px">Terminal and Control Tower</div>
+<div style="font-size:15px;font-weight:800;letter-spacing:.01em;color:#fff">{{brand1}}</div>
+<div style="font-size:11px;color:{{t.sub}};margin-top:2px">{{brand2}}</div>
 </div>
+</div>
+<div role="group" aria-label="{{langLabel}}" style="display:flex;gap:6px;align-items:center;padding:0 8px 6px;margin-top:-2px">
+<span style="font-size:11px;color:{{t.sub}};margin-right:4px">{{langLabel}}</span>
+<button onClick="{{goEn}}" aria-pressed="{{enOn}}" style="min-height:32px;min-width:44px;border-radius:8px;border:1px solid {{t.line}};background:{{enBg}};color:{{enFg}};font-weight:700;font-size:12px;cursor:pointer;font-family:inherit">EN</button>
+<button onClick="{{goFr}}" aria-pressed="{{frOn}}" style="min-height:32px;min-width:44px;border-radius:8px;border:1px solid {{t.line}};background:{{frBg}};color:{{frFg}};font-weight:700;font-size:12px;cursor:pointer;font-family:inherit">FR</button>
 </div>
 <sc-for list="{{rows}}" as="r" hint-placeholder-count="8">
 <sc-if value="{{r.head}}" hint-placeholder-val="{{ false }}">
@@ -35,7 +40,7 @@ a{text-decoration:none}
 <div aria-disabled="true" style="display:flex;align-items:center;gap:10px;min-height:34px;padding:0 10px;font-size:13px;color:{{t.sub}}"><span style="width:6px;height:6px;border-radius:50%;background:{{t.dotOff}};flex:0 0 6px"></span>{{r.label}}</div>
 </sc-if>
 </sc-for>
-<div style="margin:18px 10px 0;padding:12px;border:1px solid {{t.line}};border-radius:10px;font-size:11.5px;line-height:1.5;color:{{t.sub}}">Muted items belong to later phases. Prototype only: no data is saved.</div>
+<div style="margin:18px 10px 0;padding:12px;border:1px solid {{t.line}};border-radius:10px;font-size:11.5px;line-height:1.5;color:{{t.sub}}">{{foot}}</div>
 </nav>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"active":{"editor":null,"default":"overview"},"tone":{"editor":null,"default":"red"},"$preview":{"width":260,"height":1100}}'>
@@ -73,19 +78,41 @@ class Component extends DCLogic {
       ['COMPLETION', 'Testing and Commissioning', 'test', 'Testing.dc.html'],
       ['', 'Taking-Over and Handover', 'toc', 'TakingOver.dc.html'],
       ['', 'Defects Notification Period', 'dnp', 'TakingOver.dc.html'],
-      ['ADMIN', 'Reports', 'reports', 'Reports.dc.html'],
+      ['ADMIN', 'Monthly Report', 'monthly', 'MonthlyReport.dc.html'],
+      ['', 'All Trackers', 'trackers', 'Trackers.dc.html'],
+      ['', 'Reports', 'reports', 'Reports.dc.html'],
       ['', 'Notifications', 'notif', 'Notifications.dc.html'],
       ['', 'Users and Permissions', 'users', 'Users.dc.html'],
       ['', 'System Settings', 'settings', 'Settings.dc.html']
     ];
+    let lang = 'en';
+    try { lang = localStorage.getItem('beni_lang') === 'fr' ? 'fr' : 'en'; } catch (e) {}
+    const FR = {
+      'BENI Airport DRC': 'Aéroport de BENI RDC', 'Terminal and Control Tower': 'Terminal et tour de contrôle',
+      'COLLABORATE': 'COLLABORATION', 'CONTRACT': 'CONTRAT', 'DELIVERY': 'EXÉCUTION', 'SITE AND QUALITY': 'CHANTIER ET QUALITÉ', 'COMPLETION': 'ACHÈVEMENT', 'ADMIN': 'ADMINISTRATION',
+      'Home': 'Accueil', 'Progress Dashboard': "Tableau d'avancement", 'Project Overview': 'Vue du projet', 'Team Chat': "Discussion d'équipe", 'Contract Assistant': 'Assistant contrat',
+      'Contract Administration': 'Administration du contrat', 'Notices and Deadlines': 'Notifications et délais', 'Claims and EOT': 'Réclamations et prorogations',
+      "Engineer's Communications": "Communications de l'Ingénieur", 'Variations and Change Control': 'Modifications et contrôle des changements', 'Payments and IPCs': 'Paiements et certificats',
+      'Programme and Progress': 'Programme et avancement', 'Design Management': 'Gestion de la conception', 'Drawings and Documents': 'Plans et documents', 'RFIs and Technical Queries': 'Demandes d\'information techniques',
+      'Procurement': 'Approvisionnement', 'Risk Register': 'Registre des risques', 'Quality Management': 'Gestion de la qualité', 'Inspections and NCRs': 'Inspections et NCR', 'Field Management': 'Gestion du chantier',
+      'Site Photos and Evidence': 'Photos et preuves du chantier', 'HSE': 'HSE', 'Meetings and Actions': 'Réunions et actions', 'Testing and Commissioning': 'Essais et mise en service',
+      'Taking-Over and Handover': 'Réception et remise', 'Defects Notification Period': 'Période de notification des défauts', 'Monthly Report': 'Rapport mensuel', 'All Trackers': 'Tous les suivis',
+      'Reports': 'Rapports', 'Notifications': 'Notifications', 'Users and Permissions': 'Utilisateurs et droits', 'System Settings': 'Paramètres du système'
+    };
+    const tr = (x) => lang === 'fr' && FR[x] ? FR[x] : x;
+    const setLang = (v) => () => { try { localStorage.setItem('beni_lang', v); } catch (e) {} try { window.location.reload(); } catch (e) {} };
     const rows = [];
     items.forEach(it => {
-      if (it[0]) rows.push({ head: 'yes', link: '', off: '', label: it[0] });
+      if (it[0]) rows.push({ head: 'yes', link: '', off: '', label: tr(it[0]) });
       const on = it[2] === active;
-      if (it[3]) rows.push({ head: '', link: 'yes', off: '', label: it[1], href: it[3], bg: on ? t.actBg : 'transparent', fg: on ? t.actFg : t.fg, weight: on ? '700' : '500', dot: on ? t.actDot : t.dot });
-      else rows.push({ head: '', link: '', off: 'yes', label: it[1] });
+      if (it[3]) rows.push({ head: '', link: 'yes', off: '', label: tr(it[1]), href: it[3], bg: on ? t.actBg : 'transparent', fg: on ? t.actFg : t.fg, weight: on ? '700' : '500', dot: on ? t.actDot : t.dot });
+      else rows.push({ head: '', link: '', off: 'yes', label: tr(it[1]) });
     });
-    return { rows, t };
+    const fr = lang === 'fr';
+    return { brand1: tr('BENI Airport DRC'), brand2: tr('Terminal and Control Tower'), rows, t, langLabel: fr ? 'Langue' : 'Language', goEn: setLang('en'), goFr: setLang('fr'),
+      enOn: fr ? 'false' : 'true', frOn: fr ? 'true' : 'false',
+      enBg: fr ? 'transparent' : t.actBg, enFg: fr ? t.fg : t.actFg, frBg: fr ? t.actBg : 'transparent', frFg: fr ? t.actFg : t.fg,
+      foot: fr ? 'Les éléments grisés relèvent de phases ultérieures. Prototype : aucune donnée serveur.' : 'Muted items belong to later phases. Prototype only: no server data is saved.' };
   }
 }
 </script>
