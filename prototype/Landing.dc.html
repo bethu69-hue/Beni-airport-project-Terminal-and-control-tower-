@@ -23,17 +23,21 @@ a{text-decoration:none}
 <header style="position:relative;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;padding:22px 40px">
 <div style="display:flex;gap:12px;align-items:center">
 <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="11" fill="#F7D618"></rect><path d="M20 7v26" stroke="#0b4fb3" stroke-width="3" stroke-dasharray="4 3"></path><path d="M12 33 17 7M28 33 23 7" stroke="#0b4fb3" stroke-width="2" stroke-linecap="round"></path></svg>
-<div style="line-height:1.25"><div style="font-size:13px;font-weight:800;letter-spacing:.08em">AIA ADVENTIS INHOUSE AFRICA</div><div style="font-size:12px;color:#cfe0ee">Contractor</div></div>
+<div style="line-height:1.25"><div style="font-size:13px;font-weight:800;letter-spacing:.08em">AIA ADVENTIS INHOUSE AFRICA</div><div style="font-size:12px;color:#cfe0ee">{{t.contractor}}</div></div>
 </div>
-<div style="font-size:13px;font-weight:600;color:#e4eef6">Beni · Democratic Republic of Congo</div>
+<div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap"><div style="font-size:13px;font-weight:600;color:#e4eef6">{{t.place}}</div>
+<div role="group" aria-label="Language" style="display:flex;border:1px solid rgba(255,255,255,.5);border-radius:999px;overflow:hidden">
+<button type="button" onClick="{{setEn}}" aria-pressed="{{enOn}}" style="min-height:40px;min-width:48px;border:0;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;background:{{enBg}};color:{{enFg}}">EN</button>
+<button type="button" onClick="{{setFr}}" aria-pressed="{{frOn}}" style="min-height:40px;min-width:48px;border:0;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;background:{{frBg}};color:{{frFg}}">FR</button>
+</div></div>
 </header>
 
 <div style="flex:1 1 auto"></div>
 
 <section style="position:relative;padding:0 40px 40px;max-width:1100px">
 <h1 style="margin:0;font-family:Fraunces,Georgia,serif;font-weight:700;font-size:64px;line-height:1.05;letter-spacing:-.01em;text-shadow:0 2px 24px rgba(0,0,0,.45)">Beni Airport Project</h1>
-<h2 style="margin:12px 0 0;font-family:Fraunces,Georgia,serif;font-weight:600;font-size:34px;line-height:1.2;color:#fff2a8;text-shadow:0 2px 18px rgba(0,0,0,.45)">Terminal and Control Tower</h2>
-<p style="margin:18px 0 26px;font-size:16px;line-height:1.6;color:#dbe7f1;max-width:640px">One place to follow progress, contract administration, quality and handover for the new airport terminal and control tower.</p>
+<h2 style="margin:12px 0 0;font-family:Fraunces,Georgia,serif;font-weight:600;font-size:34px;line-height:1.2;color:#fff2a8;text-shadow:0 2px 18px rgba(0,0,0,.45)">{{t.sub}}</h2>
+<p style="margin:18px 0 26px;font-size:16px;line-height:1.6;color:#dbe7f1;max-width:640px">{{t.intro}}</p>
 <sc-if value="{{signedOut}}" hint-placeholder-val="{{ true }}">
 <form onSubmit="{{submit}}" style="max-width:380px;background:rgba(6,30,74,.62);border:1px solid rgba(255,255,255,.28);border-radius:16px;padding:18px 20px;box-sizing:border-box">
 <div style="font-size:15px;font-weight:800;margin-bottom:12px">{{t.signIn}}</div>
@@ -60,7 +64,7 @@ a{text-decoration:none}
 <button onClick="{{signOut}}" style="min-height:52px;padding:0 22px;border-radius:999px;background:transparent;border:1px solid rgba(255,255,255,.4);color:#fff;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit">{{t.out}}</button>
 </div>
 </sc-if>
-<div style="margin-top:26px;font-size:13px;color:#cfe0ee">Project Manager: Andrew Mwaura · Assistant Project Manager: Bethwell</div>
+<div style="margin-top:26px;font-size:13px;color:#cfe0ee">{{t.team}}</div>
 </section>
 </div>
 </x-dc>
@@ -105,13 +109,16 @@ class Component extends DCLogic {
       if (good) { try { sessionStorage.setItem('beni_auth', 'bethwell'); } catch (x) {} this.setState({ ok: true, err: '', pw: '', tries: 0 }); }
       else { const n = (st.tries || 0) + 1; this.setState({ tries: n, pw: '', err: T('User ID or password is not correct.', 'Identifiant ou mot de passe incorrect.'), until: n >= 5 ? Date.now() + 30000 : 0 }); }
     };
+    const setL = (v) => () => { try { localStorage.setItem('beni_lang', v); } catch (e) {} try { window.dispatchEvent(new Event('beni-lang')); } catch (e) {} this.setState({ lg: v, err: '' }); };
     return {
+      setEn: setL('en'), setFr: setL('fr'), enOn: fr ? 'false' : 'true', frOn: fr ? 'true' : 'false',
+      enBg: fr ? 'transparent' : '#F7D618', enFg: fr ? '#fff' : '#2a2000', frBg: fr ? '#F7D618' : 'transparent', frFg: fr ? '#2a2000' : '#fff',
       pwType: st.show ? 'text' : 'password', eyeOn: st.show ? 'true' : 'false', slash: st.show ? 'display:none' : '', eyeLabel: st.show ? T('Hide password', 'Masquer le mot de passe') : T('Show password', 'Afficher le mot de passe'),
       togglePw: () => this.setState({ show: !st.show }),
       signedOut: st.ok ? '' : 'yes', signedIn: st.ok ? 'yes' : '', uid: st.uid || '', pw: st.pw || '', err: st.err || '',
       setUid: (e) => this.setState({ uid: e.target.value }), setPw: (e) => this.setState({ pw: e.target.value }), submit,
       signOut: () => { try { sessionStorage.removeItem('beni_auth'); } catch (x) {} this.setState({ ok: false, uid: '', pw: '', err: '' }); },
-      t: { signIn: T('Sign in', 'Connexion'), userId: T('User ID', 'Identifiant'), password: T('Password', 'Mot de passe'), go: T('Sign in', 'Se connecter'),
+      t: { sub: T('Terminal and Control Tower', 'Terminal et tour de contrôle'), intro: T('One place to follow progress, contract administration, quality and handover for the new airport terminal and control tower.', "Un seul endroit pour suivre l'avancement, l'administration du contrat, la qualité et la remise du nouveau terminal et de la nouvelle tour de contrôle de l'aéroport."), team: T('Project Manager: Andrew Mwaura · Assistant Project Manager: Bethwell', 'Chef de projet : Andrew Mwaura · Chef de projet adjoint : Bethwell'), contractor: T('Contractor', 'Entrepreneur'), place: T('Beni · Democratic Republic of Congo', 'Beni · République démocratique du Congo'), signIn: T('Sign in', 'Connexion'), userId: T('User ID', 'Identifiant'), password: T('Password', 'Mot de passe'), go: T('Sign in', 'Se connecter'),
         note: T('Prototype sign-in: this only gates this screen. The live system uses a secure account login with two-step verification.', 'Connexion du prototype : elle ne protège que cet écran. Le système réel utilise un compte sécurisé avec vérification en deux étapes.'),
         welcome: T('Signed in as', 'Connecté en tant que'), view: T('View project progress', "Voir l'avancement du projet"), control: T('Project Control Centre', 'Centre de contrôle du projet'), contract: T('Contract Administration', 'Administration du contrat'), out: T('Sign out', 'Se déconnecter') }
     };
