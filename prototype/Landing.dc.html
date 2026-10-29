@@ -13,12 +13,20 @@
 <style>
 body{margin:0;font-family:"Plus Jakarta Sans",system-ui,sans-serif;background:#06224f;color:#fff}
 a{text-decoration:none}
+:focus-visible{outline:3px solid #F7D618;outline-offset:2px;border-radius:8px}
+form,.hero-card{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+button,a{transition:background-color .15s,box-shadow .15s,transform .1s}
+button[type=submit]:hover,a[href][style*="#F7D618"]:hover{box-shadow:0 6px 20px rgba(247,214,24,.45)}
+button:active,a:active{transform:translateY(1px)}
+input:focus{outline:3px solid #007FFF !important;outline-offset:0}
+@media (max-width:640px){h1{font-size:42px !important}h2{font-size:24px !important}header,section{padding-left:20px !important;padding-right:20px !important}}
+@media (prefers-reduced-motion:reduce){*{transition:none !important}}
 </style>
 </helmet>
 <div style="position:relative;min-height:100vh;overflow:hidden;display:flex;flex-direction:column">
 <img src="/_blob/46171ba6995dc37df5b45594d674ab24" alt="Air Congo Boeing 737 on the apron beside boarding stairs under a clear blue sky" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 40%">
 <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,30,74,.55) 0%,rgba(6,30,74,.05) 30%,rgba(6,30,74,.55) 62%,rgba(6,30,74,.94) 100%)"></div>
-<div aria-hidden="true" style="position:absolute;left:0;right:0;top:0;height:6px;background:linear-gradient(90deg,#007FFF 0 50%,#F7D618 50% 100%)"></div>
+<div aria-hidden="true" style="position:absolute;left:0;right:0;top:0;height:8px;background:linear-gradient(90deg,#007FFF 0 50%,#F7D618 50% 100%)"></div>
 
 <header style="position:relative;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;padding:22px 40px">
 <div style="display:flex;gap:12px;align-items:center">
@@ -36,10 +44,11 @@ a{text-decoration:none}
 
 <section style="position:relative;padding:0 40px 40px;max-width:1100px">
 <h1 style="margin:0;font-family:Fraunces,Georgia,serif;font-weight:700;font-size:64px;line-height:1.05;letter-spacing:-.01em;text-shadow:0 2px 24px rgba(0,0,0,.45)">Beni Airport Project</h1>
-<h2 style="margin:12px 0 0;font-family:Fraunces,Georgia,serif;font-weight:600;font-size:34px;line-height:1.2;color:#fff2a8;text-shadow:0 2px 18px rgba(0,0,0,.45)">{{t.sub}}</h2>
+<div aria-hidden="true" style="width:88px;height:6px;border-radius:3px;margin:18px 0 0;background:linear-gradient(90deg,#007FFF 0 50%,#F7D618 50% 100%)"></div>
+<h2 style="margin:14px 0 0;font-family:Fraunces,Georgia,serif;font-weight:600;font-size:34px;line-height:1.2;color:#fff2a8;text-shadow:0 2px 18px rgba(0,0,0,.45)">{{t.sub}}</h2>
 <p style="margin:18px 0 26px;font-size:16px;line-height:1.6;color:#dbe7f1;max-width:640px">{{t.intro}}</p>
 <sc-if value="{{signedOut}}" hint-placeholder-val="{{ true }}">
-<form onSubmit="{{submit}}" style="max-width:380px;background:rgba(6,30,74,.62);border:1px solid rgba(255,255,255,.28);border-radius:16px;padding:18px 20px;box-sizing:border-box">
+<form onSubmit="{{submit}}" style="max-width:400px;background:rgba(6,30,74,.66);border:1px solid rgba(255,255,255,.3);border-top:4px solid #F7D618;border-radius:18px;padding:20px 22px;box-sizing:border-box;box-shadow:0 24px 50px -20px rgba(0,0,0,.6)">
 <div style="font-size:15px;font-weight:800;margin-bottom:12px">{{t.signIn}}</div>
 <label for="uid" style="display:block;font-size:12px;font-weight:700;color:#cfe0ee;margin-bottom:4px">{{t.userId}}</label>
 <input id="uid" value="{{uid}}" onInput="{{setUid}}" autocomplete="username" autocapitalize="none" style="width:100%;box-sizing:border-box;min-height:46px;padding:0 12px;border-radius:10px;border:1px solid rgba(255,255,255,.4);background:#fff;color:#0e1a2b;font-size:15px;font-family:inherit;margin-bottom:10px">
