@@ -65,7 +65,7 @@ input:focus{outline:3px solid #007FFF !important;outline-offset:0}
 </form>
 </sc-if>
 <sc-if value="{{signedIn}}" hint-placeholder-val="">
-<div style="font-size:14px;font-weight:700;color:#fff2a8;margin-bottom:12px">{{t.welcome}} @Bethwell</div>
+<div style="font-size:14px;font-weight:700;color:#fff2a8;margin-bottom:12px">{{t.welcome}} @Beni</div>
 <div style="display:flex;flex-wrap:wrap;gap:12px">
 <a href="Progress.dc.html" style="min-height:52px;padding:0 28px;border-radius:999px;background:#F7D618;color:#2a2000;font-weight:800;font-size:15px;display:inline-flex;align-items:center;gap:10px">{{t.view}} <span aria-hidden="true">→</span></a>
 <a href="Main.dc.html" style="min-height:52px;padding:0 26px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.4);color:#fff;font-weight:700;font-size:15px;display:inline-flex;align-items:center">{{t.control}}</a>
@@ -79,7 +79,7 @@ input:focus{outline:3px solid #007FFF !important;outline-offset:0}
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":820}}'>
 class Component extends DCLogic {
-  componentDidMount() { try { if (sessionStorage.getItem('beni_auth') === 'bethwell') this.setState({ ok: true }); } catch (e) {} }
+  componentDidMount() { try { if (sessionStorage.getItem('beni_auth') === 'beni') this.setState({ ok: true }); } catch (e) {} }
   sha(t) {
     const u = unescape(encodeURIComponent(t)); const K = [], H = [];
     const isP = (n) => { for (let i = 2; i * i <= n; i++) if (n % i === 0) return false; return true; };
@@ -114,8 +114,8 @@ class Component extends DCLogic {
       try { const a = document.getElementById('uid'), b = document.getElementById('pw'); if (a && a.value) rawId = a.value; if (b && b.value) rawPw = b.value; } catch (x) {}
       const id = rawId.trim().replace(/^@/, '').toLowerCase();
       let good = false;
-      try { good = this.sha('beni-proto-v1|' + id + '|' + rawPw) === '5a70ce84e0bcd7da7c82c3cd936735905fb35e18e74a082f128f2c00c1f7902b'; } catch (x) { good = false; }
-      if (good) { try { sessionStorage.setItem('beni_auth', 'bethwell'); } catch (x) {} this.setState({ ok: true, err: '', pw: '', tries: 0 }); }
+      try { good = this.sha('beni-proto-v1|' + id + '|' + rawPw) === 'a4bee0586fdf7700a1c2301677ab8b9346f33305a6c6e9539be396d07350b7e7'; } catch (x) { good = false; }
+      if (good) { try { sessionStorage.setItem('beni_auth', 'beni'); } catch (x) {} this.setState({ ok: true, err: '', pw: '', tries: 0 }); }
       else { const n = (st.tries || 0) + 1; this.setState({ tries: n, pw: '', err: T('User ID or password is not correct.', 'Identifiant ou mot de passe incorrect.'), until: n >= 5 ? Date.now() + 30000 : 0 }); }
     };
     const setL = (v) => () => { try { localStorage.setItem('beni_lang', v); } catch (e) {} try { window.dispatchEvent(new Event('beni-lang')); } catch (e) {} this.setState({ lg: v, err: '' }); };
