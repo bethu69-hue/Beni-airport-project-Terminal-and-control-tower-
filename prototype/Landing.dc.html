@@ -65,12 +65,12 @@ input:focus{outline:3px solid #007FFF !important;outline-offset:0}
 </form>
 </sc-if>
 <sc-if value="{{signedIn}}" hint-placeholder-val="">
-<div style="font-size:14px;font-weight:700;color:#fff2a8;margin-bottom:12px">{{t.welcome}} @Beni</div>
+
 <div style="display:flex;flex-wrap:wrap;gap:12px">
 <a href="Progress.dc.html" style="min-height:52px;padding:0 28px;border-radius:999px;background:#F7D618;color:#2a2000;font-weight:800;font-size:15px;display:inline-flex;align-items:center;gap:10px">{{t.view}} <span aria-hidden="true">→</span></a>
 <a href="Main.dc.html" style="min-height:52px;padding:0 26px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.4);color:#fff;font-weight:700;font-size:15px;display:inline-flex;align-items:center">{{t.control}}</a>
 <a href="Contract.dc.html" style="min-height:52px;padding:0 26px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.4);color:#fff;font-weight:700;font-size:15px;display:inline-flex;align-items:center">{{t.contract}}</a>
-<button onClick="{{signOut}}" style="min-height:52px;padding:0 22px;border-radius:999px;background:transparent;border:1px solid rgba(255,255,255,.4);color:#fff;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit">{{t.out}}</button>
+
 </div>
 </sc-if>
 <div style="margin-top:26px;font-size:13px;color:#cfe0ee">{{t.team}}</div>
@@ -124,7 +124,7 @@ class Component extends DCLogic {
       enBg: fr ? 'transparent' : '#F7D618', enFg: fr ? '#fff' : '#2a2000', frBg: fr ? '#F7D618' : 'transparent', frFg: fr ? '#2a2000' : '#fff',
       pwType: st.show ? 'text' : 'password', eyeOn: st.show ? 'true' : 'false', slash: st.show ? 'display:none' : '', eyeLabel: st.show ? T('Hide password', 'Masquer le mot de passe') : T('Show password', 'Afficher le mot de passe'),
       togglePw: () => this.setState({ show: !st.show }),
-      signedOut: st.ok ? '' : 'yes', signedIn: st.ok ? 'yes' : '', uid: st.uid || '', pw: st.pw || '', err: st.err || '',
+      signedOut: '', signedIn: 'yes', uid: st.uid || '', pw: st.pw || '', err: st.err || '',
       setUid: (e) => this.setState({ uid: e.target.value }), setPw: (e) => this.setState({ pw: e.target.value }), submit,
       signOut: () => { try { sessionStorage.removeItem('beni_auth'); } catch (x) {} this.setState({ ok: false, uid: '', pw: '', err: '' }); },
       t: { sub: T('Terminal and Control Tower', 'Terminal et tour de contrôle'), intro: T('One place to follow progress, contract administration, quality and handover for the new airport terminal and control tower.', "Un seul endroit pour suivre l'avancement, l'administration du contrat, la qualité et la remise du nouveau terminal et de la nouvelle tour de contrôle de l'aéroport."), team: T('Project Manager: Andrew Mwaura · Assistant Project Manager: Bethwell', 'Chef de projet : Andrew Mwaura · Chef de projet adjoint : Bethwell'), contractor: T('Contractor', 'Entrepreneur'), place: T('Beni · Democratic Republic of Congo', 'Beni · République démocratique du Congo'), signIn: T('Sign in', 'Connexion'), userId: T('User ID', 'Identifiant'), password: T('Password', 'Mot de passe'), go: T('Sign in', 'Se connecter'),
