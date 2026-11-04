@@ -40,3 +40,6 @@ form.f input,form.f select,form.f textarea{width:100%;min-height:42px;padding:8p
 @media(max-width:860px){.shell{flex-direction:column}.side{position:static;width:100%;height:auto;flex-basis:auto}.side nav{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:0 8px}main{padding:16px 14px 32px}.auth h1{font-size:40px}.auth .top{left:18px;right:18px}.auth .box{padding:0 18px 28px}}
 @media print{.side{display:none}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+fieldset label,form.f label,.f label{font-size:12px;font-weight:700;color:#35465c;display:block}
+.f input:not([type=checkbox]),.f select,.f textarea,fieldset input:not([type=checkbox]),fieldset select,fieldset textarea{width:100%;min-height:40px;padding:8px 10px;border:1px solid #c5d3e6;border-radius:10px;background:#fff;margin-top:4px;font-weight:400}
+details summary{list-style:revert}

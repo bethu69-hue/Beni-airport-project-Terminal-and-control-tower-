@@ -44,6 +44,9 @@ form.f input,form.f select,form.f textarea{width:100%;min-height:42px;padding:8p
 @media(max-width:860px){.shell{flex-direction:column}.side{position:static;width:100%;height:auto;flex-basis:auto}.side nav{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:0 8px}main{padding:16px 14px 32px}.auth h1{font-size:40px}.auth .top{left:18px;right:18px}.auth .box{padding:0 18px 28px}}
 @media print{.side{display:none}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+fieldset label,form.f label,.f label{font-size:12px;font-weight:700;color:#35465c;display:block}
+.f input:not([type=checkbox]),.f select,.f textarea,fieldset input:not([type=checkbox]),fieldset select,fieldset textarea{width:100%;min-height:40px;padding:8px 10px;border:1px solid #c5d3e6;border-radius:10px;background:#fff;margin-top:4px;font-weight:400}
+details summary{list-style:revert}
 </style>
 </head><body>
 <div id="app"></div><div id="toast" role="status" aria-live="polite"></div>
@@ -151,7 +154,7 @@ window.BENI_CONFIG = {
   async function signOut() { await sb.auth.signOut(); S.user = S.profile = S.project = null; render(); }
 
   // ---------- shell ----------
-  const PAGES = [['dashboard', 'Dashboard', 'Tableau de bord'], ['notices', 'Notices', 'Notifications officielles'], ['deadlines', 'Deadlines', 'Délais'], ['report', 'Monthly Report', 'Rapport mensuel'], ['team', 'Team', 'Équipe']];
+  const PAGES = [['dashboard', 'Dashboard', 'Tableau de bord'], ['notices', 'Notices', 'Notifications officielles'], ['deadlines', 'Deadlines', 'Délais'], ['claims', 'Claim Events', 'Événements de réclamation'], ['report', 'Monthly Report', 'Rapport mensuel'], ['team', 'Team', 'Équipe']];
   function shell(title, lead, body) {
     $app.innerHTML = `<div class="shell"><aside class="side"><div class="flag"></div><div class="brand">BENI Airport DRC</div><div class="sub">${esc(S.project.name)}</div>
       <nav aria-label="Main">${PAGES.map((p) => `<a href="#/${p[0]}" ${S.page === p[0] ? 'aria-current="page"' : ''}>${T(p[1], p[2])}</a>`).join('')}</nav>
@@ -256,8 +259,119 @@ window.BENI_CONFIG = {
       <p style="color:#4a5a6e;font-size:13px">${T('Adding team members from this screen is part of the next release.', 'L’ajout de membres depuis cet écran sera dans la prochaine version.')}</p>`);
   }
 
+
+  // ---------- claim events ----------
+  const CATS = { A: ['Employer-related events', 'Événements liés au Maître d’ouvrage'], B: ['Engineer and consultant-related events', 'Événements liés à l’Ingénieur et aux consultants'], C: ['Unforeseen and external events', 'Événements imprévus et externes'], D: ['Contractor-related events', 'Événements liés à l’Entrepreneur'], E: ['Disruption and productivity events', 'Perturbations et productivité'], F: ['Commercial and financial events', 'Événements commerciaux et financiers'] };
+  const PARTY = { employer: ['Employer', 'Maître d’ouvrage'], engineer: ['Engineer', 'Ingénieur'], contractor: ['Contractor', 'Entrepreneur'], shared: ['Shared', 'Partagée'], external: ['External', 'Externe'], unknown: ['Not known', 'Inconnue'] };
+  const CLASS = { further_investigation: ['Further investigation required', 'Investigation complémentaire requise'], potentially_compensable: ['Potentially compensable', 'Potentiellement indemnisable'], potentially_excusable_non_compensable: ['Potentially excusable, non-compensable', 'Potentiellement excusable, non indemnisable'], contractor_responsible: ['Contractor-responsible', 'Imputable à l’Entrepreneur'], shared_responsibility: ['Shared responsibility', 'Responsabilité partagée'], no_demonstrated_entitlement: ['No demonstrated entitlement', 'Aucun droit démontré'] };
+  const CSTAT = { identified: ['Identified', 'Identifié'], under_review: ['Under review', 'En revue'], final: ['Final', 'Final'] };
+  const pT = (m, k) => (m[k] ? T(m[k][0], m[k][1]) : k || '—');
+  const FINALISERS = ['project_manager', 'contract_manager', 'project_administrator'];
+  const CS = { types: null, picked: {}, custom: [], filt: { cat: '', party: '', status: '' }, edit: null, open: {} };
+  const opt = (m, cur, blank) => (blank ? `<option value="">${blank}</option>` : '') + Object.keys(m).map((k) => `<option value="${k}" ${cur === k ? 'selected' : ''}>${esc(pT(m, k))}</option>`).join('');
+  const evName = (e) => { if (e.custom_title) return e.custom_title; const t = (CS.types || []).find((x) => x.code === e.event_type); return t ? T(t.name_en, t.name_fr) : e.event_type; };
+  const dval = (id) => { const v = document.getElementById(id).value; return v || null; };
+  const sel = 'min-height:40px;border:1px solid #c5d3e6;border-radius:10px;padding:0 8px';
+
+  async function claims() {
+    loading(T('Claim Events', 'Événements de réclamation'));
+    if (!CS.types) { const t = await sb.from('claim_event_types').select('*').order('code'); if (t.error) return shell(T('Claim Events', 'Événements de réclamation'), '', failBody(t.error)); CS.types = t.data; }
+    const r = await sb.from('claim_events').select('*').eq('project_id', S.project.id).order('created_at', { ascending: false });
+    if (r.error) return shell(T('Claim Events', 'Événements de réclamation'), '', failBody(r.error));
+    const all = r.data || [], f = CS.filt;
+    const rows = all.filter((e) => (!f.cat || e.category === f.cat) && (!f.party || e.responsible_party === f.party) && (!f.status || e.status === f.status));
+    const nPick = Object.keys(CS.picked).length + CS.custom.length;
+    const canFinal = FINALISERS.includes(S.role);
+    const lib = Object.keys(CATS).map((c) => `<details ${CS.open[c] ? 'open' : ''} data-cat="${c}" style="border-top:1px solid var(--line);padding:8px 0"><summary style="cursor:pointer;font-weight:700">${T(CATS[c][0], CATS[c][1])} <span class="pill">${CS.types.filter((t) => t.category === c).length}</span></summary>
+      <div class="grid" style="margin-top:8px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">${CS.types.filter((t) => t.category === c).map((t) => `<label style="display:flex;gap:8px;align-items:flex-start;padding:6px 8px;border-radius:8px;cursor:pointer"><input type="checkbox" data-pick="${t.code}" ${CS.picked[t.code] ? 'checked' : ''} style="margin-top:3px;width:18px;height:18px"> <span>${esc(T(t.name_en, t.name_fr))}</span></label>`).join('')}</div></details>`).join('');
+    const details = nPick ? `<div class="card" style="margin-top:14px"><b>${T('Details for the selected events', 'Détails des événements sélectionnés')} (${nPick})</b>
+      <p style="color:#4a5a6e;font-size:13px;margin:4px 0 10px">${T('Fill in what you know. Leave a field empty if it is not known; nothing is filled in for you.', 'Renseignez ce que vous savez. Laissez vide ce qui est inconnu ; rien n’est rempli à votre place.')}</p>
+      ${Object.keys(CS.picked).map((c) => detailForm(c, esc(evName({ event_type: c })), CS.picked[c])).join('')}${CS.custom.map((c, i) => detailForm('x' + i, `<input data-ct="${i}" value="${esc(c.title)}" placeholder="${T('Custom event title', 'Titre de l’événement personnalisé')}" style="min-height:34px;border:1px solid #c5d3e6;border-radius:8px;padding:0 8px;width:60%">`, c)).join('')}
+      <button class="btn" id="saveall" type="button">${T('Save as identified events', 'Enregistrer comme événements identifiés')}</button> <button class="btn ghost" id="clearpick" type="button">${T('Clear selection', 'Effacer la sélection')}</button></div>` : '';
+    const edit = CS.edit ? all.find((e) => e.id === CS.edit) : null;
+    shell(T('Claim Events', 'Événements de réclamation'), T('Tick the events experienced on the project. A selected event is not a valid claim: entitlement is assessed later and every classification here is provisional.', 'Cochez les événements survenus sur le projet. Un événement sélectionné n’est pas une réclamation valable : le droit est évalué ensuite et chaque classification ici est provisoire.'),
+      `<div class="card"><div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between"><b>${T('Event library', 'Bibliothèque d’événements')}</b><span class="pill">${T('Selected', 'Sélectionnés')}: ${nPick}</span></div>${lib}
+        <div style="border-top:1px solid var(--line);padding-top:10px;display:flex;gap:8px;flex-wrap:wrap"><input id="cust" placeholder="${T('Add your own event…', 'Ajouter votre propre événement…')}" style="flex:1 1 240px;min-height:42px;border:1px solid #c5d3e6;border-radius:10px;padding:0 10px"><button class="btn ghost" id="addcust" type="button">${T('Add custom event', 'Ajouter')}</button></div></div>
+      ${details}
+      <h2 style="font-size:18px;margin:22px 0 8px">${T('Claim event register', 'Registre des événements de réclamation')} (${all.length})</h2>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px"><select id="fc" aria-label="${T('Category', 'Catégorie')}" style="${sel}"><option value="">${T('All categories', 'Toutes catégories')}</option>${Object.keys(CATS).map((c) => `<option value="${c}" ${f.cat === c ? 'selected' : ''}>${c} – ${esc(T(CATS[c][0], CATS[c][1]))}</option>`).join('')}</select>
+        <select id="fp" aria-label="${T('Responsible party', 'Partie responsable')}" style="${sel}">${opt(PARTY, f.party, T('All parties', 'Toutes parties'))}</select>
+        <select id="fs" aria-label="${T('Status', 'Statut')}" style="${sel}">${opt(CSTAT, f.status, T('All statuses', 'Tous statuts'))}</select></div>
+      <div class="tw"><table><thead><tr><th>Ref</th><th>${T('Event', 'Événement')}</th><th>${T('Occurred', 'Survenu')}</th><th>${T('Notified', 'Notifié')}</th><th>${T('Party', 'Partie')}</th><th>${T('Provisional classification', 'Classification provisoire')}</th><th>${T('Status', 'Statut')}</th><th></th></tr></thead><tbody>
+      ${rows.length ? rows.map((e) => `<tr><td>${esc(e.ref)}</td><td>${esc(evName(e))}<div style="color:#4a5a6e;font-size:12px">${e.category}${e.affected_section ? ' · ' + esc(e.affected_section) : ''}${e.ongoing ? ' · ' + T('ongoing', 'en cours') : ''}</div></td><td>${fmtD(e.occurred_on)}</td><td>${e.notified_on ? fmtD(e.notified_on) : '<span class="pill warn">' + T('No notice', 'Pas de notification') + '</span>'}</td><td>${esc(pT(PARTY, e.responsible_party))}</td><td>${esc(pT(CLASS, e.classification))}</td><td><span class="pill ${e.status === 'final' ? 'ok' : ''}">${esc(pT(CSTAT, e.status))}</span></td><td><button class="btn small ghost" data-open="${e.id}">${e.status === 'final' ? T('View', 'Voir') : T('Review', 'Revoir')}</button></td></tr>`).join('') : `<tr><td colspan="8">${all.length ? T('No events match the filters.', 'Aucun événement ne correspond aux filtres.') : T('No events yet. Tick events above and save them.', 'Aucun événement. Cochez des événements ci-dessus et enregistrez-les.')}</td></tr>`}</tbody></table></div>
+      ${edit ? reviewPanel(edit, canFinal) : ''}`);
+
+    $app.querySelectorAll('details[data-cat]').forEach((d) => (d.ontoggle = () => (CS.open[d.dataset.cat] = d.open)));
+    $app.querySelectorAll('[data-pick]').forEach((c) => (c.onchange = () => { readDetails(); if (c.checked) CS.picked[c.dataset.pick] = CS.picked[c.dataset.pick] || {}; else delete CS.picked[c.dataset.pick]; claims(); }));
+    document.getElementById('addcust').onclick = () => { const v = document.getElementById('cust').value.trim(); if (!v) return toast(T('Type the event first.', 'Saisissez d’abord l’événement.')); readDetails(); CS.custom.push({ title: v }); claims(); };
+    [['fc', 'cat'], ['fp', 'party'], ['fs', 'status']].forEach(([id, k]) => (document.getElementById(id).onchange = (ev) => { CS.filt[k] = ev.target.value; claims(); }));
+    const sa = document.getElementById('saveall');
+    if (sa) {
+      document.getElementById('clearpick').onclick = () => { CS.picked = {}; CS.custom = []; claims(); };
+      sa.onclick = async () => {
+        readDetails();
+        const recs = [];
+        Object.keys(CS.picked).forEach((c) => recs.push(Object.assign({}, CS.picked[c], { event_type: c, category: c[0] })));
+        CS.custom.forEach((c) => { if (c.title && c.title.trim()) { const x = Object.assign({}, c, { custom_title: c.title.trim(), category: c.category || 'D' }); delete x.title; recs.push(x); } });
+        recs.forEach((x) => (x.project_id = S.project.id));
+        const ins = await sb.from('claim_events').insert(recs);
+        if (ins.error) return toast(errMsg(ins.error));
+        CS.picked = {}; CS.custom = []; toast(T('Events saved as identified.', 'Événements enregistrés comme identifiés.')); claims();
+      };
+    }
+    $app.querySelectorAll('[data-open]').forEach((b) => (b.onclick = () => { CS.edit = b.dataset.open; claims(); }));
+    if (edit) wireReview(edit);
+  }
+  function detailForm(key, title, v) {
+    v = v || {};
+    return `<fieldset data-d="${key}" style="border:1px solid var(--line);border-radius:12px;margin:0 0 12px;padding:10px 12px"><legend style="font-weight:700;padding:0 6px">${title}</legend><div class="f" style="display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
+      ${key[0] === 'x' ? `<label>${T('Category', 'Catégorie')}<select data-f="category">${Object.keys(CATS).map((c) => `<option value="${c}" ${(v.category || 'D') === c ? 'selected' : ''}>${c} – ${esc(T(CATS[c][0], CATS[c][1]))}</option>`).join('')}</select></label>` : ''}
+      <label>${T('Date of occurrence', 'Date de survenance')}<input type="date" data-f="occurred_on" value="${esc(v.occurred_on || '')}"></label>
+      <label>${T('Date of notification', 'Date de notification')}<input type="date" data-f="notified_on" value="${esc(v.notified_on || '')}"></label>
+      <label>${T('Date of resolution', 'Date de résolution')}<input type="date" data-f="resolved_on" value="${esc(v.resolved_on || '')}"></label>
+      <label>${T('Responsible party, if known', 'Partie responsable, si connue')}<select data-f="responsible_party">${opt(PARTY, v.responsible_party, T('Not stated', 'Non précisée'))}</select></label>
+      <label>${T('Affected work section', 'Section de travaux concernée')}<input data-f="affected_section" value="${esc(v.affected_section || '')}"></label>
+      <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" data-f="ongoing" ${v.ongoing ? 'checked' : ''} style="width:18px;height:18px"> ${T('Ongoing (not yet resolved)', 'En cours (non résolu)')}</label>
+      <label style="grid-column:1/-1">${T('Short description', 'Brève description')}<textarea rows="2" data-f="description">${esc(v.description || '')}</textarea></label>
+      <label style="grid-column:1/-1">${T('Available evidence', 'Preuves disponibles')}<textarea rows="2" data-f="evidence">${esc(v.evidence || '')}</textarea></label></div></fieldset>`;
+  }
+  function readDetails() {
+    $app.querySelectorAll('fieldset[data-d]').forEach((fs) => {
+      const k = fs.dataset.d, tgt = k[0] === 'x' ? CS.custom[+k.slice(1)] : CS.picked[k]; if (!tgt) return;
+      fs.querySelectorAll('[data-f]').forEach((el) => { const n = el.dataset.f; tgt[n] = el.type === 'checkbox' ? el.checked : (el.value || null); });
+      if (k[0] === 'x') { const ti = $app.querySelector('[data-ct="' + k.slice(1) + '"]'); if (ti) tgt.title = ti.value; }
+    });
+  }
+  function reviewPanel(e, canFinal) {
+    const L = e.status === 'final' ? 'disabled' : '';
+    return `<div class="card" style="margin-top:16px;border-top:4px solid var(--sun)"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><b>${esc(e.ref)} · ${esc(evName(e))}</b><button class="btn small ghost" id="closeedit" type="button">${T('Close', 'Fermer')}</button></div>
+      ${L ? `<div class="note" style="margin-top:10px">${T('This event is final and locked. Reviewed on', 'Cet événement est final et verrouillé. Revu le')} ${fmtDT(e.reviewed_at)}.<br><b>${T('Review note', 'Note de revue')}:</b> ${esc(e.review_note)}</div>` : ''}
+      <div class="f" style="display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:10px">
+        <label>${T('Date of occurrence', 'Date de survenance')}<input type="date" id="e_occ" value="${esc(e.occurred_on || '')}" ${L}></label>
+        <label>${T('Date of notification', 'Date de notification')}<input type="date" id="e_not" value="${esc(e.notified_on || '')}" ${L}></label>
+        <label>${T('Date of resolution', 'Date de résolution')}<input type="date" id="e_res" value="${esc(e.resolved_on || '')}" ${L}></label>
+        <label>${T('Responsible party', 'Partie responsable')}<select id="e_par" ${L}>${opt(PARTY, e.responsible_party, T('Not stated', 'Non précisée'))}</select></label>
+        <label>${T('Affected work section', 'Section concernée')}<input id="e_sec" value="${esc(e.affected_section || '')}" ${L}></label>
+        <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="e_ong" ${e.ongoing ? 'checked' : ''} ${L} style="width:18px;height:18px"> ${T('Ongoing', 'En cours')}</label>
+        <label style="grid-column:1/-1">${T('Description', 'Description')}<textarea id="e_des" rows="2" ${L}>${esc(e.description || '')}</textarea></label>
+        <label style="grid-column:1/-1">${T('Evidence', 'Preuves')}<textarea id="e_evi" rows="2" ${L}>${esc(e.evidence || '')}</textarea></label>
+        <label>${T('Provisional classification', 'Classification provisoire')}<select id="e_cls" ${L}>${opt(CLASS, e.classification)}</select></label>
+        <label style="grid-column:1/-1">${T('Review note (what you checked, what is missing)', 'Note de revue (ce qui a été vérifié, ce qui manque)')}<textarea id="e_note" rows="2" ${L}>${esc(e.review_note || '')}</textarea></label></div>
+      ${L ? '' : `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn ghost" id="e_save" type="button">${T('Save changes', 'Enregistrer')}</button><button class="btn ghost" id="e_rev" type="button">${T('Send to review', 'Envoyer en revue')}</button>${canFinal ? `<button class="btn" id="e_fin" type="button">${T('Approve as final', 'Approuver comme final')}</button>` : `<span style="color:#4a5a6e;font-size:13px;align-self:center">${T('Only a Project Manager or Contract Manager can approve as final.', 'Seul un chef de projet ou un contract manager peut approuver comme final.')}</span>`}</div>`}</div>`;
+  }
+  function wireReview(e) {
+    document.getElementById('closeedit').onclick = () => { CS.edit = null; claims(); };
+    if (e.status === 'final') return;
+    const patch = (st) => ({ occurred_on: dval('e_occ'), notified_on: dval('e_not'), resolved_on: dval('e_res'), responsible_party: document.getElementById('e_par').value || null, affected_section: document.getElementById('e_sec').value || null, ongoing: document.getElementById('e_ong').checked, description: document.getElementById('e_des').value || null, evidence: document.getElementById('e_evi').value || null, classification: document.getElementById('e_cls').value, review_note: document.getElementById('e_note').value || null, status: st });
+    const go = async (st, msg) => { const u = await sb.from('claim_events').update(patch(st)).eq('id', e.id); if (u.error) return toast(errMsg(u.error)); toast(msg); if (st === 'final') CS.edit = null; claims(); };
+    document.getElementById('e_save').onclick = () => go(e.status, T('Saved.', 'Enregistré.'));
+    document.getElementById('e_rev').onclick = () => go('under_review', T('Sent to review.', 'Envoyé en revue.'));
+    const fin = document.getElementById('e_fin');
+    if (fin) fin.onclick = () => { if (!confirm(T('Approve this event as final? It will be locked and cannot be edited afterwards.', 'Approuver cet événement comme final ? Il sera verrouillé et ne pourra plus être modifié.'))) return; go('final', T('Approved as final.', 'Approuvé comme final.')); };
+  }
+
   // ---------- router ----------
-  const ROUTES = { dashboard, notices, deadlines, report, team };
+  const ROUTES = { dashboard, notices, deadlines, claims, report, team };
   async function render() {
     document.documentElement.lang = lang;
     if (!S.user) return authView();
